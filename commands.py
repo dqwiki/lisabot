@@ -190,7 +190,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 try:
                         import sys
                         sys.path.append("/home/deltaquad/")
-                        os.system("svn checkout http://svn.toolserver.org/svnroot/deltaquad/lisabot/")#
+                        os.system("svn checkout http://svn.toolserver.org/svnroot/deltaquad/lisabot/")
                         reply("Done.", chan, nick)
                 except:
                         reply("Error.", chan, nick)
