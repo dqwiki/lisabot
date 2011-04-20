@@ -187,13 +187,17 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 say(blockinfo(line2[4]), chan)
                 say(getGeo(line2[4]),chan)
         if command == "pull":
-                try:
-                        import sys
-                        sys.path.append("/home/deltaquad/")
-                        os.system("git pull git@github.com:dqwiki/lisabot")
-                        reply("Done.", chan, nick)
-                except:
-                        reply("Error.", chan, nick)
+                if "r" in actionlevel:
+                        try:
+                                import sys
+                                sys.path.append("/home/deltaquad/")
+                                os.system("git pull git@github.com:dqwiki/lisabot")
+                                reply("Done.", chan, nick)
+                        except:
+                                reply("Error.", chan, nick)
+                else:
+                        reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
+                return
 	if command == "restart":
 		import thread, time
 		if "r" in actionlevel:
@@ -208,7 +212,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			os.system("nice -15 python main.py")
 			exit()
 		else:
-			reply("Only the owner, %s, can stop the bot. This incident will be reported." % OWNER, chan, nick)
+			reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
 		return
 	if command == "link":
                 checksafe = 1
@@ -329,7 +333,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 reply(chan, chan, nick)
         if command == "request" or command == "page":
                 if not "t" in actionlevel:
-                        reply("You are not authorized to access this command.",chan,nick)
+                        reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
                         return
                 #say(line2[4] + " to " + line2[5] +". Thank You!", chan)
                 notice(nick, "Thank you for using the LisaBot paging system. Your message has been delievered over PM.")
@@ -377,7 +381,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			notice("#techessentials-security", msg)
 			notice("#techessentials-techops", msg)
 		else:
-			reply("You aren't authorized to use that command.", chan, nick)
+			reply("Access Denied, you need the +g (global flag) to use this action.", chan, nick)
 		return
 	if command == "myaccess":
                 try:
@@ -395,7 +399,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply('Done!', chan, nick)
 		else:
-			reply("You aren't authorized to use that command.", chan, nick)
+			reply("Access Denied, you need the +j (join/part flag) to use this action.", chan, nick)
 		return
 	if command == "part":
 		if "j" in actionlevel:
@@ -415,11 +419,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply('Bye Bye!', chan, nick)
                                 s.send("PART %s :%s\r\n" % (channel,reason))
 		else:
-			reply("You aren't authorized to use that command.", chan, nick)
+			reply("Access Denied, you need the +j (join/part flag) to use this action.", chan, nick)
 		return
 	if command == "quit" or command == "die" or command == "suicide":
 		if not "p" in actionlevel:
-				reply("*RED ALERT* UNAUTHORIZED ACCESS: Only the owner, %s, can stop the bot. This incident will be reported." % OWNER, chan, nick)
+				reply("Access Denied, you need the +p (power flag) to use this action." % OWNER, chan, nick)
 		else:
 			try:
 				s.send("QUIT :%s\r\n" % ' '.join(line2[4:]))
@@ -432,7 +436,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		if "s" in actionlevel:
 			say(' '.join(line2[5:]), line2[4])
 		else:
-			reply("You aren't authorized to use that command.", chan, nick)
+			reply("Access Denied, you need the +s (talk as bot flag) to use this action.", chan, nick)
 		return
 	if command == "time":
 		u = urllib.urlopen('http://tycho.usno.navy.mil/cgi-bin/timer.pl')
@@ -551,8 +555,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply(msg, chan, nick)
 		return
 	if command == "num" or command == "number" or command == "count":
-                reply("This command is disabled until a relevant fix that will not crash the bot.", chan, nick)
-                return
 		try:
 			params = string.lower(line2[4])
 		except Exception:
@@ -572,16 +574,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 time.sleep(.25)
                                 inprogress = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_currently_in_progress&cmlimit=500").read())))
                                 time.sleep(.25)
-                                waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_Cases_needing_a_clerk&cmlimit=500").read())))
-                                time.sleep(.25)
+                                #waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_Cases_needing_a_clerk&cmlimit=500").read())))
+                                #time.sleep(.25)
                                 close = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_pending_close&cmlimit=500").read())))
                                 time.sleep(.25)
                                 admin = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_needing_an_Administrator&cmlimit=500").read())))
                                 time.sleep(.25)
-                                openspi = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_awaiting_administration&cmlimit=500").read())))
-                                time.sleep(.25)
                                 print "Send Msg"
-                                reply("SPI Status: Open - %s, CU Request - %s, CU Endorse - %s, CU in progress - %s, CU Actioned (Declined or Completed) - %s, Archive - %s, Need admin - %s" % (openspi, cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
+                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned - %s, Archive - %s, Need admin - %s" % (openspi, cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
                         except:
                                 print traceback.format_exc()
                                 return
@@ -595,7 +595,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 				return
 			s.send("NICK %s\r\n" % new_nick)
 		else:
-			reply("You aren't authorized to use that command.", chan, nick)
+			reply("Access Denied, you need the +n (nick flag) to use this action.", chan, nick)
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
                 if "b" in actionlevel and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
@@ -648,7 +648,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 print traceback.format_exc()
                                 return
                 else:
-                        reply("You aren't authorized to kick or ban a user.", chan, nick)
+                        reply("Access Denied, you need the +b/q (ban/quiet flag) to use this action.", chan, nick)
                         return
         if command == "mode":
                 if "m" in actionlevel:
@@ -674,7 +674,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 time.sleep(1)
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
-                        reply("You aren't authorized to change the channel mode.", chan, nick)
+                        reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
 	if command == "startup":
                 if "s" in actionlevel:
                         channel = "#wikipedia-en-abuse-v"
@@ -709,7 +709,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:
-			reply("You aren't authorized to use that command.", chan, nick)
+			reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
 		return
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 if command == "promote":command="op"
@@ -722,7 +722,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         user = nick
                                 say("%s %s %s" % (command, chan, user), "ChanServ")
                         except:
-                                reply("You aren't authorized to use that command Access level: %s" % actionlevel, chan, nick)
+                                reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
+                        return
 		elif "v" in actionlevel:
                         if command == "op":return
                         try:
@@ -731,7 +732,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 				user = nick
 			say("%s %s %s" % (command, chan, user), "ChanServ")
 		else:
-			reply("You aren't authorized to use that command. Access level: %s" % actionlevel, chan, nick)
+			reply("Access Denied, you need the +v (voice flag) to use this action.", chan, nick)
 		return
 	if command == "trout":
                 if "t" in actionlevel:
@@ -755,7 +756,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("I refuse to hurt anything with \"DeltaQuad\" in its name :P", chan, nick)
                         return
                 else:
-                        reply("You aren't authorized to use that command.", chan, nick)
+                        reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
                         
 	if command == "kill" or command == "destroy" or command == "murder":
 		reply("Who do you think I am? The Mafia?", chan, nick)
@@ -782,7 +783,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("I refuse to hurt anything with \"DeltaQuad\" in its name :P", chan, nick)
                         return
                 else:
-                        reply("You aren't authorized to use that command.", chan, nick)
+                        reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
 	if command == "remind" or command == "reminder":
 		try:
 			times = int(line2[4])
@@ -795,6 +796,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		reply(content, chan, nick)
 		return
 	if command == "lockdown":
+                return
                 if "g" in actionlevel:
                         import MySQLdb
                         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
@@ -813,6 +815,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Done!", chan, nick)
                                 return
         if command == "unlock":
+                return
                 if "g" in actionlevel:
                         import MySQLdb
                         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
@@ -856,7 +859,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         say("Try a valid IP address.", chan)
 	if command == "sql" or command == "perms":
                 if not "f" in actionlevel:
-                        reply("You aren't authorized to change or read bot permissions. Access Level %s" % actionlevel, chan, nick)
+                        reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                         return
                 try:
 			action = line2[4]
@@ -910,7 +913,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 print field
                                 if field == "spi":
                                         if not "f" in authtest(host, "#wikipedia-en-spi", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("UPDATE access SET spi=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
                                         db.commit()
@@ -918,7 +921,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 elif field == "abuse":
                                         if not "f" in authtest(host, "#wikipedia-en-abuse", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("UPDATE access SET abuse=\'%s\' WHERE cloak=\"%s\";" % (level, specify))
                                         db.commit()
@@ -926,7 +929,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 elif field == "dq" or field == "deltaquad":
                                         if not "f" in authtest(host, "##DeltaQuad", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("UPDATE access SET dq=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
                                         db.commit()
@@ -934,7 +937,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 elif field == "te":
                                         if not "f" in authtest(host, "#techessentials", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("UPDATE access SET te=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
                                         db.commit()
@@ -942,7 +945,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 elif field == "wikipedia":
                                         if not "f" in authtest(host, "#wikipedia", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("UPDATE access SET wikipedia=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
                                         db.commit()
@@ -964,37 +967,37 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         try:
                                 if field == "spi":
                                         if not "f" in authtest(host, "#wikipedia-en-spi", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '%s', '', '', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "abuse":
                                         if not "f" in authtest(host, "#wikipedia-en-abuse", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '%s', '', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "dq" or field == "deltaquad":
                                         if not "f" in authtest(host, "##DeltaQuad", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '%s', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "te":
                                         if not "f" in authtest(host, "#techessentials", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '', '%s', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "wikipedia":
                                         if not "f" in authtest(host, "#wikipedia", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '', '', '%s', '');" % (specify, level) )
                                         db.commit()
                                 if field == "other":
                                         if not "f" in authtest(host, "#other", "no"):
-                                                reply("You aren't authorized to change or read bot permissions.", chan, nick)
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
                                         db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '', '', '', '%s');" % (specify, level) )
                                         db.commit()

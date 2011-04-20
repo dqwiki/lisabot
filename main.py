@@ -221,13 +221,13 @@ def tellFreenode(msg):
         if "Special:Log/rights" in msg:msg = string.replace(msg, "rights", "Changed Userrights")
         if "Special:Log/newusers" in msg:msg = string.replace(msg, "create2", "Created Account Via Email")
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
-        if "Special:Log/delete" in msg:msg = string.replace(msg, "revision", "Changed Revsion Visability")
+        msg = string.replace(msg, "DeltaQuadBot", "DQB")
         if 'Wikipedia:Abuse' in msg or 'Wikipedia talk:Abuse' in msg or ('Special:Log/block' in msg and 'Long-term abuse' in msg):
                 msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
                 print msg
                 say(msg, "#wikipedia-en-abuse")
                 time.sleep(0.5)
-        if 'DeltaQuad' in msg or 'Mlpearc' in msg or 'Vandalism information' in msg or 'Jamesofur' in msg:
+        if 'DeltaQuad' in msg or 'Vandalism information' in msg or 'Jamesofur' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg:
                 print msg
                 say(msg, "##DeltaQuad-RC")
                 time.sleep(0.5)
@@ -235,7 +235,7 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "##DeltaQuad-RC-block")
                 time.sleep(0.5)
-        if '[[07Special:Log/delete14]]4 revision10' in msg or '[[Special:Log/delete]] revision' in msg:
+        if 'Special:Log/delete' in msg and 'revision' in msg:
                 print msg
                 say(msg, "##DeltaQuad-RC-revdel")
                 time.sleep(0.5)
@@ -253,11 +253,9 @@ def tellFreenode(msg):
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02ENWP Rights Change:\x0F ")
                 msg = string.replace(msg, "setstatus", "Global Account Lock/Unlock")
                 msg = string.replace(msg, "gblock2", "Global Block")
+                if "Special:Log/delete" in msg:msg = string.replace(msg, "revision", "Changed Revsion Visability", 1)
                 print msg
                 say(msg, "##DeltaQuad-RC")
-                if 'Global' in msg:
-                        time.sleep(0.5)
-                        say(msg, "##DeltaQuad")
                 time.sleep(0.5)
 if __name__ == "__main__":
     run()
