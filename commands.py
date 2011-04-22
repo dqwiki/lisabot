@@ -584,14 +584,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 time.sleep(.25)
                                 inprogress = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_currently_in_progress&cmlimit=500").read())))
                                 time.sleep(.25)
-                                #waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_Cases_needing_a_clerk&cmlimit=500").read())))
-                                #time.sleep(.25)
+                                waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_Cases_needing_a_clerk&cmlimit=500").read())))
+                                time.sleep(.25)
                                 close = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_pending_close&cmlimit=500").read())))
                                 time.sleep(.25)
                                 admin = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_needing_an_Administrator&cmlimit=500").read())))
                                 time.sleep(.25)
                                 print "Send Msg"
-                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned - %s, Archive - %s, Need admin - %s" % (openspi, cur, cuendorse, inprogress, close, admin), chan, nick)
+                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
                         except:
                                 print traceback.format_exc()
                                 return
