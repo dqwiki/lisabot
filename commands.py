@@ -354,16 +354,26 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
         if command == "project":
                 reply("http://lisabot.org/", chan, nick)
         if command == "version":
-                reply("Version = 1.9.0 Alpha", chan, nick)
+                reply("Version = 1.10.0 Alpha", chan, nick)
         if command == "new":
-                reply("Version 1.9.1", chan, nick)
+                reply("Version 1.10.0", chan, nick)
                 reply("!num spi fixed", chan, nick)
-                reply("Fixed !page", chan, nick)
-                reply("Op actions fixed", chan, nick)
-                reply("Alpha - Safety in main.py for autorestart/restart still in trial", chan, nick)
-                reply("Release on 29/03/2011", chan, nick)
+                reply("Permission Error Messages reformated", chan, nick)
+                reply("Git commit added", chan, nick)
+                reply("Restart Installed and working", chan, nick)
+                reply("RC changed up a bit", chan, nick)
+                reply("Added !bugs back, created !devs", chan, nick)
+                reply("Release on 22/04/2011", chan, nick)
+        if command == "dev" or command == "devs" or command == "developers":
+                reply("DeltaQuad - Project Manager/Owner", chan, nick)
+                reply("Pilif12p - Lead Programmer", chan, nick)
+                reply("JoeGazz84 - Security Manager", chan, nick)
 	if command == "help" or command == "commands":
                 reply("http://lisabot.org/index.php/commands", chan, nick)
+        if command == "bugs" or command == "bug":
+                reply("https://github.com/dqwiki/lisabot/issues", chan, nick)
+        if command == "git" or command == "github":
+                reply("https://github.com/dqwiki/lisabot/", chan, nick)
        	if command == "access":
 		reply("http://lisabot.org/index.php/access-levels", chan, nick)
 	if command == "globalmsg":
@@ -581,7 +591,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 admin = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_needing_an_Administrator&cmlimit=500").read())))
                                 time.sleep(.25)
                                 print "Send Msg"
-                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned - %s, Archive - %s, Need admin - %s" % (openspi, cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
+                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned - %s, Archive - %s, Need admin - %s" % (openspi, cur, cuendorse, inprogress, close, admin), chan, nick)
                         except:
                                 print traceback.format_exc()
                                 return

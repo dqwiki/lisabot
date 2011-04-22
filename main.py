@@ -222,6 +222,7 @@ def tellFreenode(msg):
         if "Special:Log/newusers" in msg:msg = string.replace(msg, "create2", "Created Account Via Email")
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
         msg = string.replace(msg, "DeltaQuadBot", "DQB")
+        msg = string.replace(msg, "DeltaQuad", "DQ")
         if 'Wikipedia:Abuse' in msg or 'Wikipedia talk:Abuse' in msg or ('Special:Log/block' in msg and 'Long-term abuse' in msg):
                 msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
                 print msg
