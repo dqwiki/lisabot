@@ -128,7 +128,7 @@ def main():
                                         say("\x0302Member welcomed:\x0301 \x02%s\x0F was welcomed into \x02%s\x0F." % (nick, REPORT_CHAN), META_CHAN)
                                 except Exception:
                                         print traceback.format_exc()
-                        elif line2[1] == "NOTICE" and line2[6] == "identified":
+                        elif line2[1] == "NOTICE" and "identified" in line2:
                                 print "START"
                                 for chan in CHANS:
                                         msg = "JOIN %s" % chan
