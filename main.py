@@ -32,12 +32,12 @@ s.send("USER %s %s bla :%s\r\n" % (IDENT, HOST, REALNAME))
 print "   USER %s %s bla :%s" % (IDENT, HOST, REALNAME)
 
 def run():
-	while 1:
-		try:
-			main()
-		except Exception:
-			pass
-		time.sleep(10)
+	#while 1:
+		#try:
+	main()
+		#except Exception:
+			#pass
+		#time.sleep(10)
 def main():
         readbuffer=''
         ## Infinte loop - command parsing.
