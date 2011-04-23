@@ -210,7 +210,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			#os.system("exit")
 			os.system("clear")
 			os.system("nice -15 python main.py")
-			exit()
+			os.abort()
 		else:
 			reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
 		return
