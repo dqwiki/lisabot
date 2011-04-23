@@ -75,10 +75,17 @@ def main():
                                                 if welcome(None):
                                                         say("Welcome %s! Just ask your question below; a !clerk will be right with you." % nick[0], WELCOME_CHAN)
                                                         say("\x0302Newbie welcomed:\x0301 \x02%s\x0F was welcomed into \x02%s\x0F." % (nick[0], REPORT_CHAN), META_CHAN)
+                                                        notice("##LisaBot","Please Remember to start me up!")
                                 except Exception:
                                         pass
                         elif line2[1] == "MODE" and line2[2] == "#wikipedia-en-spi" and line2[3] == "+v" and line2[0] == ":ChanServ!ChanServ@services.":
                                 try:
+                                        nick = line2[4]
+                                        if nick == NICK: continue
+                                        number = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Waiting_for_Investigation&cmlimit=500").read()))))
+                                        num2 = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Open&cmlimit=500").read()))))
+                                        aggregate = int(number) + int(num2)
+                                        if nick == NICK: continue
                                         import time
                                         print "Start opening"
                                         cur = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_for_pre-CheckUser_review&cmlimit=500").read())))
