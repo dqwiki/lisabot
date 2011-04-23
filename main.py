@@ -178,6 +178,15 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2):
 		command = string.lower(line2[3][2:])
 		thread.start_new_thread(meta_reporting,(line2, nick, chan, command))
 		authorization = cparser.authtest(host, chan, "no")
+		if "r" in authorization and command == "restart":
+                        import sys
+                        sys.exit()
+                        import os
+                        os.abort()
+                        return
+		elif command == "restart":
+                        say("Restart declined %s" % authorization, META_CHAN)
+                        return
 		if command != "null" and lockdown != "true":
 			 cparser.main(command, line, line2, nick, chan, host, authorization, notice, say, reply, s, s2)
 
