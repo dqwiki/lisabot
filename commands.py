@@ -356,16 +356,17 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
         if command == "project":
                 reply("http://lisabot.org/", chan, nick)
         if command == "version":
-                reply("Version = 1.10.0 Alpha", chan, nick)
+                reply("Version = 1.10.0 Gamma", chan, nick)
         if command == "new":
-                reply("Version 1.10.0", chan, nick)
+                reply("Version 1.10.0 Gamma", chan, nick)
                 reply("!num spi fixed", chan, nick)
                 reply("Permission Error Messages reformated", chan, nick)
                 reply("Git commit added", chan, nick)
                 reply("Restart Installed and working", chan, nick)
                 reply("RC changed up a bit", chan, nick)
                 reply("Added !bugs back, created !devs", chan, nick)
-                reply("Release on 22/04/2011", chan, nick)
+                reply("!remind fixed", chan, nick)
+                reply("Release on 06/05/2011", chan, nick)
         if command == "dev" or command == "devs" or command == "developers":
                 reply("DeltaQuad - Project Manager/Owner", chan, nick)
                 reply("Pilif12p - Lead Programmer", chan, nick)
@@ -797,6 +798,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 else:
                         reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
 	if command == "remind" or command == "reminder":
+                import time
 		try:
 			times = int(line2[4])
 			content = ' '.join(line2[5:])
