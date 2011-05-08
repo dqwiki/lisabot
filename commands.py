@@ -220,7 +220,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 checksafe = 1
                 try:
                         try:
-                                if lastlink:
+                                if "" == lastlink:
                                         if typelink == "link":
                                                 if "TEW" in lastlink:
                                                         reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
