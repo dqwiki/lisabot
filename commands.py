@@ -219,26 +219,27 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "link":
                 checksafe = 1
                 try:
-                        try:if lastlink:
-                                if typelink == "link":
-                                        if "TEW" in lastlink:
-                                                reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
-                                        elif "AW" in lastlink:
-                                                reply("http://apple.techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
-                                        elif "TW" in lastlink:
-                                                reply("http://tw.techessentials.org/wiki/" + " , http://tw.techessentials.org/wiki/"+lastlink, chan, nick)
-                                        else:
-                                                reply("http://enwp.org/" + " , http://enwp.org/"+lastlink, chan, nick)
-        
-                                if typelink == "template":
-                                        if "TEW" in lastlink:
-                                                reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:"+lastlink, chan, nick)        
-                                        elif "AW" in lastlink:
-                                                reply("http://apple.techessentials.org/wiki/Template:" + " , http://apple.techessentials.org/wiki/Template:"+lastlink, chan, nick)        
-                                        elif "TW" in lastlink:
-                                                reply("http://tw.techessentials.org/wiki/Template:" + " , http://tw.techessentials.org/wiki/Template:"+lastlink, chan, nick)
-                                        else:
-                                                reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:"+lastlink, chan, nick)
+                        try:
+                                if lastlink:
+                                        if typelink == "link":
+                                                if "TEW" in lastlink:
+                                                        reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
+                                                elif "AW" in lastlink:
+                                                        reply("http://apple.techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
+                                                elif "TW" in lastlink:
+                                                        reply("http://tw.techessentials.org/wiki/" + " , http://tw.techessentials.org/wiki/"+lastlink, chan, nick)
+                                                else:
+                                                        reply("http://enwp.org/" + " , http://enwp.org/"+lastlink, chan, nick)
+                
+                                        if typelink == "template":
+                                                if "TEW" in lastlink:
+                                                        reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:"+lastlink, chan, nick)        
+                                                elif "AW" in lastlink:
+                                                        reply("http://apple.techessentials.org/wiki/Template:" + " , http://apple.techessentials.org/wiki/Template:"+lastlink, chan, nick)        
+                                                elif "TW" in lastlink:
+                                                        reply("http://tw.techessentials.org/wiki/Template:" + " , http://tw.techessentials.org/wiki/Template:"+lastlink, chan, nick)
+                                                else:
+                                                        reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:"+lastlink, chan, nick)
                         except:
                                 if line2[1] != "PRIVMSG": checksafe = 0
                                 if "[[TEW:" in line:
