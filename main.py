@@ -16,7 +16,6 @@ from datetime import datetime
 HOST, PORT, NICK, IDENT, REALNAME, CHANS, REPORT_CHAN, WELCOME_CHAN, META_CHAN, HOST2, PORT2, CHAN2, BOT, OWNER, PASS = config.host, config.port, config.nick, config.ident, config.realname, config.chans, config.report_chan, config.welcome_chan, config.meta_chan, config.host2, config.port2, config.chan2, config.bot, config.owner, config.password
 
 ld="false"
-lastlnk=""
 
 commandList = cparser.get_commandList()
 
@@ -134,6 +133,9 @@ def main():
                                         msg = "JOIN %s" % chan
                                         s.send(msg + "\r\n")
                                         print "   %s" % msg
+                        if "[[" in line2 and "]]" in line2:
+                                global lastlink
+                                lastlink = line2.split("[[")[1].split("]]")[0]
                         if line2[1] == "PRIVMSG":
                                 try:
                                         if "kicks %s" % NICK in ' '.join(line2):
@@ -190,8 +192,7 @@ def say(msg, chan=CHANS[0]):
     print "   PRIVMSG %s :%s" % (chan, msg)
 	
 def reply(msg, chan=CHANS[0], nick=""):
-   s.send("PRIVMSG %s :\x02%s:\x0F %s\r\n" % (chan, nick, msg))
-   print "   PRIVMSG %s :%s: %s" % (chan, nick, msg)
+   say(msg, chan)
 
 def editreport():
         s2.connect((HOST2, PORT2))

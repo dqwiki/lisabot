@@ -219,55 +219,77 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "link":
                 checksafe = 1
                 try:
-			if line2[1] != "PRIVMSG": checksafe = 0
-			if "[[TEW:" in line:
-                                site = "TEW\:"
-                        elif "[[AW:" in line:
-                                site = "AW\:"
-                        elif "[[TW:" in line:
-                                site = "TW\:"
-                        else:
-                                site = ""
-			if "[[" in line and "]]" in line:
-				if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
-				if "bot" in string.lower(nick): checksafe = 0
-				wls = re.findall("\[\["+site+"(.*?)(\||\]\])", line)
-				wls2 = ""
-				for wls3 in wls:
-					wls2 = wls2 + "\n" + wls3[0]
-				wls2 = re.sub(" ", "_", wls2)
-				wls2 = string.split(wls2, "\n")
-				typelink = "link"
-				print wls2[1:]
-			if "{{" in line and "}}" in line:
-				if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
-				if "bot" in string.lower(nick): checksafe = 0
-				wls = re.findall("\{\{"+site+"(.*?)(\||\}\})", line)
-				wls2 = ""
-				for wls3 in wls:
-					wls2 = wls2 + "\n" + wls3[0]
-				wls2 = re.sub(" ", "_", wls2)
-				wls2 = string.split(wls2, "\n")
-				typelink = "template"
-				print wls2[1:]
-			if typelink == "link" and checksafe == 1:
-                                if site == "TEW\:":
-                                        reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
-                                elif site == "AW\:":
-                                        reply("http://techessentials.org/apple/" + " , http://techessentials.org/apple/".join(wls2[1:]), chan, nick)        
-                                elif site == "TW\:":
-                                        reply("http://testwiki.org/wiki/" + " , http://testwiki.org/wiki/".join(wls2[1:]), chan, nick)
-                                elif site == "":
-                                        reply("http://enwp.org/" + " , http://enwp.org/".join(wls2[1:]), chan, nick)
-                        if typelink == "template" and checksafe == 1:
-                                if site == "TEW":
-                                        reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)        
-                                elif site == "AW":
-                                        reply("http://techessentials.org/apple/Template:" + " , http://techessentials.org/apple/Template:".join(wls2[1:]), chan, nick)        
-                                elif site == "TW":
-                                        reply("http://testwiki.org/wiki/Template:" + " , http://testwiki.org/wiki/Template:".join(wls2[1:]), chan, nick)
-                                elif site == "WP":
-                                        reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:".join(wls2[1:]), chan, nick)
+                        try:if lastlink:
+                                if typelink == "link":
+                                        if "TEW" in lastlink:
+                                                reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
+                                        elif "AW" in lastlink:
+                                                reply("http://apple.techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
+                                        elif "TW" in lastlink:
+                                                reply("http://tw.techessentials.org/wiki/" + " , http://tw.techessentials.org/wiki/"+lastlink, chan, nick)
+                                        else:
+                                                reply("http://enwp.org/" + " , http://enwp.org/"+lastlink, chan, nick)
+        
+                                if typelink == "template":
+                                        if "TEW" in lastlink:
+                                                reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:"+lastlink, chan, nick)        
+                                        elif "AW" in lastlink:
+                                                reply("http://apple.techessentials.org/wiki/Template:" + " , http://apple.techessentials.org/wiki/Template:"+lastlink, chan, nick)        
+                                        elif "TW" in lastlink:
+                                                reply("http://tw.techessentials.org/wiki/Template:" + " , http://tw.techessentials.org/wiki/Template:"+lastlink, chan, nick)
+                                        else:
+                                                reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:"+lastlink, chan, nick)
+                        except:
+                                if line2[1] != "PRIVMSG": checksafe = 0
+                                if "[[TEW:" in line:
+                                        site = "TEW\:"
+                                elif "[[AW:" in line:
+                                        site = "AW\:"
+                                elif "[[TW:" in line:
+                                        site = "TW\:"
+                                else:
+                                        site = ""
+                                if "[[" in line and "]]" in line:
+                                        if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
+                                        if "bot" in string.lower(nick): checksafe = 0
+                                        wls = re.findall("\[\["+site+"(.*?)(\||\]\])", line)
+                                        wls2 = ""
+                                        for wls3 in wls:
+                                                wls2 = wls2 + "\n" + wls3[0]
+                                        wls2 = re.sub(" ", "_", wls2)
+                                        wls2 = string.split(wls2, "\n")
+                                        typelink = "link"
+                                        print wls2[1:]
+                                if "{{" in line and "}}" in line:
+                                        if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
+                                        if "bot" in string.lower(nick): checksafe = 0
+                                        wls = re.findall("\{\{"+site+"(.*?)(\||\}\})", line)
+                                        wls2 = ""
+                                        for wls3 in wls:
+                                                wls2 = wls2 + "\n" + wls3[0]
+                                        wls2 = re.sub(" ", "_", wls2)
+                                        wls2 = string.split(wls2, "\n")
+                                        typelink = "template"
+                                        print wls2[1:]
+                                if typelink == "link" and checksafe == 1:
+                                        if site == "TEW\:":
+                                                reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
+                                        elif site == "AW\:":
+                                                reply("http://apple.techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
+                                        elif site == "TW\:":
+                                                reply("http://tw.techessentials.org/wiki/" + " , http://tw.techessentials.org/wiki/".join(wls2[1:]), chan, nick)
+                                        elif site == "":
+                                                reply("http://enwp.org/" + " , http://enwp.org/".join(wls2[1:]), chan, nick)
+                                if typelink == "template" and checksafe == 1:
+                                        if site == "TEW":
+                                                reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)        
+                                        elif site == "AW":
+                                                reply("http://apple.techessentials.org/wiki/Template:" + " , http://apple.techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)        
+                                        elif site == "TW":
+                                                reply("http://tw.techessentials.org/wiki/Template:" + " , http://tw.techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)
+                                        elif site == "WP":
+                                                reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:".join(wls2[1:]), chan, nick)
+                                return
 		except BaseException:
                         trace = traceback.format_exc() # Traceback.
 			print trace # Print.
@@ -281,56 +303,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			else: report2.append('source unknown')
 			say(report2[0] + ' (' + report2[1] + ')', chan)
 			pass
-		except UnboundLocalError:
-                        lnk = main.lastlnk
-                        if "[[TEW:" in lnk:
-                                site = "TEW\:"
-                        elif "[[AW:" in lnk:
-                                site = "AW\:"
-                        elif "[[TW:" in lnk:
-                                site = "TW\:"
-                        else:
-                                site = ""
-			if "[[" in line and "]]" in lnk:
-				if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
-				if "bot" in string.lower(nick): checksafe = 0
-				wls = re.findall("\[\["+site+"(.*?)(\||\]\])", line)
-				wls2 = ""
-				for wls3 in wls:
-					wls2 = wls2 + "\n" + wls3[0]
-				wls2 = re.sub(" ", "_", wls2)
-				wls2 = string.split(wls2, "\n")
-				typelink = "link"
-				print wls2[1:]
-			if "{{" in line and "}}" in lnk:
-				if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
-				if "bot" in string.lower(nick): checksafe = 0
-				wls = re.findall("\{\{"+site+"(.*?)(\||\}\})", line)
-				wls2 = ""
-				for wls3 in wls:
-					wls2 = wls2 + "\n" + wls3[0]
-				wls2 = re.sub(" ", "_", wls2)
-				wls2 = string.split(wls2, "\n")
-				typelink = "template"
-				print wls2[1:]
-			if typelink == "link" and checksafe == 1:
-                                if site == "TEW\:":
-                                        reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
-                                elif site == "AW\:":
-                                        reply("http://techessentials.org/apple/" + " , http://techessentials.org/apple/".join(wls2[1:]), chan, nick)        
-                                elif site == "TW\:":
-                                        reply("http://testwiki.org/wiki/" + " , http://testwiki.org/wiki/".join(wls2[1:]), chan, nick)
-                                elif site == "":
-                                        reply("http://enwp.org/" + " , http://enwp.org/".join(wls2[1:]), chan, nick)
-                        if typelink == "template" and checksafe == 1:
-                                if site == "TEW":
-                                        reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)        
-                                elif site == "AW":
-                                        reply("http://techessentials.org/apple/Template:" + " , http://techessentials.org/apple/Template:".join(wls2[1:]), chan, nick)        
-                                elif site == "TW":
-                                        reply("http://testwiki.org/wiki/Template:" + " , http://testwiki.org/wiki/Template:".join(wls2[1:]), chan, nick)
-                                elif site == "WP":
-                                        reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:".join(wls2[1:]), chan, nick)
 	if command == "chan":
                 reply(chan, chan, nick)
         if command == "request" or command == "page":
@@ -356,17 +328,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
         if command == "project":
                 reply("http://lisabot.org/", chan, nick)
         if command == "version":
-                reply("Version = 1.10.0 Gamma", chan, nick)
+                reply("Version = 1.11.01 Alpha", chan, nick)
         if command == "new":
-                reply("Version 1.10.0 Gamma", chan, nick)
-                reply("!num spi fixed", chan, nick)
-                reply("Permission Error Messages reformated", chan, nick)
-                reply("Git commit added", chan, nick)
-                reply("Restart Installed and working", chan, nick)
-                reply("RC changed up a bit", chan, nick)
-                reply("Added !bugs back, created !devs", chan, nick)
-                reply("!remind fixed", chan, nick)
-                reply("Release on 06/05/2011", chan, nick)
+                reply("Version 1.11.01 Alpha", chan, nick)
+                reply("Added !ops", chan, nick)
+                reply("Fixed links hopefully", chan, nick)
+                reply("Release on 08/05/2011", chan, nick)
         if command == "dev" or command == "devs" or command == "developers":
                 reply("DeltaQuad - Project Manager/Owner", chan, nick)
                 reply("Pilif12p - Lead Programmer", chan, nick)
@@ -379,6 +346,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 reply("https://github.com/dqwiki/lisabot/", chan, nick)
        	if command == "access":
 		reply("http://lisabot.org/index.php/access-levels", chan, nick)
+	if command == "ops":
+                if "DeltaQuad" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
+                elif "techessentials" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Netalarm.", "#techessentials", nick)
+                elif "wikipedia" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4", "##DeltaQuad", nick)
+                else:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
 	if command == "globalmsg":
 		if "g" in actionlevel:
 			msg = "Global Notice for LisaBot: "		
