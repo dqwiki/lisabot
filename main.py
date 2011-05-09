@@ -175,13 +175,13 @@ def meta_reporting(line2, nick, chan, command):
 		msg = "\x0302Command executed:\x0301 \x02%s\x0F used command \x02%s\x0F in %s." % (nick, command, channel)
 	say(msg, META_CHAN)
 
-def commandparser(line, line2, nick, chan, host, lockdown, s2):
+def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 	if line2[1] == "PRIVMSG" and (line2[3].startswith(":!") or line2[3].startswith(":.")):
 		command = string.lower(line2[3][2:])
 		thread.start_new_thread(meta_reporting,(line2, nick, chan, command))
 		authorization = cparser.authtest(host, chan, "no")
 		if command != "null" and lockdown != "true":
-			 cparser.main(command, line, line2, nick, chan, host, authorization, notice, say, reply, s, s2)
+			 cparser.main(command, line, line2, nick, chan, host, authorization, notice, say, reply, s, s2, lastlink)
 
 def notice(nick, msg):
     s.send("NOTICE %s :%s\r\n" % (nick, msg))
