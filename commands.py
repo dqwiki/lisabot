@@ -217,6 +217,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
 		return
 	if command == "link":
+                import traceback
                 checksafe = 1
                 try:
                         try:
@@ -241,6 +242,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                                 else:
                                                         reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:"+lastlink, chan, nick)
                         except:
+                                print traceback
                                 if line2[1] != "PRIVMSG": checksafe = 0
                                 if "[[TEW:" in line:
                                         site = "TEW\:"
