@@ -279,6 +279,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                                 h=1#holder
                                 except:
                                         typelink = "link"
+                                try:
+                                        if wls2 == "":
+                                                h=1#holder
+                                except:
+                                        wls2 = lastlink
                                 if typelink == "link" and checksafe == 1:
                                         if site == "TEW\:":
                                                 reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
