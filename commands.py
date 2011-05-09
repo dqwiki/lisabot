@@ -274,6 +274,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         wls2 = string.split(wls2, "\n")
                                         typelink = "template"
                                         print wls2[1:]
+                                try:
+                                        if typelink == "test":
+                                                h=1#holder
+                                except:
+                                        typelink = "link"
                                 if typelink == "link" and checksafe == 1:
                                         if site == "TEW\:":
                                                 reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
