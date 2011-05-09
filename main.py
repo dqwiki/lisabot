@@ -134,7 +134,6 @@ def main():
                                         s.send(msg + "\r\n")
                                         print "   %s" % msg
                         if "[[" in line2 and "]]" in line2:
-                                global lastlink
                                 lastlink = "[["+line2.split("[[")[1].split("]]")[0]+"]]"
                         if line2[1] == "PRIVMSG":
                                 try:
