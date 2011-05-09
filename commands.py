@@ -148,9 +148,9 @@ def get_commandList():
         'sql':'sql'
 	}
 
-def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2):
+def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	try:
-		parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2)
+		parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink)
 	except Exception:
 		trace = traceback.format_exc() # Traceback.
 		print trace # Print.
@@ -174,7 +174,7 @@ def quiet():
                 return True
         else:
                 return False
-def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2):
+def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	actionlevel = authtest(host, chan, "no")
 	if "a" in actionlevel:return
 	if command == "shutup":# or command == "quiet":

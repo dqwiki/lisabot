@@ -146,7 +146,7 @@ def main():
                                                 say(":x", chan)
                                                 time.sleep(0.5)
                                                 say("\x01ACTION retaliates with a roundhouse kick.\x01", chan)
-                                        thread.start_new_thread(commandparser,(line, line2, nick, chan, host, ld, s2))
+                                        thread.start_new_thread(commandparser,(line, line2, nick, chan, host, ld, s2, lastlink))
                                 except Exception:
                                         trace = traceback.format_exc() # Traceback.
                                         print trace # Print.
