@@ -275,20 +275,20 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		reply("http://lisabot.org/index.php/access-levels", chan, nick)
 		return
 	if command == "requestvoice":
-                if "rfa" in chan:reply(nick + " \x0312has requested a voice in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
-                if "rfa" in chan:reply(nick + " \x0312has requested a voice in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
-                else:reply(nick + " \x0312has requested a voice in \x0301"+chan+". Ping: DeltaQuad.", "##DeltaQuad", nick)
+                if "rfa" in chan:reply("\x0312"+nick + " \x0312has requested a voice in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
+                if "rfa" in chan:reply("\x0312"+nick + " \x0312has requested a voice in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
+                else:reply("\x0312"+nick + " \x0312has requested a voice in "+chan+". \x0301\x02Ping: DeltaQuad.", "##DeltaQuad", nick)
                 return
 	if command == "ops":
                 if "rfa" in chan:
-                        reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
-                        reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
-                elif "DeltaQuad" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
-                elif "techessentials" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Netalarm.", "#techessentials", nick)
-                elif "spi" in chan:reply(nick + " \x0304has requested operator attention. Ping: DeltaQuad, !clerk, MuZemike, Courcelles, Dmcdevit, Tnxman307, Avi|work, FT2, Shirik, SpitfireWP, Timotheus_Canens.", "#wikipedia-en-spi", nick)
-                elif "afc" in chan:reply(nick + " \x0304has requested operator attention. Ping: Earwig", "#wikipedia-en-afc", nick)
-                elif "abuse" in chan:reply(nick + " \x0304has requested operator attention. Ping: Netalarm, DeltaQuad", "#wikipedia-en-afc", nick)
-                else:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
+                        reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
+                        reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
+                elif "DeltaQuad" in chan:reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
+                elif "techessentials" in chan:reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Netalarm.", "#techessentials", nick)
+                elif "spi" in chan:reply("\x0312"+nick + " \x0304has requested operator attention. \x0301\x02Ping: DeltaQuad, !clerk, MuZemike, Courcelles, Dmcdevit, Tnxman307, Avi|work, FT2, Shirik, SpitfireWP, Timotheus_Canens.", "#wikipedia-en-spi", nick)
+                elif "afc" in chan:reply("\x0312"+nick + " \x0304has requested operator attention. \x0301\x02Ping: Earwig", "#wikipedia-en-afc", nick)
+                elif "abuse" in chan:reply("\x0312"+nick + " \x0304has requested operator attention. \x0301\x02Ping: Netalarm, DeltaQuad", "#wikipedia-en-afc", nick)
+                else:reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
                 return
 	if command == "globalmsg":
 		if "g" in actionlevel:
