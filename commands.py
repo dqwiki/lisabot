@@ -649,6 +649,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         reply("Access Denied, you need the +b/q (ban/quiet flag) to use this action.", chan, nick)
                         return
         if command == "mode":
+                import time
                 if "m" in actionlevel:
                         try:
                                 if "spi" in chan:
