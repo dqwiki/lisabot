@@ -81,7 +81,6 @@ def get_commandList():
 	return {'quiet': 'quiet',
 	'welcome': 'welcome',
 	'greet': 'welcome',
-	'linker': 'linker',
 	'auth': 'auth',
 	'access': 'access',
         'link':'link',
@@ -216,106 +215,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		else:
 			reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
 		return
-	if command == "link":
-                import traceback
-                checksafe = 1
-                try:
-                        try:
-                                if "" == lastlink:
-                                        if typelink == "link":
-                                                if "TEW" in lastlink:
-                                                        reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
-                                                elif "AW" in lastlink:
-                                                        reply("http://apple.techessentials.org/wiki/" + " , http://techessentials.org/wiki/"+lastlink, chan, nick)        
-                                                elif "TW" in lastlink:
-                                                        reply("http://tw.techessentials.org/wiki/" + " , http://tw.techessentials.org/wiki/"+lastlink, chan, nick)
-                                                else:
-                                                        reply("http://enwp.org/" + " , http://enwp.org/"+lastlink, chan, nick)
-                
-                                        if typelink == "template":
-                                                if "TEW" in lastlink:
-                                                        reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:"+lastlink, chan, nick)        
-                                                elif "AW" in lastlink:
-                                                        reply("http://apple.techessentials.org/wiki/Template:" + " , http://apple.techessentials.org/wiki/Template:"+lastlink, chan, nick)        
-                                                elif "TW" in lastlink:
-                                                        reply("http://tw.techessentials.org/wiki/Template:" + " , http://tw.techessentials.org/wiki/Template:"+lastlink, chan, nick)
-                                                else:
-                                                        reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:"+lastlink, chan, nick)
-                        except:
-                                print traceback
-                                if line2[1] != "PRIVMSG": checksafe = 0
-                                if "[[TEW:" in line:
-                                        site = "TEW\:"
-                                elif "[[AW:" in line:
-                                        site = "AW\:"
-                                elif "[[TW:" in line:
-                                        site = "TW\:"
-                                else:
-                                        site = ""
-                                if "[[" in line and "]]" in line:
-                                        if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
-                                        if "bot" in string.lower(nick): checksafe = 0
-                                        wls = re.findall("\[\["+site+"(.*?)(\||\]\])", line)
-                                        wls2 = ""
-                                        for wls3 in wls:
-                                                wls2 = wls2 + "\n" + wls3[0]
-                                        wls2 = re.sub(" ", "_", wls2)
-                                        wls2 = string.split(wls2, "\n")
-                                        typelink = "link"
-                                        print wls2[1:]
-                                if "{{" in line and "}}" in line:
-                                        if host == "wikipedia/Chzz" or host.startswith("gateway/web/freenode/"): checksafe = 0
-                                        if "bot" in string.lower(nick): checksafe = 0
-                                        wls = re.findall("\{\{"+site+"(.*?)(\||\}\})", line)
-                                        wls2 = ""
-                                        for wls3 in wls:
-                                                wls2 = wls2 + "\n" + wls3[0]
-                                        wls2 = re.sub(" ", "_", wls2)
-                                        wls2 = string.split(wls2, "\n")
-                                        typelink = "template"
-                                        print wls2[1:]
-                                try:
-                                        if typelink == "test":
-                                                h=1#holder
-                                except:
-                                        typelink = "link"
-                                try:
-                                        if wls2 == "":
-                                                h=1#holder
-                                except:
-                                        wls2 = lastlink
-                                if typelink == "link" and checksafe == 1:
-                                        if site == "TEW\:":
-                                                reply("http://techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
-                                        elif site == "AW\:":
-                                                reply("http://apple.techessentials.org/wiki/" + " , http://techessentials.org/wiki/".join(wls2[1:]), chan, nick)        
-                                        elif site == "TW\:":
-                                                reply("http://tw.techessentials.org/wiki/" + " , http://tw.techessentials.org/wiki/".join(wls2[1:]), chan, nick)
-                                        elif site == "":
-                                                reply("http://enwp.org/" + " , http://enwp.org/".join(wls2[1:]), chan, nick)
-                                if typelink == "template" and checksafe == 1:
-                                        if site == "TEW":
-                                                reply("http://techessentials.org/wiki/Template:" + " , http://techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)        
-                                        elif site == "AW":
-                                                reply("http://apple.techessentials.org/wiki/Template:" + " , http://apple.techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)        
-                                        elif site == "TW":
-                                                reply("http://tw.techessentials.org/wiki/Template:" + " , http://tw.techessentials.org/wiki/Template:".join(wls2[1:]), chan, nick)
-                                        elif site == "WP":
-                                                reply("http://enwp.org/wiki/Template:" + " , http://enwp.org/wiki/Template:".join(wls2[1:]), chan, nick)
-                                return
-		except BaseException:
-                        trace = traceback.format_exc() # Traceback.
-			print trace # Print.
-			lines = list(reversed(trace.splitlines())) # Convert lines to process traceback....
-			report2 = [lines[0].strip()]
-			for line in lines: 
-				line = line.strip()
-				if line.startswith('File "/'): 
-					report2.append(line[0].lower() + line[1:])
-					break
-			else: report2.append('source unknown')
-			say(report2[0] + ' (' + report2[1] + ')', chan)
-			pass
 	if command == "chan":
                 reply(chan, chan, nick)
         if command == "request" or command == "page":
@@ -341,11 +240,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
         if command == "project":
                 reply("http://lisabot.org/", chan, nick)
         if command == "version":
-                reply("Version = 1.11.01 Alpha", chan, nick)
+                reply("Version = 1.11.01 Beta", chan, nick)
         if command == "new":
-                reply("Version 1.11.01 Alpha", chan, nick)
+                reply("Version 1.11.01 Beta", chan, nick)
                 reply("Added !ops", chan, nick)
                 reply("Fixed links hopefully", chan, nick)
+                reply("Minor fixes", chan, nick)
                 reply("Release on 08/05/2011", chan, nick)
         if command == "dev" or command == "devs" or command == "developers":
                 reply("DeltaQuad - Project Manager/Owner", chan, nick)
@@ -360,9 +260,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
        	if command == "access":
 		reply("http://lisabot.org/index.php/access-levels", chan, nick)
 	if command == "ops":
-                if "DeltaQuad" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
+                if "rfa" in chan:
+                        reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
+                        reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
+                elif "DeltaQuad" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
                 elif "techessentials" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Netalarm.", "#techessentials", nick)
-                elif "wikipedia" in chan:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4", "##DeltaQuad", nick)
+                elif "spi" in chan:reply(nick + " \x0304has requested operator attention. Ping: DeltaQuad, !clerk, MuZemike, Courcelles, Dmcdevit, Tnxman307, Avi|work, FT2, Shirik, SpitfireWP, Timotheus_Canens.", "#wikipedia-en-spi", nick)
+                elif "afc" in chan:reply(nick + " \x0304has requested operator attention. Ping: Earwig", "#wikipedia-en-afc", nick)
+                elif "abuse" in chan:reply(nick + " \x0304has requested operator attention. Ping: Netalarm, DeltaQuad", "#wikipedia-en-afc", nick)
                 else:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
 	if command == "globalmsg":
 		if "g" in actionlevel:
