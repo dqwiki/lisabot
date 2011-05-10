@@ -181,10 +181,13 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
         if command == "talk":# or command == "unquiet":
                 if "f" in actionlevel:db.query("UPDATE `u_deltaquad_rights`.`config` SET `value` = 'false' WHERE `config`.`param` = 'quiet' AND `config`.`value` = 'true' LIMIT 1 ;")
         #if quiet():return
-        if command == "blockinfo":say(blockinfo(" ".join(line2[4:])), chan)
+        if command == "blockinfo":
+                say(blockinfo(" ".join(line2[4:])), chan)
+                return
         if command == "ipinfo":
                 say(blockinfo(line2[4]), chan)
                 say(getGeo(line2[4]),chan)
+                return
         if command == "pull":
                 if "r" in actionlevel:
                         try:
@@ -230,35 +233,52 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 notice(line2[4], "You have been requested by " + nick)
                         except:
                                 notice(nick, "Your request format is invalid.")
+                return
 	if command == "myhost":
                 reply(host, chan, nick)
+                return
 	if command == "sayhi":
                 lisabot = "*waves* Hello I am LisaBot. I run off of the Willow server on the Wikimedia Toolserver."
                 reply(lisabot, chan, nick)
+                return
         if command == "support":
                 reply("http://support.lisabot.org/", chan, nick)
+                return
         if command == "project":
                 reply("http://lisabot.org/", chan, nick)
+                return
         if command == "version":
                 reply("Version = 1.11.01 Beta", chan, nick)
+                return
         if command == "new":
                 reply("Version 1.11.01 Beta", chan, nick)
                 reply("Added !ops", chan, nick)
                 reply("Fixed links hopefully", chan, nick)
                 reply("Minor fixes", chan, nick)
                 reply("Release on 08/05/2011", chan, nick)
+                return
         if command == "dev" or command == "devs" or command == "developers":
                 reply("DeltaQuad - Project Manager/Owner", chan, nick)
                 reply("Pilif12p - Lead Programmer", chan, nick)
                 reply("JoeGazz84 - Security Manager", chan, nick)
+                return
 	if command == "help" or command == "commands":
                 reply("http://lisabot.org/index.php/commands", chan, nick)
+                return
         if command == "bugs" or command == "bug":
                 reply("https://github.com/dqwiki/lisabot/issues", chan, nick)
+                return
         if command == "git" or command == "github":
                 reply("https://github.com/dqwiki/lisabot/", chan, nick)
+                return
        	if command == "access":
 		reply("http://lisabot.org/index.php/access-levels", chan, nick)
+		return
+	if command == "requestvoice":
+                if "rfa" in chan:reply(nick + " \x0312has requested a voice in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
+                if "rfa" in chan:reply(nick + " \x0312has requested a voice in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
+                else:reply(nick + " \x0312has requested a voice in \x0301"+chan+". Ping: DeltaQuad.", "##DeltaQuad", nick)
+                return
 	if command == "ops":
                 if "rfa" in chan:
                         reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
@@ -269,6 +289,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 elif "afc" in chan:reply(nick + " \x0304has requested operator attention. Ping: Earwig", "#wikipedia-en-afc", nick)
                 elif "abuse" in chan:reply(nick + " \x0304has requested operator attention. Ping: Netalarm, DeltaQuad", "#wikipedia-en-afc", nick)
                 else:reply(nick + " \x0304has requested operator attention in \x0301"+chan+". Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
+                return
 	if command == "globalmsg":
 		if "g" in actionlevel:
 			msg = "Global Notice for LisaBot: "		
@@ -293,6 +314,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 except:
                         temp5 = authtest(host, chan, "soft")
                         reply('Access Codes: %s' % temp5, chan, nick)
+                return
 	if command == "join":
 		if "j" in actionlevel:
 			try:
