@@ -633,8 +633,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#techessentials-managers"  
 			s.send("JOIN %s\r\n" % channel)
-			channel = "#wikipedia-rfa"  
-			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:
 			reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
