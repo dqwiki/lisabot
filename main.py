@@ -277,7 +277,7 @@ def tellFreenode(msg):
         elif 'Wikipedia:Requests for adminship' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02\x0304New RfA:\x0F\x0301 ")
                 print msg
-                say(msg, "#wikipedia-rfa")
+                say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
         if 'Special:Log/delete' in msg and 'revision' in msg:
                 print msg
