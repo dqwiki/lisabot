@@ -525,10 +525,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
                 if "b" in actionlevel and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
                         try:
-                                if "spi" in chan:
-                                        #reply("I'm trying!", chan, nick)
-                                        say("op %s %s" % (chan, "LisaBot"), "ChanServ")
-                                        time.sleep(1)
                                 if command == "kick":
                                         s.send("KICK %s %s :%s\r\n" % (chan, line2[4], line2[4]))
                                 if command == "ban":
@@ -542,10 +538,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
-                                if "spi" in chan:
-                                        time.sleep(1)
-                                        say("deop %s %s" % (chan, "LisaBot"), "ChanServ")
-                                        return
                         except:
                                 if line2[4]:
                                         reply("I do not have sufficienct authorization.", chan, nick)
@@ -556,18 +548,10 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                 elif "q" in actionlevel and (command == "quiet" or command == "unquiet"):      
                         try:
-                                if "spi" in chan:
-                                        #reply("I'm trying!", chan, nick)
-                                        say("op %s %s" % (chan, "LisaBot"), "ChanServ")
-                                        time.sleep(1)
                                 if command == "unquiet":
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
-                                if "spi" in chan:
-                                        time.sleep(1)
-                                        say("deop %s %s" % (chan, "LisaBot"), "ChanServ")
-                                        return
                         except:
                                 reply("I do not have sufficienct authorization.", chan, nick)
                                 print traceback.format_exc()
@@ -579,12 +563,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 import time
                 if "m" in actionlevel:
                         try:
-                                if "spi" in chan:
-                                        say("op %s %s" % (chan, "LisaBot"), "ChanServ")
-                                        time.sleep(1)
-                                        s.send("MODE %s %s %s\r\n" % (chan, line2[4], line2[5]))
-                                        time.sleep(1)
-                                        say("deop %s %s" % (chan, "LisaBot"), "ChanServ")
                                 if line2[5]:
                                         if chan == "##DeltaQuadBot":
                                                 say("op ##DeltaQuadBot LisaBot", "ChanServ")
@@ -605,11 +583,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 if "s" in actionlevel:
                         channel = "#wikipedia-en-abuse-v"
                         s.send("JOIN %s\r\n" % channel)
-			channel = "##dusti"  
-			s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-private"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "##DeltaQuad-class"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#techessentials"  
 			s.send("JOIN %s\r\n" % channel)
@@ -627,11 +601,13 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#techessentials-apple"  
 			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-dusti"  
-			s.send("JOIN %s\r\n" % channel)
 			channel = "#testwiki"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#techessentials-managers"  
+			s.send("JOIN %s\r\n" % channel)
+			channel = "##DeltaQuad-RFA"  
+			s.send("JOIN %s\r\n" % channel)
+			channel = "#everythingfoodanddrink"  
 			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:

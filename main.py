@@ -269,12 +269,12 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
-        elif 'Wikipedia:Requests for adminship/' in msg:
+        elif 'Wikipedia:Requests for adminship/' in msg and 'Wikipedia:Miscellany for deletion' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x0304New RfA Change:\x0F\x0301 ")
                 print msg
                 say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
-        elif 'Wikipedia:Requests for adminship' in msg:
+        elif 'Wikipedia:Requests for adminship' in msg and 'Wikipedia:Miscellany for deletion' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02\x0304New RfA:\x0F\x0301 ")
                 print msg
                 say(msg, "##DeltaQuad-rfa")
@@ -286,10 +286,6 @@ def tellFreenode(msg):
         if 'Sockpuppet investigations' in msg and 'bot' not in msg and 'Special:Log/block' not in msg:
                 print msg
                 say(msg, "#wikipedia-en-spi")
-                time.sleep(0.5)
-        if 'Special:Log/newusers' in msg:
-                print msg
-                say(msg, "##DeltaQuad-RC-newacc")
                 time.sleep(0.5)
         if 'setstatus' in msg or 'Special:Log/rights' in msg or 'gblock2' in msg:
                 msg = string.replace(msg, "\x02Meta Wiki:\x0F ", "\x02Global Action:\x0F ")
