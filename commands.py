@@ -46,6 +46,7 @@ def authdb(host, chan, secure):
                 teaccess=data[0][4]
                 wikiaccess=data[0][5]
                 otheraccess=data[0][6]
+                msgaccess=data[0][7]
                 #say("Entry \"\x02%s\x0F\": Cloak: %s SPI: %s Abuse: %s DQ: %s TE: %s Global: %s" % (specify, cloak, spiaccess, abuseaccess, dqaccess, teaccess, globalaccess), chan)
                 if "DeltaQuad" in chan or "LisaBot" in chan or "deltaquad" in chan or "lisabot" in chan:
                         return dqaccess
@@ -57,8 +58,10 @@ def authdb(host, chan, secure):
                         return spiaccess
                 elif "wikipedia" in chan:
                         return wikiaccess
-                else:
+                elif "#" in chan:
                         return otheraccess
+                else:
+                        return msgaccess
         except Exception:
                 print traceback.format_exc()
                 return ""
@@ -856,6 +859,22 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
+                                elif field == "other":
+                                        if not "f" in authtest(host, "#random", "no"):
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
+                                                return
+                                        db.query("UPDATE access SET other=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
+                                        db.commit()
+                                        reply("Done!", chan, nick)
+                                        return
+                                elif field == "msg":
+                                        if not "f" in authtest(host, "test", "no"):
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
+                                                return
+                                        db.query("UPDATE access SET msg=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
+                                        db.commit()
+                                        reply("Done!", chan, nick)
+                                        return
                                 else:
                                         reply("You did not specify a valid channel group. (Options: spi, abuse, te, dq" % specify, chan, nick)
                         except Exception:
@@ -874,37 +893,43 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         if not "f" in authtest(host, "#wikipedia-en-spi", "no"):
                                                 reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '%s', '', '', '', '', '');" % (specify, level) )
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '%s', '', '', '', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "abuse":
                                         if not "f" in authtest(host, "#wikipedia-en-abuse", "no"):
                                                 reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '%s', '', '', '', '');" % (specify, level) )
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '%s', '', '', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "dq" or field == "deltaquad":
                                         if not "f" in authtest(host, "##DeltaQuad", "no"):
                                                 reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '%s', '', '', '');" % (specify, level) )
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '%s', '', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "te":
                                         if not "f" in authtest(host, "#techessentials", "no"):
                                                 reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '', '%s', '', '');" % (specify, level) )
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '%s', '', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "wikipedia":
                                         if not "f" in authtest(host, "#wikipedia", "no"):
                                                 reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '', '', '%s', '');" % (specify, level) )
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '', '%s', '', '');" % (specify, level) )
                                         db.commit()
                                 if field == "other":
                                         if not "f" in authtest(host, "#other", "no"):
                                                 reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                                                 return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`) VALUES ('%s', '', '', '', '', '', '%s');" % (specify, level) )
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '', '', '%s', '');" % (specify, level) )
+                                        db.commit()
+                                if field == "msg":
+                                        if not "f" in authtest(host, "#other", "no"):
+                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
+                                                return
+                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '', '', '', '%s');" % (specify, level) )
                                         db.commit()
                                 reply("Done!", chan, nick)
                         except Exception:
