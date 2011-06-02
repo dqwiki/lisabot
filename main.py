@@ -299,28 +299,28 @@ def tellFreenode(msg):
                 time.sleep(0.5)
         if 'Wikipedia:Requests for permissions/Rollback' in msg or 'Wikipedia:Requests for permissions/File Mover' in msg or 'Wikipedia:Requests for permissions/Account Creator' in msg or 'Wikipedia:Requests for permissions/Confirmed' in msg or 'Wikipedia:Requests for permissions/Autopatrolled' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Rights Changes:\x0F ")
-                print msg + " !att-admin-rfp"
-                say(msg, "##DeltaQuad-RC-admin")
+                print msg 
+                say(msg + " !att-admin-rfp", "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Wikipedia:Requests for page protection' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Page Protection:\x0F ")
-                print msg + " !att-admin-rfpp"
-                say(msg, "##DeltaQuad-RC-admin")
+                print msg
+                say(msg + " !att-admin-rfpp", "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Wikipedia:Administrator intervention against vandalism' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Vandalism Blocking:\x0F ")
-                print msg + " !att-admin-aiv"
-                say(msg, "##DeltaQuad-RC-admin")
+                print msg
+                say(msg + " !att-admin-aiv", "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Wikipedia:Usernames for administrator attention' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Username Blocking:\x0F ")
-                print msg + " !att-admin-uaa"
-                say(msg, "##DeltaQuad-RC-admin")
+                print msg
+                say(msg + " !att-admin-uaa", "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Requesting speedy deletion' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02CSD:\x0F ")
-                print msg + " !att-admin-delete"
-                say(msg, "##DeltaQuad-RC-admin")
+                print msg
+                say(msg + " !att-admin-delete", "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
 if __name__ == "__main__":
     run()
