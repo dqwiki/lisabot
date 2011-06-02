@@ -275,7 +275,7 @@ def tellFreenode(msg):
                 say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
         elif 'Wikipedia:Requests for adminship' in msg and 'Wikipedia:Miscellany for deletion' not in msg:
-                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02\x0304New RfA:\x0F\x0301 ")
+                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02\x0304RfA Status Change:\x0F\x0301 ")
                 print msg
                 say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
@@ -296,6 +296,31 @@ def tellFreenode(msg):
                 if "Special:Log/delete" in msg:msg = string.replace(msg, "revision", "Changed Revsion Visability", 1)
                 print msg
                 say(msg, "##DeltaQuad-RC")
+                time.sleep(0.5)
+        if 'Wikipedia:Requests for permissions/Rollback' in msg or 'Wikipedia:Requests for permissions/File Mover' in msg or 'Wikipedia:Requests for permissions/Account Creator' in msg or 'Wikipedia:Requests for permissions/Confirmed' in msg or 'Wikipedia:Requests for permissions/Autopatrolled' in msg:
+                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Rights Changes:\x0F ")
+                print msg + " !att-admin-rfp"
+                say(msg, "##DeltaQuad-RC-admin")
+                time.sleep(0.5)
+        if 'Wikipedia:Requests for page protection' in msg:
+                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Page Protection:\x0F ")
+                print msg + " !att-admin-rfpp"
+                say(msg, "##DeltaQuad-RC-admin")
+                time.sleep(0.5)
+        if 'Wikipedia:Administrator intervention against vandalism' in msg:
+                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Vandalism Blocking:\x0F ")
+                print msg + " !att-admin-aiv"
+                say(msg, "##DeltaQuad-RC-admin")
+                time.sleep(0.5)
+        if 'Wikipedia:Usernames for administrator attention' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg:
+                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Username Blocking:\x0F ")
+                print msg + " !att-admin-uaa"
+                say(msg, "##DeltaQuad-RC-admin")
+                time.sleep(0.5)
+        if 'Requesting speedy deletion' in msg:
+                msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02CSD:\x0F ")
+                print msg + " !att-admin-delete"
+                say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
 if __name__ == "__main__":
     run()
