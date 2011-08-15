@@ -179,7 +179,7 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 	if line2[1] == "PRIVMSG" and (line2[3].startswith(":!") or line2[3].startswith(":.")):
 		command = string.lower(line2[3][2:])
 		thread.start_new_thread(meta_reporting,(line2, nick, chan, command))
-		authorization = cparser.authtest(host, chan, "no")
+		authorization = cparser.authtest(host, chan)
 		if command != "null" and lockdown != "true":
 			 cparser.main(command, line, line2, nick, chan, host, authorization, notice, say, reply, s, s2, lastlink)
 
