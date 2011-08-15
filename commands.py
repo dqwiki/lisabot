@@ -50,12 +50,27 @@ def authdb(host, chan):
                 print "error"
         if '@' not in specify:specify = '@' + specify
         try:
-                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\";" % specify)
+                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" %(specify,chan))
                 r = db.use_result()
-                data = r.fetch_row(0)
-                try:print data[0][5]
-                except:return ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                return data[0]
+                data = r.fetch_row(0)[0]
+                try:
+                        print data[5]
+                        auth = data
+                except:auth = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" %(specify,chan))
+                rglobal = db.use_result()
+                authglobal = rglobal.fetch_row(0)[0]
+                try:
+                        print authglobal[5]
+                except:authglobal = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                count = 0
+                for entry in authglobal:
+                        count = count + 1
+                        try:float(entry)
+                        except ValueError:continue
+                        if entry == 0:authglobal[count-1] = auth[count-1]
+                        else:continue
+                return authglobal
         except:
                 return
 
@@ -706,8 +721,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 except:
                         say("Try a valid IP address.", chan)
 	if command == "sql" or command == "perms":
-                reply("This action set is currently disabled due to a new permissions system.", chan, nick)
-                return
                 if not actionlevel[voice] == 1:
                         reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                         return
@@ -722,23 +735,40 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		if action == "read":
                         if " " in specify: specify = string.split(specify, " ")[0]
                         if not specify or "\"" in specify:
-                                reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
+                                reply("Please include the name of the entry you would like to read after the command.", chan, nick)
                                 return
                         try:
-                                db.query("SELECT * FROM access WHERE cloak = \"%s\";" % specify)
+                                if line2[5] == "@global":
+                                        channew = "@global"
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % (specify,chan))
+                                else:
+                                        channew = chan
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (specify,chan))
                                 r = db.use_result()
                                 data = r.fetch_row(0)
                                 cloak = data[0][0]
-                                spiaccess=data[0][1]
-                                abuseaccess=data[0][2]
-                                dqaccess=data[0][3]
-                                teaccess=data[0][4]
-                                wikiaccess=data[0][5]
-                                otheraccess=data[0][6]
-                                say("Entry \"\x02%s\x0F\": Cloak: %s SPI: %s Abuse: %s DQ: %s TE: %s Wikipedia: %s Other: %s" % (specify, cloak, spiaccess, abuseaccess, dqaccess, teaccess, wikiaccess, otheraccess), chan)
+                                channel=data[0][1]
+                                #s added to all commands because without 's' is already defined
+                                ops=data[0][2]
+                                voices=data[0][3]
+                                bans=data[0][4]
+                                kicks=data[0][5]
+                                globalmsgs=data[0][6]
+                                startups=data[0][7]
+                                quiets=data[0][8]
+                                nicks=data[0][9]
+                                modes=data[0][10]
+                                trouts=data[0][11]
+                                permissions=data[0][12]
+                                restarts=data[0][13]
+                                joinparts=data[0][14]
+                                blockeds=data[0][15]
+                                notice(nick, "Entry \"\x02%s\x0F\": Cloak: %s Channel: %s Ops: %s Voice: %s Globalmsg/Startup: %s Nick: %s Ban: %s Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (specify, channew, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds), chan)
                         except Exception:
                                 reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
                         return
+                reply("All permission modifications are disabled at this time.", chan, nick)
+                return
                 elif action == "del":
                         if " " in specify:specify = string.split(specify, " ")[0]
                         if not specify or "\"" in specify:
