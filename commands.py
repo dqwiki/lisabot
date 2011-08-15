@@ -65,21 +65,23 @@ def authdb(host, chan):
                 except:authglobal = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 count = 0
                 authfinal = []
+                authfinal.insert(-1, '@none')
+                authfinal.insert(1, '@global')
                 for entry in authglobal:
                         count = count + 1
                         try:float(entry)
                         except ValueError:continue
-                        if entry == 0:authfinal.insert(-1, auth[count-1]) 
+                        if entry == 0:authfinal.insert(count-1, auth[count-1]) 
                         else:
                                 try:
                                         authfinal[count-1] = authglobal[count-1]
                                 except:
-                                        authfinal.insert(-1, authglobal[count-1]) 
-                print authfinal
+                                        authfinal.insert(count-1, authglobal[count-1]) 
+                #print authfinal
                 return authfinal
         except:
                 trace = traceback.format_exc() # Traceback.
-		print trace # Print.
+                print trace # Print.
                 return
 
 def authtest(host, chan):
@@ -183,7 +185,13 @@ def quiet():
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	actionlevel = authtest(host, chan)
 	print actionlevel
-	if actionlevel[blocked] == 1:return
+	try:
+                if actionlevel[blocked] == 1:return
+        except:
+                trace = traceback.format_exc() # Traceback.
+		print trace # Print.
+                say("Error with obtaining your access codes.", chan)
+                return
         if command == "blockinfo":
                 say(blockinfo(" ".join(line2[4:])), chan)
                 return
