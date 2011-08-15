@@ -769,7 +769,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         return
                 reply("All permission modifications are disabled at this time.", chan, nick)
                 return
-                elif action == "del":
+        """        elif action == "del":
                         if " " in specify:specify = string.split(specify, " ")[0]
                         if not specify or "\"" in specify:
                                 reply("Invalid command", chan, nick)
@@ -908,7 +908,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Error.", chan, nick)
                                 print traceback.format_exc()
                         return
-
+"""
 def getGeo(ip):#,loc):
         # Copyright (c) 2010, Westly Ward
         # All rights reserved.
