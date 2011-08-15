@@ -64,6 +64,7 @@ def authdb(host, chan):
                         print authglobal[5]
                 except:authglobal = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 count = 0
+                authfinal = []
                 for entry in authglobal:
                         count = count + 1
                         try:float(entry)
