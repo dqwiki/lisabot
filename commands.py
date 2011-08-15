@@ -70,6 +70,7 @@ def authdb(host, chan):
                         except ValueError:continue
                         if entry == 0:authglobal[count-1] = auth[count-1]
                         else:continue
+                print authglobal
                 return authglobal
         except:
                 return
