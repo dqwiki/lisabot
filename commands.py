@@ -68,10 +68,14 @@ def authdb(host, chan):
                         count = count + 1
                         try:float(entry)
                         except ValueError:continue
-                        if entry == 0:authglobal[count-1] = auth[count-1]
-                        else:continue
-                print authglobal
-                return authglobal
+                        if entry == 0:authfinal.insert(-1, auth[count-1]) 
+                        else:
+                                try:
+                                        authfinal[count-1] = authglobal[count-1]
+                                except:
+                                        authfinal.insert(-1, authglobal[count-1]) 
+                print authfinal
+                return authfinal
         except:
                 trace = traceback.format_exc() # Traceback.
 		print trace # Print.
