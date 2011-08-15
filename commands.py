@@ -764,6 +764,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 data = r.fetch_row(0)
+                                print data
                                 cloak = data[0][0]
                                 channel=data[0][1]
                                 #s added to all commands because without 's' is already defined
