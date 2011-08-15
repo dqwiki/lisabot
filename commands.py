@@ -73,6 +73,8 @@ def authdb(host, chan):
                 print authglobal
                 return authglobal
         except:
+                trace = traceback.format_exc() # Traceback.
+		print trace # Print.
                 return
 
 def authtest(host, chan):
