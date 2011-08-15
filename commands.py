@@ -174,7 +174,7 @@ def quiet():
                 return False
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	actionlevel = authtest(host, chan)
-	if actionlevel[blocked] == 1:return
+	if int(actionlevel[blocked]) == 1:return
         if command == "blockinfo":
                 say(blockinfo(" ".join(line2[4:])), chan)
                 return
