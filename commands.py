@@ -57,7 +57,7 @@ def authdb(host, chan):
                         print data[5]
                         auth = data
                 except:auth = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" %(specify,chan))
+                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" %specify)
                 rglobal = db.use_result()
                 try:
                         authglobal = rglobal.fetch_row(0)[0]
