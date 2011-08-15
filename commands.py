@@ -748,8 +748,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			return
                 import MySQLdb
 		db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-		reqchan = ' '.join(line2[5])
-		cloak = ' '.join(line2[6])
+		reqchan = str(line2[5])
+		cloak = str(line2[6])
 		if action == "read":
                         if " " in cloak: cloak = string.split(cloak, " ")[0]
                         if not cloak or "\"" in cloak:
