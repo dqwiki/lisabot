@@ -23,51 +23,41 @@ import config, time
 HOST, PORT, NICK, IDENT, REALNAME, CHANS, REPORT_CHAN, WELCOME_CHAN, META_CHAN, HOST2, PORT2, CHAN2, BOT, OWNER, PASS = config.host, config.port, config.nick, config.ident, config.realname, config.chans, config.report_chan, config.welcome_chan, config.meta_chan, config.host2, config.port2, config.chan2, config.bot, config.owner, config.password
 
 KEY=config.key
-def authdb(host, chan, secure):
-        import MySQLdb
-	db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-	specify = host
+
+## MySQL constants for access commands
+op=2
+voice=3
+ban=4
+kick=5
+globalmsg=6
+startup=7
+quiet=8
+nick=9
+mode=10
+trout=11
+permission=12
+restart=13
+joinpart=14
+blocked=15
+
+def authdb(host, chan):
+        import MySQLdb, traceback
+        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
+        specify = host
         if " " in specify: specify = string.split(specify, " ")[0]
         if not specify or "\"" in specify:
                 reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
-                return
-        if '@' not in specify:
-                specify = '@' + specify
+                print "error"
+        if '@' not in specify:specify = '@' + specify
         try:
-                print specify
-                db.query("SELECT * FROM access WHERE cloak = \"%s\";" % specify)
+                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\";" % specify)
                 r = db.use_result()
-                print r
                 data = r.fetch_row(0)
-                print data
-                spiaccess=data[0][1]
-                abuseaccess=data[0][2]
-                dqaccess=data[0][3]
-                teaccess=data[0][4]
-                wikiaccess=data[0][5]
-                otheraccess=data[0][6]
-                msgaccess=data[0][7]
-                #say("Entry \"\x02%s\x0F\": Cloak: %s SPI: %s Abuse: %s DQ: %s TE: %s Global: %s" % (specify, cloak, spiaccess, abuseaccess, dqaccess, teaccess, globalaccess), chan)
-                if "DeltaQuad" in chan or "LisaBot" in chan or "deltaquad" in chan or "lisabot" in chan:
-                        return dqaccess
-                elif "abuse" in chan:
-                        return abuseaccess
-                elif "tech" in chan or "testwiki" in chan:
-                        return teaccess
-                elif "spi" in chan:
-                        return spiaccess
-                elif "wikipedia" in chan:
-                        return wikiaccess
-                elif "#" in chan:
-                        return otheraccess
-                else:
-                        return msgaccess
-        except Exception:
-                print traceback.format_exc()
-                return ""
-                        
+                return data[0]
+        except:
+                return
 
-def authtest(host, chan, secure):
+def authtest(host, chan):
         if not "@" in host:host= "@" + host
 	if host == OWNER:
                 print "owner"
@@ -77,8 +67,7 @@ def authtest(host, chan, secure):
 		return "bot"
 	else:
                 print "AuthDB"
-                if secure == "hard":return authdb(host, chan, True)
-                else:return authdb(host, chan, False)
+                return authdb(host, chan)
 	return False
 def get_commandList():
 	return {'quiet': 'quiet',
@@ -177,13 +166,8 @@ def quiet():
         else:
                 return False
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
-	actionlevel = authtest(host, chan, "no")
-	if "a" in actionlevel:return
-	if command == "shutup":# or command == "quiet":
-                if "f" in actionlevel:db.query("UPDATE `u_deltaquad_rights`.`config` SET `value` = 'false' WHERE `config`.`param` = 'quiet' AND `config`.`value` = 'true' LIMIT 1 ;")
-        if command == "talk":# or command == "unquiet":
-                if "f" in actionlevel:db.query("UPDATE `u_deltaquad_rights`.`config` SET `value` = 'false' WHERE `config`.`param` = 'quiet' AND `config`.`value` = 'true' LIMIT 1 ;")
-        #if quiet():return
+	actionlevel = authtest(host, chan)
+	if actionlevel[blocked] == 1:return
         if command == "blockinfo":
                 say(blockinfo(" ".join(line2[4:])), chan)
                 return
@@ -192,7 +176,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 say(getGeo(line2[4]),chan)
                 return
         if command == "pull":
-                if "r" in actionlevel:
+                if actionlevel[restart] == 1:
                         try:
                                 import sys
                                 sys.path.append("/home/deltaquad/")
@@ -205,7 +189,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 return
 	if command == "restart":
 		import thread, time
-		if "r" in actionlevel:
+		if actionlevel[restart] == 1:
                         s.send("QUIT\r\n")
                         s.shutdown(socket.SHUT_RDWR)
                         time.sleep(2)
@@ -224,7 +208,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "chan":
                 reply(chan, chan, nick)
         if command == "request" or command == "page":
-                if not "t" in actionlevel:
+                if actionlevel[trout]==0:
                         reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
                         return
                 #say(line2[4] + " to " + line2[5] +". Thank You!", chan)
@@ -294,7 +278,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 else:reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
                 return
 	if command == "globalmsg":
-		if "g" in actionlevel:
+		if actionlevel[globalmsg] == 1:
 			msg = "Global Notice for LisaBot: "		
                         msg = msg + ' '.join(line2[4:])
 			notice("#wikipedia-en-abuse", msg)
@@ -319,7 +303,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         reply('Access Codes: %s' % temp5, chan, nick)
                 return
 	if command == "join":
-		if "j" in actionlevel:
+		if actionlevel[joinpart] == 1:
 			try:
 				channel = line2[4]
 			except Exception:
@@ -330,7 +314,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +j (join/part flag) to use this action.", chan, nick)
 		return
 	if command == "part":
-		if "j" in actionlevel:
+		if actionlevel[joinpart] == 1:
 			try:
 				channel = line2[4]
 			except Exception:
@@ -350,7 +334,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +j (join/part flag) to use this action.", chan, nick)
 		return
 	if command == "quit" or command == "die" or command == "suicide":
-		if not "p" in actionlevel:
+		if actionlevel[startup] == 0:
 				reply("Access Denied, you need the +p (power flag) to use this action." % OWNER, chan, nick)
 		else:
 			try:
@@ -361,7 +345,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			sys.exit(1)
 		return
 	if command == "msg":
-		if "s" in actionlevel:
+		if actionlevel[startup] == 1:
 			say(' '.join(line2[5:]), line2[4])
 		else:
 			reply("Access Denied, you need the +s (talk as bot flag) to use this action.", chan, nick)
@@ -515,7 +499,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 return
 		return
 	if command == "nick":
-		if "n" in actionlevel:
+		if actionlevel[nick] == 1:
 			try:
 				new_nick = line2[4]
 			except Exception:
@@ -526,7 +510,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +n (nick flag) to use this action.", chan, nick)
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
-                if "b" in actionlevel and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
+                if actionlevel[ban] == 1 and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
                         try:
                                 if command == "kick":
                                         s.send("KICK %s %s :%s\r\n" % (chan, line2[4], line2[4]))
@@ -549,7 +533,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 else:
                                         reply("Please enter a user.", chan, nick)
                                         return
-                elif "q" in actionlevel and (command == "quiet" or command == "unquiet"):      
+                elif actionlevel[quiet] == 1 and (command == "quiet" or command == "unquiet"):      
                         try:
                                 if command == "unquiet":
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
@@ -564,7 +548,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         return
         if command == "mode":
                 import time
-                if "m" in actionlevel:
+                if actionlevel[mode] == 1:
                         try:
                                 if line2[5]:
                                         if chan == "##DeltaQuadBot":
@@ -583,7 +567,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 else:
                         reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
 	if command == "startup":
-                if "s" in actionlevel:
+                if actionlevel[startup] == 1:
                         channel = "#wikipedia-en-abuse-v"
                         s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-private"  
@@ -614,6 +598,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-RC-admin"  
 			s.send("JOIN %s\r\n" % channel)
+			channel = "#wikipedia-en-proxy"  
+			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:
 			reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
@@ -621,7 +607,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
-                if "o" in actionlevel:
+                if actionlevel[op] == 1:
                         try:
                                 try:
                                         user = line2[4]
@@ -631,7 +617,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         except:
                                 reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
                         return
-		elif "v" in actionlevel:
+		elif actionlevel[voice] == 1:
                         if command == "op":return
                         try:
 				user = line2[4]
@@ -642,7 +628,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +v (voice flag) to use this action.", chan, nick)
 		return
 	if command == "trout":
-                if "t" in actionlevel:
+                if actionlevel[trout] == 1:
                         try:
                                 user = line2[4]
                                 user = ' '.join(line2[4:])
@@ -669,7 +655,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		reply("Who do you think I am? The Mafia?", chan, nick)
 		return
 	if command == "fish":
-                if "t" in actionlevel:
+                if actionlevel[trout] == 1:
                         try:
                                 user = line2[4]
                                 fish = ' '.join(line2[5:])
@@ -703,44 +689,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		time.sleep(times)
 		reply(content, chan, nick)
 		return
-	if command == "lockdown":
-                return
-                if "g" in actionlevel:
-                        import MySQLdb
-                        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-                        if not actionlevel=="owner":
-                                try:
-                                        field = line2[4]
-                                except:
-                                        field = "global"
-                                if "spi" in chan:field="spi"
-                                elif "abuse" in chan:field="abuse"
-                                elif "dq" in chan:field="dq"
-                                elif "tech" in chan or "testwiki" in chan:field="te"
-                                else:field="global"
-                                db.query("UPDATE access SET %s=\'shutup\' WHERE cloak=\'@lockdown\';" % specify)
-                                db.commit()
-                                reply("Done!", chan, nick)
-                                return
-        if command == "unlock":
-                return
-                if "g" in actionlevel:
-                        import MySQLdb
-                        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-                        if not actionlevel=="owner":
-                                try:
-                                        field = line2[4]
-                                except:
-                                        field = "global"
-                                if "spi" in chan:field="spi"
-                                elif "abuse" in chan:field="abuse"
-                                elif "dq" in chan:field="dq"
-                                elif "tech" in chan or "testwiki" in chan:field="te"
-                                else:field="global"
-                                db.query("UPDATE access SET %s=\'talk\' WHERE cloak=\'@lockdown\';" % specify)
-                                db.commit()
-                                reply("Done!", chan, nick)
-                                return
 	if command == "langcode" or command == "lang" or command == "language":
 		try:
 			lang = line2[4]
@@ -766,7 +714,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 except:
                         say("Try a valid IP address.", chan)
 	if command == "sql" or command == "perms":
-                if not "f" in actionlevel:
+                reply("This action set is currently disabled due to a new permissions system.", chan, nick)
+                return
+                if not actionlevel[voice] == 1:
                         reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                         return
                 try:
