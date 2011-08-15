@@ -52,15 +52,15 @@ def authdb(host, chan):
         try:
                 db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" %(specify,chan))
                 r = db.use_result()
-                data = r.fetch_row(0)[0]
                 try:
+                        data = r.fetch_row(0)[0]
                         print data[5]
                         auth = data
                 except:auth = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" %(specify,chan))
                 rglobal = db.use_result()
-                authglobal = rglobal.fetch_row(0)[0]
                 try:
+                        authglobal = rglobal.fetch_row(0)[0]
                         print authglobal[5]
                 except:authglobal = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 count = 0
@@ -178,7 +178,7 @@ def quiet():
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	actionlevel = authtest(host, chan)
 	print actionlevel
-	if int(actionlevel[blocked]) == 1:return
+	if actionlevel[blocked] == 1:return
         if command == "blockinfo":
                 say(blockinfo(" ".join(line2[4:])), chan)
                 return
