@@ -748,8 +748,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			return
                 import MySQLdb
 		db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-		reqchan = line2[5]
-		cloak = line2[6]
+		reqchan = ' '.join(line2[5])
+		cloak = ' '.join(line2[6])
 		if action == "read":
                         if " " in cloak: cloak = string.split(cloak, " ")[0]
                         if not cloak or "\"" in cloak:
@@ -784,7 +784,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 notice(nick, "Entry \"\x02%s\x0F\": Cloak: %s Channel: %s Ops: %s Voice: %s Globalmsg/Startup: %s Nick: %s Ban: %s Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (specify, channew, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds), chan)
                         except Exception:
                                 print traceback.format_exc()
-                                reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
+                                reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
                         return
                 reply("All permission modifications are disabled at this time.", chan, nick)
                 return
