@@ -738,7 +738,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 except:
                         say("Try a valid IP address.", chan)
 	if command == "sql" or command == "perms":
-                if not actionlevel[voice] == 1:
+                if not actionlevel[permission] == 1:
                         reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
                         return
                 try:
@@ -748,19 +748,20 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			return
                 import MySQLdb
 		db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-		specify = ' '.join(line2[5:])
+		reqchan = line2[5]
+		cloak = line2[6]
 		if action == "read":
-                        if " " in specify: specify = string.split(specify, " ")[0]
-                        if not specify or "\"" in specify:
+                        if " " in cloak: cloak = string.split(cloak, " ")[0]
+                        if not cloak or "\"" in cloak:
                                 reply("Please include the name of the entry you would like to read after the command.", chan, nick)
                                 return
                         try:
                                 if line2[5] == "@global":
                                         channew = "@global"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % (specify,chan))
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % (cloak,reqchan))
                                 else:
                                         channew = chan
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (specify,chan))
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 data = r.fetch_row(0)
                                 cloak = data[0][0]
