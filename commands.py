@@ -53,6 +53,8 @@ def authdb(host, chan):
                 db.query("SELECT * FROM accessnew WHERE cloak = \"%s\";" % specify)
                 r = db.use_result()
                 data = r.fetch_row(0)
+                try:print data[0][5]
+                except:return ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 return data[0]
         except:
                 return
@@ -124,19 +126,9 @@ def get_commandList():
         'unban': 'unban',
         'sayhi': 'sayhi',
         'new': 'new',
-        #'project': 'project',
-        #'class': 'class',
         'version': 'version',
         'support': 'support',
-        #'stalk': 'stalk',
-        #'unstalk': 'unstalk',
         'globalmsg': 'globalmsg',
-        #'lockdown': 'lockdown',
-        #'unlock': 'unlock',
-        'blockinfo':'blockinfo',
-        'ipinfo':'ipinfo',
-        'geolocate':'geolocate',
-        'sql':'sql'
 	}
 
 def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
