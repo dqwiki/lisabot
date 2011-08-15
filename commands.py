@@ -758,7 +758,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         try:
                                 if line2[5] == "@global":
                                         channew = "@global"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % (cloak,reqchan))
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % (cloak))
                                 else:
                                         channew = chan
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
