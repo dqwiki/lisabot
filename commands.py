@@ -868,6 +868,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Invalid command", chan, nick)
                                 return
                         try:
+                                print field.lower
                                 if field.lower == "@voice":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
