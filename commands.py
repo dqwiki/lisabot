@@ -793,6 +793,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         cloak = str(line2[6])
                         field = str(line2[7])
                         try:value =  str(line2[8])
+                        except:a=1
                         if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
@@ -849,6 +850,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         cloak = str(line2[6])
                         field = str(line2[7])
                         try:value =  str(line2[8])
+                        except:a=1
                         try:
                                 if line2[5] == "@global":
                                         channew = "@global"
@@ -861,6 +863,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 print data[0][5]
                                 reply("There is already a entry under that cloak, please use the modify command." % specify, chan, nick)
                                 return
+                        except:a=1
                         if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
