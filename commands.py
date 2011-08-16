@@ -65,8 +65,8 @@ def authdb(host, chan):
                 except:authglobal = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 count = 0
                 authfinal = []
-                authfinal.insert(-1, '@none')
-                authfinal.insert(1, '@global')
+                authfinal.insert(-1, '@%s'%host)
+                authfinal.insert(1, chan)
                 for entry in authglobal:
                         count = count + 1
                         try:float(entry)
@@ -763,172 +763,140 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         channew = chan
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
-                                data = r.fetch_row(0)
-                                print data
-                                cloak = data[0][0]
-                                channel=data[0][1]
-                                #s added to all commands because without 's' is already defined
-                                ops=data[0][2]
-                                voices=data[0][3]
-                                bans=data[0][4]
-                                kicks=data[0][5]
-                                globalmsgs=data[0][6]
-                                startups=data[0][7]
-                                quiets=data[0][8]
-                                nicks=data[0][9]
-                                modes=data[0][10]
-                                trouts=data[0][11]
-                                permissions=data[0][12]
-                                restarts=data[0][13]
-                                joinparts=data[0][14]
-                                blockeds=data[0][15]
-                                notice(nick, "Entry \"\x02%s\x0F\": Channel: %s Ops: %s Voice: %s Ban: %s Kick: %s Globalmsg: %s Startup: %s Nick: %s  Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (cloak, channew, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds))
+                                data = r.fetch_row()
+                                for entry in data:
+                                        cloak = entry[0][0]
+                                        channel=entry[0][1]
+                                        #s added to all commands because without 's' is already defined
+                                        ops=entry[0][2]
+                                        voices=entry[0][3]
+                                        bans=entry[0][4]
+                                        kicks=entry[0][5]
+                                        globalmsgs=entry[0][6]
+                                        startups=entry[0][7]
+                                        quiets=entry[0][8]
+                                        nicks=entry[0][9]
+                                        modes=entry[0][10]
+                                        trouts=entry[0][11]
+                                        permissions=entry[0][12]
+                                        restarts=entry[0][13]
+                                        joinparts=entry[0][14]
+                                        blockeds=entry[0][15]
+                                        notice(nick, "Entry \"\x02%s\x0F\": Channel: %s Ops: %s Voice: %s Ban: %s Kick: %s Globalmsg: %s Startup: %s Nick: %s  Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (cloak, channel, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds))
                         except Exception:
                                 print traceback.format_exc()
                                 reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
-                        return
-                reply("All permission modifications are disabled at this time.", chan, nick)
-                return
-        """        elif action == "del":
-                        if " " in specify:specify = string.split(specify, " ")[0]
-                        if not specify or "\"" in specify:
+                        return                
+                elif action == "del":
+                        if " " in cloak:cloak = string.split(cloak, " ")[0]
+                        if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
                         try:
-                                db.query("DELETE * FROM access WHERE cloak = \"%s\";" % specify)
+                                db.query("DELETE * FROM accessnew WHERE cloak = \"%s\";" % cloak)
                                 db.commit()
+                                reply("Done if any were present.", chan, nick)
                         except Exception:
-                                reply("Error", chan, nick)
+                                print traceback.format_exc()
+                                reply("Error", chan, nick)                
                 elif action == "modify":
-                        field = string.lower(' '.join(line2[6:]))
-                        field = field.split(' ')[0]
-                        level = string.lower(' '.join(line2[7:]))
-                        if " " in specify: specify = string.split(specify, " ")[0]
-                        if not specify or "\"" in specify:
+                        reqchan = str(line2[6])
+                        cloak = str(line2[7])
+                        field = str(line2[8])
+                        value =  str(line2[9])
+                        if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
+                        if value.lower == "@voice":
+                                try:
+                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.commit()
+                                        reply("Done!", chan, nick)
+                                        return
+                                except Exception:
+                                        print traceback.format_exc()
+                                        reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
+                        if value.lower == "@ops":
+                                try:
+                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.commit()
+                                        reply("Done!", chan, nick)
+                                        return
+                                except Exception:
+                                        print traceback.format_exc()
+                                        reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
+                        if value.lower == "@mode":
+                                try:
+                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET mode=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan)) 
+                                        db.commit()
+                                        reply("Done!", chan, nick)
+                                        return
+                                except Exception:
+                                        print traceback.format_exc()
+                                        reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)                        
                         try:
-                                print level
-                                print specify
-                                print field
-                                if field == "spi":
-                                        if not "f" in authtest(host, "#wikipedia-en-spi", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET spi=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                elif field == "abuse":
-                                        if not "f" in authtest(host, "#wikipedia-en-abuse", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET abuse=\'%s\' WHERE cloak=\"%s\";" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                elif field == "dq" or field == "deltaquad":
-                                        if not "f" in authtest(host, "##DeltaQuad", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET dq=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                elif field == "te":
-                                        if not "f" in authtest(host, "#techessentials", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET te=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                elif field == "wikipedia":
-                                        if not "f" in authtest(host, "#wikipedia", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET wikipedia=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                elif field == "other":
-                                        if not "f" in authtest(host, "#random", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET other=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                elif field == "msg":
-                                        if not "f" in authtest(host, "test", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("UPDATE access SET msg=\'%s\' WHERE cloak=\'%s\';" % (level, specify))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                else:
-                                        reply("You did not specify a valid channel group. (Options: spi, abuse, te, dq" % specify, chan, nick)
+                                db.query("UPDATE accessnew SET %s=\'%s\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (field, value, cloak, reqchan))
+                                db.commit()
+                                reply("Done!", chan, nick)
+                                return
                         except Exception:
+                                print traceback.format_exc()
                                 reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
                         return
                 elif action == "add":
-                        field = string.lower(' '.join(line2[6:]))
-                        field = field.split(' ')[0]
-                        level = string.lower(' '.join(line2[7:]))
-                        if " " in specify: specify = string.split(specify, " ")[0]
-                        if not specify or "\"" in specify:
+                        reqchan = str(line2[6])
+                        cloak = str(line2[7])
+                        field = str(line2[8])
+                        value =  str(line2[9])
+                        if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
                         try:
-                                if field == "spi":
-                                        if not "f" in authtest(host, "#wikipedia-en-spi", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '%s', '', '', '', '', '', '');" % (specify, level) )
+                                if value.lower == "@voice":
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.commit()
-                                if field == "abuse":
-                                        if not "f" in authtest(host, "#wikipedia-en-abuse", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '%s', '', '', '', '', '');" % (specify, level) )
+                                        return
+                                if value.lower == "@ops":
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `op`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `ban`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `kick`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `quiet`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.commit()
-                                if field == "dq" or field == "deltaquad":
-                                        if not "f" in authtest(host, "##DeltaQuad", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '%s', '', '', '', '');" % (specify, level) )
+                                        return
+                                if value.lower == "@mode":
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `op`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `ban`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `kick`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `quiet`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `mode`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.commit()
-                                if field == "te":
-                                        if not "f" in authtest(host, "#techessentials", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '%s', '', '', '');" % (specify, level) )
+                                        return
+                                else:
+                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `%s`) VALUES ('%s', '%s', '%s');" % (field, cloak, reqchan, value) )
                                         db.commit()
-                                if field == "wikipedia":
-                                        if not "f" in authtest(host, "#wikipedia", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '', '%s', '', '');" % (specify, level) )
-                                        db.commit()
-                                if field == "other":
-                                        if not "f" in authtest(host, "#other", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '', '', '%s', '');" % (specify, level) )
-                                        db.commit()
-                                if field == "msg":
-                                        if not "f" in authtest(host, "#other", "no"):
-                                                reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
-                                                return
-                                        db.query("INSERT INTO access (`cloak`, `spi`, `abuse`, `dq`, `te`, `wikipedia`, `other`, `msg`) VALUES ('%s', '', '', '', '', '', '', '%s');" % (specify, level) )
-                                        db.commit()
-                                reply("Done!", chan, nick)
+                                        reply("Done!", chan, nick)
+                                        return
                         except Exception:
                                 reply("Error.", chan, nick)
                                 print traceback.format_exc()
                         return
-"""
 def getGeo(ip):#,loc):
         # Copyright (c) 2010, Westly Ward
         # All rights reserved.
