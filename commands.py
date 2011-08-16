@@ -547,7 +547,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
-                        if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
+                                if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 reply("I do not have sufficienct authorization.", chan, nick)
                                 print traceback.format_exc()
