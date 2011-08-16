@@ -259,19 +259,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 reply("http://lisabot.org/", chan, nick)
                 return
         if command == "version":
-                reply("Version = 1.11.01 Beta", chan, nick)
+                reply("Version = 1.2.0 Alpha", chan, nick)
                 return
         if command == "new":
-                reply("Version 1.11.01 Beta", chan, nick)
-                reply("Added !ops", chan, nick)
-                reply("Fixed links hopefully", chan, nick)
-                reply("Minor fixes", chan, nick)
-                reply("Release on 08/05/2011", chan, nick)
-                return
-        if command == "dev" or command == "devs" or command == "developers":
-                reply("DeltaQuad - Project Manager/Owner", chan, nick)
-                reply("Pilif12p - Lead Programmer", chan, nick)
-                reply("JoeGazz84 - Security Manager", chan, nick)
+                reply("Version 1.2.0 Alpha", chan, nick)
+                reply("New permissions system", chan, nick)
+                reply("Remove excessive logging", chan, nick)
+                reply("Remove excessive commands", chan, nick)
+                reply("Release on 15/08/2011", chan, nick)
                 return
 	if command == "help" or command == "commands":
                 reply("http://lisabot.org/index.php/commands", chan, nick)
@@ -318,14 +313,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		else:
 			reply("Access Denied, you need the +g (global flag) to use this action.", chan, nick)
 		return
-	if command == "myaccess":
-                try:
-                        temp5 = authtest((line2[4:])[0], chan, "soft")
-                        reply('Access Codes: %s' % temp5, chan, nick)
-                except:
-                        temp5 = authtest(host, chan, "soft")
-                        reply('Access Codes: %s' % temp5, chan, nick)
-                return
 	if command == "join":
 		if actionlevel[joinpart] == 1:
 			try:
@@ -379,11 +366,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		info = u.info()
 		u.close()
 		say('"' + info['Date'] + '" - tycho.usno.navy.mil', chan)
-		return
-	if command == "beats":
-		beats = ((time.time() + 3600) % 86400) / 86.4
-		beats = int(math.floor(beats))
-		say('@%03i' % beats, chan)
 		return
 	if command == "dict" or command == "dictionary":
 		def trim(thing): 
@@ -534,6 +516,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +n (nick flag) to use this action.", chan, nick)
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
+                if "spi" in channel:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                 if actionlevel[ban] == 1 and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
                         try:
                                 if command == "kick":
@@ -549,6 +532,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
+                                if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 if line2[4]:
                                         reply("I do not have sufficienct authorization.", chan, nick)
@@ -563,6 +547,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
+                        if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 reply("I do not have sufficienct authorization.", chan, nick)
                                 print traceback.format_exc()
@@ -575,6 +560,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 if actionlevel[mode] == 1:
                         try:
                                 if line2[5]:
+                                        if "spi" in channel:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                                         if chan == "##DeltaQuadBot":
                                                 say("op ##DeltaQuadBot LisaBot", "ChanServ")
                                                 time.sleep(1)
@@ -582,11 +568,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         if chan == "##DeltaQuadBot":
                                                 time.sleep(1)
                                                 say("deop ##DeltaQuadBot LisaBot", "ChanServ")
+                                        if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 if chan == "##DeltaQuadBot":say("op ##DeltaQuadBot LisaBot", "ChanServ")
+                                if "spi" in channel:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                                 time.sleep(1)
                                 s.send("MODE %s %s\r\n" % (chan, line2[4]))
                                 time.sleep(1)
+                                if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
                         reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
