@@ -799,8 +799,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 return
                         if field.lower() == "@voice":
                                 try:
-                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
@@ -809,12 +809,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
                         if field.lower() == "@ops":
                                 try:
-                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
@@ -823,13 +823,13 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
                         if field.lower() == "@mode":
                                 try:
-                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET mode=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan)) 
+                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
+                                        db.query("UPDATE accessnew SET mode=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan)) 
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
@@ -870,28 +870,28 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         try:
                                 if field.lower() == "@voice":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
                                 if field.lower() == "@ops":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
                                 if field.lower() == "@mode":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET mdoe=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET mdoe=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
