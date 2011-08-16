@@ -748,35 +748,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if line2[5] == "@global":
                                         channew = "@global"
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % cloak)
-                                if line2[5] == "@all":
-                                        channew = "@global"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\";" % cloak)
                                 else:
                                         channew = chan
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 data = r.fetch_row()
-                                if line2[5] == '@all':
-                                        for entry in data:
-                                                cloak = entry[0][0]
-                                                channel=entry[0][1]
-                                                #s added to all commands because without 's' is already defined
-                                                ops=entry[0][2]
-                                                voices=entry[0][3]
-                                                bans=entry[0][4]
-                                                kicks=entry[0][5]
-                                                globalmsgs=entry[0][6]
-                                                startups=entry[0][7]
-                                                quiets=entry[0][8]
-                                                nicks=entry[0][9]
-                                                modes=entry[0][10]
-                                                trouts=entry[0][11]
-                                                permissions=entry[0][12]
-                                                restarts=entry[0][13]
-                                                joinparts=entry[0][14]
-                                                blockeds=entry[0][15]
-                                                notice(nick, "Entry \"\x02%s\x0F\": Channel: %s Ops: %s Voice: %s Ban: %s Kick: %s Globalmsg: %s Startup: %s Nick: %s  Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (cloak, channel, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds))
-                                else:
+                                for entry in data:
                                         cloak = entry[0][0]
                                         channel=entry[0][1]
                                         #s added to all commands because without 's' is already defined
