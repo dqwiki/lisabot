@@ -870,27 +870,30 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         try:
                                 if field.lower() == "@voice":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
                                         db.commit()
+                                        reply("Done!", chan, nick)
                                         return
                                 if field.lower() == "@ops":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `op`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `ban`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `kick`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `quiet`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
                                         db.commit()
+                                        reply("Done!", chan, nick)
                                         return
                                 if field.lower() == "@mode":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `op`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `ban`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `kick`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `quiet`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `mode`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET mdoe=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan) )
                                         db.commit()
+                                        reply("Done!", chan, nick)
                                         return
                                 else:
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `%s`) VALUES ('%s', '%s', '%s');" % (field, cloak, reqchan, value) )
