@@ -777,12 +777,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
                         return                
                 elif action == "del":
-                        if " " in cloak:cloak = string.split(cloak, " ")[0]
                         if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
                         try:
-                                db.query("DELETE * FROM accessnew WHERE cloak = \"%s\";" % cloak)
+                                db.query("DELETE FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak, reqchan))
                                 db.commit()
                                 reply("Done if any were present.", chan, nick)
                         except Exception:
