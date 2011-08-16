@@ -890,7 +890,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
                                         db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
                                         db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET mdoe=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
+                                        db.query("UPDATE accessnew SET mode=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
                                         db.commit()
                                         reply("Done!", chan, nick)
                                         return
