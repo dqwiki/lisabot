@@ -797,7 +797,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
-                        if field.lower == "@voice":
+                        if field.lower() == "@voice":
                                 try:
                                         db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
                                         db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
@@ -807,7 +807,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 except Exception:
                                         print traceback.format_exc()
                                         reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
-                        if field.lower == "@ops":
+                        if field.lower() == "@ops":
                                 try:
                                         db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
                                         db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
@@ -821,7 +821,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 except Exception:
                                         print traceback.format_exc()
                                         reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
-                        if field.lower == "@mode":
+                        if field.lower() == "@mode":
                                 try:
                                         db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
                                         db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (cloak, reqchan))
@@ -868,13 +868,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Invalid command", chan, nick)
                                 return
                         try:
-                                print field.lower
-                                if field.lower == "@voice":
+                                if field.lower() == "@voice":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.commit()
                                         return
-                                if field.lower == "@ops":
+                                if field.lower() == "@ops":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `op`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
@@ -883,7 +882,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `quiet`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.commit()
                                         return
-                                if field.lower == "@mode":
+                                if field.lower() == "@mode":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `trout`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `op`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
