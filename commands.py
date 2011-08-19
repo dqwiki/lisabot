@@ -633,7 +633,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
                         return
 		elif actionlevel[voice] == 1:
-                        if command == "op":return
+                        if not command == "voice" and not command =="devoice":return
                         try:
 				user = line2[4]
 			except Exception:
