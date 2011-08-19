@@ -256,7 +256,7 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "#wikipedia-en-abuse")
                 time.sleep(0.5)
-        if 'DeltaQuad' in msg:
+        if 'User:DeltaQuad' in msg or 'User:DeltaQuad' in msg or ('DeltaQuad' in msg and 'Special:Log' in msg):
                 print msg
                 say(msg, "##DeltaQuad")
                 time.sleep(0.5)
