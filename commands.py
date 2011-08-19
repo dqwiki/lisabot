@@ -518,7 +518,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +n (nick flag) to use this action.", chan, nick)
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
-                if "spi" in channel:say("op #wikipedia-en-spi LisaBot", "ChanServ")
+                if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                 if actionlevel[ban] == 1 and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
                         try:
                                 if command == "kick":
