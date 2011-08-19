@@ -543,7 +543,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 else:
                                         reply("Please enter a user.", chan, nick)
                                         return
-                elif actionlevel[quiet] == 1 and (command == "quiet" or command == "unquiet"):      
+                elif actionlevel[kick] == 1 and (command == "quiet" or command == "unquiet"):      
                         try:
                                 if command == "unquiet":
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
@@ -633,7 +633,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
                         return
 		elif actionlevel[voice] == 1:
-                        if not command == "voice" and not command =="devoice":return
+                        if not command == "voice" and not command =="devoice":
+                                reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
+                                return
                         try:
 				user = line2[4]
 			except Exception:
