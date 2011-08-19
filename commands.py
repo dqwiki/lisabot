@@ -519,6 +519,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
                 if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
+                time.sleep(1)
                 if actionlevel[ban] == 1 and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
                         try:
                                 if command == "kick":
@@ -534,6 +535,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
+                                time.sleep(1)
                                 if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 if line2[4]:
@@ -549,6 +551,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
+                                time.sleep(1)
                                 if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 reply("I do not have sufficienct authorization.", chan, nick)
@@ -741,8 +744,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			return
                 import MySQLdb
 		db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-		reqchan = str(line2[5])
-		cloak = str(line2[6])
+		try:reqchan = str(line2[5])
+                except:
+                        reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
+                        return
+		try:cloak = str(line2[6])
+		except:
+                        reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
+                        return
 		if action == "read":
                         if " " in cloak: cloak = string.split(cloak, " ")[0]
                         if not cloak or "\"" in cloak:
@@ -779,7 +788,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         return                
                 elif action == "del":
                         if not cloak or "\"" in cloak:
-                                reply("Invalid command", chan, nick)
+                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                                 return
                         try:
                                 db.query("DELETE FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak, reqchan))
@@ -787,7 +796,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Done if any were present.", chan, nick)
                         except Exception:
                                 print traceback.format_exc()
-                                reply("Error", chan, nick)                
+                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)                
                 elif action == "modify":
                         reqchan = str(line2[5])
                         cloak = str(line2[6])
@@ -795,7 +804,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         try:value =  str(line2[8])
                         except:a=1
                         if not cloak or "\"" in cloak:
-                                reply("Invalid command", chan, nick)
+                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                                 return
                         if field.lower() == "@voice":
                                 try:
@@ -896,9 +905,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         reply("Done!", chan, nick)
                                         return
                                 else:
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `%s`) VALUES ('%s', '%s', '%s');" % (field, cloak, reqchan, value) )
-                                        db.commit()
-                                        reply("Done!", chan, nick)
+                                        try:
+                                                db.query("INSERT INTO accessnew (`cloak`, `channel`, `%s`) VALUES ('%s', '%s', '%s');" % (field, cloak, reqchan, value) )
+                                                db.commit()
+                                                reply("Done!", chan, nick)
+                                        except:
+                                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                                         return
                         except Exception:
                                 reply("Error.", chan, nick)
