@@ -534,7 +534,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
-                                if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
+                                if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 if line2[4]:
                                         reply("I do not have sufficienct authorization.", chan, nick)
@@ -549,7 +549,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
                                 if command == "quiet":
                                         s.send("MODE %s +q %s\r\n" % (chan, line2[4]))
-                                if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
+                                if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 reply("I do not have sufficienct authorization.", chan, nick)
                                 print traceback.format_exc()
@@ -751,7 +751,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 entry = r.fetch_row()
-                                print "entry: " + ' '.join(str(entry[0][0:])
+                                print "entry: " + ' '.join(str(entry[0][0:]))
                                 ####for entry in data:
                                 cloak = entry[0][0]
                                 channel=entry[0][1]
