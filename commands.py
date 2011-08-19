@@ -44,6 +44,8 @@ def authdb(host, chan):
         import MySQLdb, traceback
         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
         specify = host
+        if "techessentials" in chan:chan = "@te"
+        if "deltaquad" in chan or "lisabot" in chan:chan = "@dq"
         if " " in specify: specify = string.split(specify, " ")[0]
         if not specify or "\"" in specify:
                 reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
@@ -748,11 +750,18 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if line2[5] == "@global":
                                         channew = "@global"
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % cloak)
+                                if line2[5] == "@dq":
+                                        channew = "@dq"
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@dq\";" % cloak)
+                                if line2[5] == "@te":
+                                        channew = "@te"
+                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@te\";" % cloak)
                                 else:
                                         channew = chan
                                         db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 entry = r.fetch_row()
+                                print "entry: " + entry
                                 ####for entry in data:
                                 cloak = entry[0][0]
                                 channel=entry[0][1]
@@ -805,7 +814,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 except Exception:
                                         print traceback.format_exc()
-                                        reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
+                                        reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
                         if field.lower() == "@ops":
                                 try:
                                         db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
@@ -819,7 +828,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 except Exception:
                                         print traceback.format_exc()
-                                        reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
+                                        reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
                         if field.lower() == "@mode":
                                 try:
                                         db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
@@ -834,7 +843,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         return
                                 except Exception:
                                         print traceback.format_exc()
-                                        reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)                        
+                                        reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)                        
                         try:
                                 db.query("UPDATE accessnew SET %s=\'%s\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (field, value, cloak, reqchan))
                                 db.commit()
@@ -842,7 +851,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 return
                         except Exception:
                                 print traceback.format_exc()
-                                reply("There is no cloak titled \"\x02%s\x0F\"." % specify, chan, nick)
+                                reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
                         return
                 elif action == "add":
                         reqchan = str(line2[5])
