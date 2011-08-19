@@ -44,8 +44,8 @@ def authdb(host, chan):
         import MySQLdb, traceback
         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
         specify = host
-        if "techessentials" in chan:chan = "@te"
-        if "deltaquad" in chan or "lisabot" in chan:chan = "@dq"
+        if "techessentials" in chan.lower():chan = "@te"
+        if "deltaquad" in chan.lower() or "lisabot" in chan.lower():chan = "@dq"
         if " " in specify: specify = string.split(specify, " ")[0]
         if not specify or "\"" in specify:
                 reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
@@ -751,7 +751,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 entry = r.fetch_row()
-                                print "entry: " + ' '.join(str(entry[0][0:]))
+                                print "entry: " + ' '.join(str(entry[0][0:])
                                 ####for entry in data:
                                 cloak = entry[0][0]
                                 channel=entry[0][1]
