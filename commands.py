@@ -747,18 +747,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Please include the name of the entry you would like to read after the command.", chan, nick)
                                 return
                         try:
-                                if line2[5] == "@global":
-                                        channew = "@global"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % cloak)
-                                if line2[5] == "@dq":
-                                        channew = "@dq"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@dq\";" % cloak)
-                                if line2[5] == "@te":
-                                        channew = "@te"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@te\";" % cloak)
-                                else:
-                                        channew = chan
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
+                                channew = chan
+                                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak,reqchan))
                                 r = db.use_result()
                                 entry = r.fetch_row()
                                 print "entry: " + entry
