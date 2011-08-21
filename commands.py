@@ -519,6 +519,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
                 if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
+                import time
                 time.sleep(1)
                 if actionlevel[ban] == 1 and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
                         try:
@@ -527,7 +528,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if command == "ban":
                                         s.send("MODE %s +b %s\r\n" % (chan, line2[4]))
                                 if command == "kickban":
-                                        s.send("MODE %s +b %s\r\n" % (chan, line2[4]))
+                                        s.send("MODE 0%s +b %s\r\n" % (chan, line2[4]))
                                         s.send("KICK %s %s :%s\r\n" % (chan, line2[4], line2[4]))
                                 if command == "unban":
                                         s.send("MODE %s -b %s\r\n" % (chan, line2[4]))
@@ -625,6 +626,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
+                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in nick)
                 if actionlevel[op] == 1:
                         try:
                                 try:
