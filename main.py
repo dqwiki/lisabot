@@ -31,12 +31,12 @@ s.send("USER %s %s bla :%s\r\n" % (IDENT, HOST, REALNAME))
 print "   USER %s %s bla :%s" % (IDENT, HOST, REALNAME)
 
 def run():
-	#while 1:
-		#try:
-	main()
-		#except Exception:
-			#pass
-		#time.sleep(10)
+	while 1:
+		try:
+                        main()
+		except Exception:
+			pass
+		time.sleep(15)
 def main():
         readbuffer=''
         ## Infinte loop - command parsing.
@@ -134,8 +134,6 @@ def main():
                                         msg = "JOIN %s" % chan
                                         s.send(msg + "\r\n")
                                         print "   %s" % msg
-                        if "[[" in line2 and "]]" in line2:
-                                lastlink = "[["+line2.split("[[")[1].split("]]")[0]+"]]"
                         if line2[1] == "PRIVMSG":
                                 try:
                                         if "kicks %s" % NICK in ' '.join(line2):
