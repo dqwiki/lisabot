@@ -306,7 +306,7 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
-        if 'Wikipedia:Administrator intervention against vandalism' in msg 'DeltaQuad' not in msg:
+        if 'Wikipedia:Administrator intervention against vandalism' in msg and 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Vandalism Blocking:\x0F ")
                 print msg
                 say(msg, "##DeltaQuad-RC-admin")
