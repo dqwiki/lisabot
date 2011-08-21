@@ -256,11 +256,11 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "#wikipedia-en-abuse")
                 time.sleep(0.5)
-        if 'User:DeltaQuad' in msg or 'User:DeltaQuad' in msg or ('DeltaQuad' in msg and 'Special:Log' in msg):
+        if 'DeltaQuad' in msg and '(HG)' not in msg and '(TW)' not in msg:
                 print msg
                 say(msg, "##DeltaQuad")
                 time.sleep(0.5)
-        if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg:
+        if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'HelloAnnyong' in msg or 'MuZemike' in msg or 'Courcelles' in msg or 'Tnxman307' in msg or 'Wikipedia:WikiProject on open proxies/Unchecked' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg:
                 print msg
                 say(msg, "##DeltaQuad-RC")
                 time.sleep(0.5)
@@ -301,17 +301,17 @@ def tellFreenode(msg):
                 print msg 
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
-        if 'Wikipedia:Requests for page protection' in msg:
+        if 'Wikipedia:Requests for page protection' in msg and 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Page Protection:\x0F ")
                 print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
-        if 'Wikipedia:Administrator intervention against vandalism' in msg:
+        if 'Wikipedia:Administrator intervention against vandalism' in msg 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Vandalism Blocking:\x0F ")
                 print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
-        if 'Wikipedia:Usernames for administrator attention' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg:
+        if ('Wikipedia:Usernames for administrator attention' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg) and 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Username Blocking:\x0F ")
                 print msg
                 say(msg, "##DeltaQuad-RC-admin")
