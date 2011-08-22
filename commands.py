@@ -494,7 +494,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 time.sleep(.25)
                                 inprogress = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_currently_in_progress&cmlimit=500").read())))
                                 time.sleep(.25)
-                                waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_Cases_needing_a_clerk&cmlimit=500").read())))
+                                waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_awaiting_administration&cmlimit=500").read())))
                                 time.sleep(.25)
                                 close = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_pending_close&cmlimit=500").read())))
                                 time.sleep(.25)
@@ -731,8 +731,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		return
 	if command == "geolocate":
                 try:
-                        say(getGeo(line2[4]), chan)#, False)
-                        #say(getGeo(line2[4]), chan)#, True)
+                        say(getGeo(line2[4]), chan)
                 except:
                         say("Try a valid IP address.", chan)
 	if command == "sql" or command == "perms":
