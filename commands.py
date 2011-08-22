@@ -363,6 +363,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		else:
 			reply("Access Denied, you need the +s (talk as bot flag) to use this action.", chan, nick)
 		return
+	if command == "me":
+		if actionlevel[startup] == 1:
+			s.send("PRIVMSG "+line2[4]+" ACTION "+ ' '.join(line2[5:]) )
+		else:
+			reply("Access Denied, you need the +s (talk as bot flag) to use this action.", chan, nick)
+		return
 	if command == "time":
 		u = urllib.urlopen('http://tycho.usno.navy.mil/cgi-bin/timer.pl')
 		info = u.info()
@@ -626,7 +632,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
-                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in nick)
+                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in nick):
+                        reply("Access Denied, you are not DeltaQuad.", chan, nick)
+                        return
                 if actionlevel[op] == 1:
                         try:
                                 try:
