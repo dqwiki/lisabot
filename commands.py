@@ -630,17 +630,17 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
 		return
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
+                try:
+                        user = line2[4]
+                except Exception:
+                        user = nick
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
-                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in nick):
+                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
                         reply("Access Denied, you are not DeltaQuad.", chan, nick)
                         return
                 if actionlevel[op] == 1:
                         try:
-                                try:
-                                        user = line2[4]
-                                except Exception:
-                                        user = nick
                                 say("%s %s %s" % (command, chan, user), "ChanServ")
                         except:
                                 reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
@@ -649,13 +649,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         if not command == "voice" and not command =="devoice":
                                 reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
                                 return
-                        try:
-				user = line2[4]
-			except Exception:
-				user = nick
 			say("%s %s %s" % (command, chan, user), "ChanServ")
 		else:
-			reply("Access Denied, you need the +v (voice flag) to use this action.", chan, nick)
+			reply("Access Denied, you need the +v/o (voice flag/op flag) to use this action.", chan, nick)
 		return
 	if command == "trout":
                 if actionlevel[trout] == 1:
