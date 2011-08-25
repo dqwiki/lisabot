@@ -507,7 +507,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 admin = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_needing_an_Administrator&cmlimit=500").read())))
                                 time.sleep(.25)
                                 print "Send Msg"
-                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
+                                reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Open cases - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
                         except:
                                 print traceback.format_exc()
                                 return
