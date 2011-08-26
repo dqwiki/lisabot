@@ -40,9 +40,7 @@ def run():
 def main():
         readbuffer=''
         ## Infinte loop - command parsing.
-        log = "log.txt"
         thread.start_new_thread(editreport,())
-        lastlink = "User:DeltaQuad"
         while 1:
                 WHOISSERV = False
                 readbuffer=readbuffer+s.recv(1024)
@@ -258,7 +256,11 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "##DeltaQuad")
                 time.sleep(0.5)
-        if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'User talk:HelloAnnyong' in msg or 'User talk:MuZemike' in msg or 'User talk:Courcelles' in msg or 'User talk:Tnxman307' in msg or 'Wikipedia:WikiProject on open proxies/Unchecked' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg:
+        if 'Wikipedia:WikiProject on open proxies/Unchecked' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg or 'Wikipedia:WikiProject on open proxies/Need Blocking' in msg:
+                print msg
+                say(msg, "#wikipedia-en-proxy")
+                time.sleep(0.5)
+        if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'User talk:HelloAnnyong' in msg or 'User talk:MuZemike' in msg or 'User talk:Courcelles' in msg or 'User talk:Tnxman307' in msg or '{{checkuserblock}}' in msg:
                 print msg
                 say(msg, "##DeltaQuad-RC")
                 time.sleep(0.5)
