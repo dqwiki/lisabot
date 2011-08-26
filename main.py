@@ -40,6 +40,7 @@ def run():
 def main():
         readbuffer=''
         ## Infinte loop - command parsing.
+        lastlink = 'User:DQ'
         thread.start_new_thread(editreport,())
         while 1:
                 WHOISSERV = False
