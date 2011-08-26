@@ -637,8 +637,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
                 if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
-                        reply("Access Denied, you are not DeltaQuad.", chan, nick)
-                        return
+                        if not host == '@wikipedia/DeltaQuad':
+                                reply("Access Denied, you are not DeltaQuad.", chan, nick)
+                                return
                 if actionlevel[op] == 1:
                         try:
                                 say("%s %s %s" % (command, chan, user), "ChanServ")
