@@ -258,7 +258,7 @@ def tellFreenode(msg):
                 print msg
                 say(msg, "##DeltaQuad")
                 time.sleep(0.5)
-        if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'HelloAnnyong' in msg or 'MuZemike' in msg or 'Courcelles' in msg or 'Tnxman307' in msg or 'Wikipedia:WikiProject on open proxies/Unchecked' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg:
+        if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'User talk:HelloAnnyong' in msg or 'User talk:MuZemike' in msg or 'User talk:Courcelles' in msg or 'User talk:Tnxman307' in msg or 'Wikipedia:WikiProject on open proxies/Unchecked' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg:
                 print msg
                 say(msg, "##DeltaQuad-RC")
                 time.sleep(0.5)
