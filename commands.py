@@ -606,7 +606,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#techessentials-techops"  
 			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-mlpearc"  
+			channel = "#openglobe"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#techessentials-deltaquad"  
 			s.send("JOIN %s\r\n" % channel)
@@ -638,7 +638,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
                 if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
-                        if not host == '@wikipedia/DeltaQuad':
+                        if not host == 'wikipedia/DeltaQuad':
                                 reply("Access Denied, you are not DeltaQuad.", chan, nick)
                                 return
                 if actionlevel[op] == 1:
