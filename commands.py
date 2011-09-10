@@ -46,6 +46,7 @@ def authdb(host, chan):
         specify = host
         if "techessentials" in chan.lower():chan = "@te"
         if "deltaquad" in chan.lower() or "lisabot" in chan.lower():chan = "@dq"
+        if "openglobe" in chan.lower() or "lisabot" in chan.lower():chan = "@openglobe"
         if " " in specify: specify = string.split(specify, " ")[0]
         if not specify or "\"" in specify:
                 reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
