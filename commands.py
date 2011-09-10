@@ -852,7 +852,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         print traceback.format_exc()
                                         reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)                        
                         try:
-                                db.query("UPDATE accessnew SET %s=\'%s\' WHERE cloak=\'%s\' AND channel=\'%s\;" % (field, value, cloak, reqchan))
+                                db.query("UPDATE accessnew SET %s=\'%s\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (field, value, cloak, reqchan))
                                 db.commit()
                                 reply("Done!", chan, nick)
                                 return
