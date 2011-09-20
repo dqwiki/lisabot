@@ -573,7 +573,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 if actionlevel[mode] == 1:
                         try:
                                 if line2[5]:
-                                        if "spi" in channel:say("op #wikipedia-en-spi LisaBot", "ChanServ")
+                                        if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                                         if chan == "##DeltaQuadBot":
                                                 say("op ##DeltaQuadBot LisaBot", "ChanServ")
                                                 time.sleep(1)
@@ -581,14 +581,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                         if chan == "##DeltaQuadBot":
                                                 time.sleep(1)
                                                 say("deop ##DeltaQuadBot LisaBot", "ChanServ")
-                                        if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
+                                        if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                         except:
                                 if chan == "##DeltaQuadBot":say("op ##DeltaQuadBot LisaBot", "ChanServ")
-                                if "spi" in channel:say("op #wikipedia-en-spi LisaBot", "ChanServ")
+                                if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                                 time.sleep(1)
                                 s.send("MODE %s %s\r\n" % (chan, line2[4]))
                                 time.sleep(1)
-                                if "spi" in channel:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
+                                if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
                         reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
