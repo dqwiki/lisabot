@@ -595,6 +595,14 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
                         reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
+        if command == "refreshrc":
+                if actionlevel[startup] == 1:
+                        try:
+                                main.refreshRClist()
+                        except:
+                                reply("Error in processing your request.", chan, nick)
+                                print traceback.format_exc()
+                                
 	if command == "startup":
                 if actionlevel[startup] == 1:
                         channel = "#wikipedia-en-abuse-v"
