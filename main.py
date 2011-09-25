@@ -244,12 +244,12 @@ def refreshRClist():
         db.query("SELECT * FROM rcstalklist;")
         r = db.use_result()
         global rcstalk
-        entry = r.fetch_row(maxrows=0)
+        rcstalk = r.fetch_row(maxrows=0)
         
         db.query("SELECT * FROM rcblacklist;")
         r = db.use_result()
         global blacklist
-        entry = r.fetch_row(maxrows=0)
+        blacklist = r.fetch_row(maxrows=0)
 
 def tellFreenode(msg):
         if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
