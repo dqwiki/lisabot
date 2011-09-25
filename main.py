@@ -192,7 +192,6 @@ def reply(msg, chan=CHANS[0], nick=""):
    say(msg, chan)
 
 def editreport():
-        refreshRClist()
         s2.connect((HOST2, PORT2))
         s2.send("NICK %s\r\n" % NICK)
         print "   NICK %s" % NICK
@@ -269,7 +268,7 @@ def tellFreenode(msg):
                                         return
                         say(msg, rcstalk[reportline][1])
                         time.sleep(0.5)
-
+refreshRClist()
         
 if __name__ == "__main__":
     run()
