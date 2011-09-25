@@ -595,7 +595,44 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
                         reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
-                                
+        if command == "stalk" or command == "unstalk" or command == "hide" or command == "unhide":
+                if actionlevel[startup] == 1:
+                        import MySQLdb, traceback
+                        if command == "stalk":
+                                try:
+                                        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
+                                        db.query("INSERT INTO rcstalklist (`stalk`, `channel`) VALUES ('%s', '%s');" %(' '.join(line2[4:]), chan))
+                                        db.commit()
+                                except:
+                                        reply("Error.", chan, nick)
+                                        print traceback.format_exc()
+                        if command == "hide":
+                                try:
+                                        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
+                                        db.query("INSERT INTO rcblacklist (`stalk`, `channel`) VALUES ('%s', '%s');" %(' '.join(line2[4:]), chan))
+                                        db.commit()
+                                except:
+                                        reply("Error.", chan, nick)
+                                        print traceback.format_exc()
+                        if command == "unstalk":
+                                try:
+                                        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
+                                        db.query("DELETE FROM rcstalklist WHERE stalk = \"%s\" AND channel = \"%s\";" %(' '.join(line2[4:]), chan))
+                                        db.commit()
+                                except:
+                                        reply("Error.", chan, nick)
+                                        print traceback.format_exc()
+                        if command == "unstalk":
+                                try:
+                                        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
+                                        db.query("DELETE FROM rcblacklist WHERE stalk = \"%s\" AND channel = \"%s\";" %(' '.join(line2[4:]), chan))
+                                        db.commit()
+                                except:
+                                        reply("Error.", chan, nick)
+                                        print traceback.format_exc()
+                else:
+			reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
+		return
 	if command == "startup":
                 if actionlevel[startup] == 1:
                         channel = "#wikipedia-en-abuse-v"
