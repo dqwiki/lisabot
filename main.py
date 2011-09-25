@@ -242,12 +242,12 @@ def editreport():
 def refreshRClist():
         import MySQLdb, traceback
         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-        db.query("SELECT * FROM rc-stalklist;")
+        db.query("SELECT * FROM rcstalklist;")
         r = db.use_result()
         global rcstalk
         entry = r.fetch_row(maxrows=0)
         
-        db.query("SELECT * FROM rc-blacklist;")
+        db.query("SELECT * FROM rcblacklist;")
         r = db.use_result()
         global blacklist
         entry = r.fetch_row(maxrows=0)
