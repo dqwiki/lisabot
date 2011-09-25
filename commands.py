@@ -48,7 +48,8 @@ def authdb(host, chan):
         #new group system
         db.query("SELECT * FROM groups;")
         r = db.use_result()
-        for group in r:
+        entry = r.fetch_row()
+        for group in entry:
                 print "Line: " + group[0] + ":" + group[1]
                 print "Old chan: "
                 if group[0] in chan.lower():chan = group[1]
