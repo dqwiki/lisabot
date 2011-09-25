@@ -266,7 +266,7 @@ def tellFreenode(msg):
                         for bline in blacklist:
                                 if bline[0].lower() in msg.lower() and bline[1] == line[1]:
                                         return
-                        say(msg, rcstalk[line][1])
+                        say(msg, line[1])
                         time.sleep(0.5)
 refreshRClist()
         
