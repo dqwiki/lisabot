@@ -52,8 +52,7 @@ def authdb(host, chan):
                 print "Line: " + group[0] + ":" + group[1]
                 print "Old chan: "
                 if group[0] in chan.lower():chan = group[1]
-                print "Chan new: " +chan 
-                else:continue
+                print "Chan new: " +chan
 
         ####Temp disable to try new group system
         #if "techessentials" in chan.lower():chan = "@te"
