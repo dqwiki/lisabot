@@ -177,8 +177,8 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 		command = string.lower(line2[3][2:])
 		if command == "refreshrc":
                         actionlevel = cparser.authtest(host, chan)
-                        if actionlevel[7]==0:
-                                reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
+                        if actionlevel[4]==1:
+                                return
                         else:
                                 refreshRClist()
                                 reply("RC List refreshed.", chan, nick)
