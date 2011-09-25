@@ -598,7 +598,15 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
         if command == "refreshrc":
                 if actionlevel[startup] == 1:
                         try:
-                                main.refreshRClist()
+                                import MySQLdb, traceback
+                                db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
+                                db.query("SELECT * FROM rcstalklist;")
+                                r = db.use_result()
+                                rcstalk = r.fetch_row(maxrows=0)
+                                
+                                db.query("SELECT * FROM rcblacklist;")
+                                r = db.use_result()
+                                blacklist = r.fetch_row(maxrows=0)
                         except:
                                 reply("Error in processing your request.", chan, nick)
                                 print traceback.format_exc()
