@@ -219,7 +219,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         except:
                                 reply("Error.", chan, nick)
                 else:
-                        reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +r (restart) to use this action.", chan, nick)
                 return
 	if command == "restart":
 		import thread, time
@@ -237,13 +237,13 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			sys.exit("Trying to end process.")
 			raise SystemExit
 		else:
-			reply("Access Denied, you need the +r (restart flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +r (restart) flag to use this action.", chan, nick)
 		return
 	if command == "chan":
                 reply(chan, chan, nick)
         if command == "request" or command == "page":
                 if actionlevel[trout]==0:
-                        reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
                         return
                 #say(line2[4] + " to " + line2[5] +". Thank You!", chan)
                 notice(nick, "Thank you for using the LisaBot paging system. Your message has been delievered over PM.")
@@ -259,7 +259,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 reply(host, chan, nick)
                 return
 	if command == "sayhi":
-                lisabot = "*waves* Hello I am LisaBot. I run off of the Willow server on the Wikimedia Toolserver."
+                lisabot = "*waves* Hello, I am LisaBot. I run off of the Willow server on the Wikimedia Toolserver."
                 reply(lisabot, chan, nick)
                 return
         if command == "project":
@@ -318,7 +318,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			notice("#techessentials-security", msg)
 			notice("#techessentials-techops", msg)
 		else:
-			reply("Access Denied, you need the +g (global flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +g (global) global to use this action.", chan, nick)
 		return
 	if command == "join":
 		if actionlevel[joinpart] == 1:
@@ -329,7 +329,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply('Done!', chan, nick)
 		else:
-			reply("Access Denied, you need the +j (join/part flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +j (join/part) flag to use this action.", chan, nick)
 		return
 	if command == "part":
 		if actionlevel[joinpart] == 1:
@@ -349,11 +349,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply('Bye Bye!', chan, nick)
                                 s.send("PART %s :%s\r\n" % (channel,reason))
 		else:
-			reply("Access Denied, you need the +j (join/part flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +j (join/part) flag to use this action.", chan, nick)
 		return
 	if command == "quit" or command == "die" or command == "suicide":
 		if actionlevel[startup] == 0:
-				reply("Access Denied, you need the +p (power flag) to use this action." % OWNER, chan, nick)
+				reply("Access denied, you need the +p (power) flag to use this action." % OWNER, chan, nick)
 		else:
 			try:
 				s.send("QUIT :%s\r\n" % ' '.join(line2[4:]))
@@ -366,13 +366,13 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		if actionlevel[startup] == 1:
 			say(' '.join(line2[5:]), line2[4])
 		else:
-			reply("Access Denied, you need the +s (talk as bot flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +s (talk as bot) flag  to use this action.", chan, nick)
 		return
 	if command == "me":
 		if actionlevel[startup] == 1:
 			s.send("PRIVMSG "+line2[4]+" ACTION "+ ' '.join(line2[5:]) )
 		else:
-			reply("Access Denied, you need the +s (talk as bot flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +s (talk as bot) flag to use this action.", chan, nick)
 		return
 	if command == "time":
 		u = urllib.urlopen('http://tycho.usno.navy.mil/cgi-bin/timer.pl')
@@ -526,7 +526,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 				return
 			s.send("NICK %s\r\n" % new_nick)
 		else:
-			reply("Access Denied, you need the +n (nick flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +n (nick flag) to use this action.", chan, nick)
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
                 if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
@@ -570,7 +570,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 print traceback.format_exc()
                                 return
                 else:
-                        reply("Access Denied, you need the +b/q (ban/quiet flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +b/q (ban/quiet) flag to use this action.", chan, nick)
                         return
         if command == "mode":
                 import time
@@ -595,7 +595,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
-                        reply("Access Denied, you need the +m (mode flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +m (mode) flag to use this action.", chan, nick)
         if command == "stalk" or command == "unstalk" or command == "hide" or command == "unhide":
                 import MySQLdb, traceback
                 if command == "stalk":
@@ -667,7 +667,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:
-			reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +s (startup) startup to use this action.", chan, nick)
 		return
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 try:
@@ -678,21 +678,21 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 if command == "demote":command="deop"
                 if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
                         if not host == 'wikipedia/DeltaQuad':
-                                reply("Access Denied, you are not DeltaQuad.", chan, nick)
+                                reply("Access denied, you are not DeltaQuad.", chan, nick)
                                 return
                 if actionlevel[op] == 1:
                         try:
                                 say("%s %s %s" % (command, chan, user), "ChanServ")
                         except:
-                                reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
+                                reply("Access denied, you need the +o (operator) flag to use this action.", chan, nick)
                         return
 		elif actionlevel[voice] == 1:
                         if not command == "voice" and not command =="devoice":
-                                reply("Access Denied, you need the +o (op flag) to use this action.", chan, nick)
+                                reply("Access denied, you need the +o (operator) flag to use this action.", chan, nick)
                                 return
 			say("%s %s %s" % (command, chan, user), "ChanServ")
 		else:
-			reply("Access Denied, you need the +v/o (voice flag/op flag) to use this action.", chan, nick)
+			reply("Access denied, you need the +v/o (voice/op) flags  to use this action.", chan, nick)
 		return
 	if command == "trout":
                 if actionlevel[trout] == 1:
@@ -716,7 +716,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("I refuse to hurt anything with \"DeltaQuad\" in its name :P", chan, nick)
                         return
                 else:
-                        reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
                         
 	if command == "kill" or command == "destroy" or command == "murder":
 		reply("Who do you think I am? The Mafia?", chan, nick)
@@ -743,7 +743,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("I refuse to hurt anything with \"DeltaQuad\" in its name :P", chan, nick)
                         return
                 else:
-                        reply("Access Denied, you need the +t (trout flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
 	if command == "remind" or command == "reminder":
                 import time
 		try:
@@ -781,7 +781,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         say("Try a valid IP address.", chan)
 	if command == "sql" or command == "perms":
                 if not actionlevel[permission] == 1:
-                        reply("Access Denied, you need the +f (permissions flag) to use this action.", chan, nick)
+                        reply("Access denied, you need the +f (permissions) flag to use this action.", chan, nick)
                         return
                 try:
 			action = line2[4]
