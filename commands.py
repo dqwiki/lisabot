@@ -54,7 +54,7 @@ def authdb(host, chan):
                 print "Old chan: " +chan
                 if group[0] in chan.lower():chan = group[1]
                 print "Chan new: " +chan
-
+        time.sleep(.5)
         ####Temp disable to try new group system
         #if "techessentials" in chan.lower():chan = "@te"
         #if "deltaquad" in chan.lower() or "lisabot" in chan.lower():chan = "@dq"
