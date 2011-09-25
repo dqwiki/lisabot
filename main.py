@@ -263,10 +263,10 @@ def tellFreenode(msg):
                 if not line[0].lower() in msg.lower():
                        continue
                 else:
-                        for line in blacklist:
-                                if line[0].lower() in msg.lower() and line[1] == rcstalk[reportline][1]:
+                        for bline in blacklist:
+                                if line[0].lower() in msg.lower() and line[1] == rcstalk[line][1]:
                                         return
-                        say(msg, rcstalk[reportline][1])
+                        say(msg, rcstalk[line][1])
                         time.sleep(0.5)
 refreshRClist()
         
