@@ -50,10 +50,7 @@ def authdb(host, chan):
         r = db.use_result()
         entry = r.fetch_row(maxrows=0)
         for group in entry:
-                print "Line: " + group[0] + ":" + group[1]
-                print "Old chan: " +chan
                 if group[0] in chan.lower():chan = group[1]
-                print "Chan new: " +chan
         time.sleep(.5)
         ####Temp disable to try new group system
         #if "techessentials" in chan.lower():chan = "@te"
@@ -102,16 +99,9 @@ def authdb(host, chan):
 
 def authtest(host, chan):
         if not "@" in host:host= "@" + host
-	if host == OWNER:
-                print "owner"
-		return "owner"
-        elif host == BOT:
-                print "bot"
-		return "bot"
-	else:
-                print "AuthDB"
-                return authdb(host, chan)
-	return False
+        print "AuthDB"
+        try:return authdb(host, chan)
+	except:return False
 def get_commandList():
 	return {'quiet': 'quiet',
 	'welcome': 'welcome',

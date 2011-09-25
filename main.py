@@ -250,41 +250,32 @@ def tellFreenode(msg):
         msg = string.replace(msg, "User:DeltaQuad", "User:DQ")
         if 'Wikipedia:Abuse' in msg or 'Wikipedia talk:Abuse' in msg or ('Special:Log/block' in msg and 'Long-term abuse' in msg):
                 msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
-                print msg
                 say(msg, "#wikipedia-en-abuse")
                 time.sleep(0.5)
         if 'DeltaQuad' in msg and '(HG)' not in msg and '(TW)' not in msg:
-                print msg
                 say(msg, "##DeltaQuad")
                 time.sleep(0.5)
         if 'Wikipedia:WikiProject on open proxies/Unchecked' in msg or 'Wikipedia:WikiProject on open proxies/Unblock' in msg or 'Wikipedia:WikiProject on open proxies/Need Blocking' in msg:
-                print msg
                 say(msg, "#wikipedia-en-proxy")
                 time.sleep(0.5)
         if 'DeltaQuad' in msg or 'Jamesofur' in msg or 'User talk:HelloAnnyong' in msg or 'User talk:MuZemike' in msg or 'User talk:Courcelles' in msg or 'User talk:Tnxman307' in msg or '{{checkuserblock}}' in msg:
-                print msg
                 say(msg, "##DeltaQuad-RC")
                 time.sleep(0.5)
         if 'Special:Log/block' in msg and '[[WP:Vandalism|Vandalism]]' not in msg and '[[WP:Vandalism-only account|Vandalism-only account]]' not in msg and 'ProcseeBot' not in msg:
-                print msg
                 say(msg, "##DeltaQuad-RC-block")
                 time.sleep(0.5)
         elif 'Wikipedia:Requests for adminship/' in msg and 'Wikipedia:Miscellany for deletion' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x0304New RfA Change:\x0F\x0301 ")
-                print msg
                 say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
         elif 'Wikipedia:Requests for bureaucratship' in msg and 'Wikipedia:Miscellany for deletion' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02\x0304RfB Status Change:\x0F\x0301 ")
-                print msg
                 say(msg, "##DeltaQuad-rfa")
                 time.sleep(0.5)
         if 'Special:Log/delete' in msg and 'revision' in msg:
-                print msg
                 say(msg, "##DeltaQuad-RC-revdel")
                 time.sleep(0.5)
         if 'Sockpuppet investigations' in msg and 'bot' not in msg and 'Special:Log/block' not in msg and 'Archiving case to' not in msg and 'Archiving case from' not in msg:
-                print msg
                 say(msg, "#wikipedia-en-spi")
                 time.sleep(0.5)
         if 'setstatus' in msg or 'Special:Log/rights' in msg or 'gblock2' in msg:
@@ -294,32 +285,26 @@ def tellFreenode(msg):
                 msg = string.replace(msg, "setstatus", "Global Account Lock/Unlock")
                 msg = string.replace(msg, "gblock2", "Global Block")
                 if "Special:Log/delete" in msg:msg = string.replace(msg, "revision", "Changed Revsion Visability", 1)
-                print msg
                 say(msg, "##DeltaQuad-RC")
                 time.sleep(0.5)
         if 'Wikipedia:Requests for permissions/Rollback' in msg or 'Wikipedia:Requests for permissions/File Mover' in msg or 'Wikipedia:Requests for permissions/Account Creator' in msg or 'Wikipedia:Requests for permissions/Confirmed' in msg or 'Wikipedia:Requests for permissions/Autopatrolled' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Rights Changes:\x0F ")
-                print msg 
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Wikipedia:Requests for page protection' in msg and 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Page Protection:\x0F ")
-                print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Wikipedia:Administrator intervention against vandalism' in msg and 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Vandalism Blocking:\x0F ")
-                print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if ('Wikipedia:Usernames for administrator attention' in msg or 'Wikipedia:Usernames for administrator attention/Bot' in msg) and 'DeltaQuad' not in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02Request for Username Blocking:\x0F ")
-                print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
         if 'Requesting speedy deletion' in msg:
                 msg = string.replace(msg, "\x02English Wikipedia:\x0F ", "\x02CSD:\x0F ")
-                print msg
                 say(msg, "##DeltaQuad-RC-admin")
                 time.sleep(0.5)
 if __name__ == "__main__":
