@@ -175,6 +175,14 @@ def meta_reporting(line2, nick, chan, command):
 def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 	if line2[1] == "PRIVMSG" and (line2[3].startswith(":!") or line2[3].startswith(":.")):
 		command = string.lower(line2[3][2:])
+		if command == "refreshrc":
+                        actionlevel = cparser.authtest(host, chan)
+                        if actionlevel[7]==0:
+                                reply("Access Denied, you need the +s (startup flag) to use this action.", chan, nick)
+                        else:
+                                refreshRClist()
+                                reply("RC List refreshed.", chan, nick)
+                        return
 		thread.start_new_thread(meta_reporting,(line2, nick, chan, command))
 		authorization = cparser.authtest(host, chan)
 		if command != "null" and lockdown != "true":
