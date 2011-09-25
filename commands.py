@@ -44,9 +44,19 @@ def authdb(host, chan):
         import MySQLdb, traceback
         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
         specify = host
-        if "techessentials" in chan.lower():chan = "@te"
-        if "deltaquad" in chan.lower() or "lisabot" in chan.lower():chan = "@dq"
-        if "openglobe" in chan.lower() or "lisabot" in chan.lower():chan = "@openglobe"
+
+        #new group system
+        db.query("SELECT * FROM groups;")
+        r = db.use_result()
+        for group in r:
+                if group[0] in chan.lower():chan = group[1]
+                else:continue
+
+        ####Temp disable to try new group system
+        #if "techessentials" in chan.lower():chan = "@te"
+        #if "deltaquad" in chan.lower() or "lisabot" in chan.lower():chan = "@dq"
+        #if "openglobe" in chan.lower() or "lisabot" in chan.lower():chan = "@openglobe"
+                
         if " " in specify: specify = string.split(specify, " ")[0]
         if not specify or "\"" in specify:
                 reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
