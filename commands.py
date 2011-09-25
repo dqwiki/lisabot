@@ -667,7 +667,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:
-			reply("Access denied, you need the +s (startup) startup to use this action.", chan, nick)
+			reply("Access denied, you need the +s (startup) flag to use this action.", chan, nick)
 		return
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 try:
