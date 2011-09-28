@@ -198,6 +198,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 	try:
                 if actionlevel[blocked] == 1:return
         except:
+                import traceback
                 trace = traceback.format_exc() # Traceback.
 		print trace # Print.
                 say("Error with obtaining your access codes.", chan)
