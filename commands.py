@@ -531,6 +531,10 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
                 if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
+                try:
+                        user = line2[4]
+                except Exception:
+                        user = nick
                 if (command == "kick" or command == "kickban" or command == "ban" or command == "quiet") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
                         if not host == 'wikipedia/DeltaQuad':
                                 reply("Access denied, you are not DeltaQuad.", chan, nick)
