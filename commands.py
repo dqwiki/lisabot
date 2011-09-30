@@ -834,6 +834,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 blockeds=entry[0][15]
                                 notice(nick, "Entry \"\x02%s\x0F\": Channel: %s Ops: %s Voice: %s Ban: %s Kick: %s Globalmsg: %s Startup: %s Nick: %s  Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (cloak, channel, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds))
                         except Exception:
+                                import traceback
                                 print traceback.format_exc()
                                 reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
                         return                
