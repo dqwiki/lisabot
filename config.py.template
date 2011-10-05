@@ -1,0 +1,18 @@
+# -*- coding: utf-8  -*-
+### Configuration file
+key = 'fooooooooobaaaaar' #Key for geolocation, removed for security reasons, see ip2location to get your API key
+host = 'irc.omg.net'#Main IRC server bot is to connect to
+port = 6667#Port number to connect to
+nick = 'BotName'#Nick of bot
+ident = 'BotIdent'#NickServ Ident for bot
+realname = "The bot."
+chans = ['#SeperateChannels', '#LikeThis!']#Channels needed to immediately join, also see commands.py for !startup which can do this also
+report_chan = '#channeltoreportin'#Null value until I clean up the code
+welcome_chan = '#welcomealltheusers'#Null value until I clean up the code
+meta_chan = '##MetaChan'#Channel to report all changes to
+#host2 = 'irc.wikimedia.org' # Used for recent changes on wikis.
+#port2 = 6667 # Ditto 
+#chan2 = ['#en.wikipedia','#commons.wikimedia','#simple.wikipedia'] # Again
+bot = 'TheBots/Cloak'#Bots cloak
+owner = 'LookAt/MyCloak'#Owners cloak
+password = 'omghaxx0r'#removed for security reasons
