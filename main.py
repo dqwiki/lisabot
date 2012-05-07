@@ -268,7 +268,7 @@ def tellFreenode(msg):
         if "Special:Log/rights" in msg:msg = string.replace(msg, "rights", "Changed Userrights")
         if "Special:Log/newusers" in msg:msg = string.replace(msg, "create2", "Created Account Via Email")
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
-        for rcdb in rcstalk:
+        for line in rcstalk:
                 method = line[2]
                 page = msg.split("]]")[0]
                 page = page.split("[[")[1]
