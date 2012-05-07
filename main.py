@@ -270,13 +270,12 @@ def tellFreenode(msg):
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
         for line in rcstalk:
                 method = line[2]
-                page = msg.split("14]]")[0]
-                print page
-                page = page.split("07")[1]
-                user = msg.split("5* 03")[1]
-                user = user.split(" 5*")[0]
-                try:summary = msg.split(") 10")[1]
-                except:summary = msg.split("]]\": ")[1]
+                page = msg.split("]]")[0]
+                page = page.split("[[")[1]
+                user = msg.split("* ")[1]
+                user = user.split(" *")[0]
+                try:summary = msg.split(") ")[1]
+                summary = msg.split("\":")[1]
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         print msg
                         for bline in blacklist:
