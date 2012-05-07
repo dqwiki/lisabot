@@ -15,6 +15,8 @@ from datetime import datetime
 ## Set up constants.
 HOST, PORT, NICK, IDENT, REALNAME, CHANS, REPORT_CHAN, WELCOME_CHAN, META_CHAN, HOST2, PORT2, CHAN2, BOT, OWNER, PASS = config.host, config.port, config.nick, config.ident, config.realname, config.chans, config.report_chan, config.welcome_chan, config.meta_chan, config.host2, config.port2, config.chan2, config.bot, config.owner, config.password
 
+ld="false"
+
 commandList = cparser.get_commandList()
 
 startup = "1"
