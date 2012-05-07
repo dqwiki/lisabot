@@ -274,8 +274,10 @@ def tellFreenode(msg):
                 page = page.split("[[\x0307")[1]
                 user = msg.split("\x0303")[1]
                 user = user.split("* (")[0]
-                try:summary = msg.split(") \x0310")[1]
-                except:summary = msg.split('": ')[1]
+                try:
+                        try:summary = msg.split(") \x0310")[1]
+                        except:summary = msg.split('": ')[1]
+                except:summary=""
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         print msg
                         for bline in blacklist:
