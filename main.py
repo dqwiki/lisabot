@@ -260,6 +260,7 @@ def refreshRClist():
         blacklist = r.fetch_row(maxrows=0)
 
 def tellFreenode(msg):
+        alreadyprint = ""
         if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
@@ -267,19 +268,50 @@ def tellFreenode(msg):
         if "Special:Log/rights" in msg:msg = string.replace(msg, "rights", "Changed Userrights")
         if "Special:Log/newusers" in msg:msg = string.replace(msg, "create2", "Created Account Via Email")
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
-        for line in rcstalk:
-                if not line[0].lower() in msg.lower():
-                       continue
-                else:
+        for rcdb in rcstalk:
+                method = line[2]
+                page = msg.split("]]")[0]
+                page = page.split("[[")[1]
+                user = msg.split(" * ")[1]
+                summary = msg.split(" * ")[2]
+                summary = summary.split(") ")[1]
+                if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         for bline in blacklist:
-                                if bline[0].lower() in msg.lower() and bline[1] == line[1]:
+                                if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
-                        print bline[0].lower()
-                        print msg.lower()
-                        print bline[1]
-                        print line[1]
-                        say(msg, line[1])
+                        if not line[1] in alreadyprint:
+                                firstmsg = msg.split(":")[0]
+                                secondmsg = msg.split(":")[1]
+                                msg = firstmsg + " \x0304(Matched user: " + line[0].lower + ")\x0301" + secondmsg
+                                say(msg, line[1])
                         time.sleep(0.5)
+                        alreadyprint = alreadyprint + "," + line[1]
+                if method == "page" and not None == (re.search(line[0].lower(),page.lower())):
+                        for bline in blacklist:
+                                if bline[0].lower() in page.lower() and bline[1] == line[1]:
+                                        return
+                        if not line[1] in alreadyprint:
+                                firstmsg = msg.split(":")[0]
+                                secondmsg = msg.split(":")[1]
+                                msg = firstmsg + " \x0304(Matched page: " + line[0].lower() + ")\x0301" + secondmsg
+                                say(msg, line[1])
+                        time.sleep(0.5)
+                        alreadyprint = alreadyprint + "," + line[1]
+                if method == "summary" and not None == (re.search(line[0].lower(),summary.lower())):
+                        for bline in blacklist:
+                                if bline[0].lower() in summary.lower() and bline[1] == line[1]:
+                                        return
+                        if not line[1] in alreadyprint:
+                                firstmsg = msg.split(":")[0]
+                                secondmsg = msg.split(":")[1]
+                                msg = firstmsg + " \x0304(Matched summary: " + line[0].lower() + ")\x0301" + secondmsg
+                                say(msg, line[1])
+                        time.sleep(0.5)
+                        alreadyprint = alreadyprint + "," + line[1]
+                        continue
+                #if not line[0].lower() in msg.lower():
+                       #continue
+                        
 refreshRClist()
         
 if __name__ == "__main__":
