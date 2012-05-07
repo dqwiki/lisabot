@@ -235,7 +235,7 @@ def tellFreenode(msg):
                         print line[1]
                         say(msg, line[1])
                         time.sleep(0.5)
-
+refreshRClist()
         
 if __name__ == "__main__":
     run()
