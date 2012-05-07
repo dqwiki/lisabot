@@ -248,31 +248,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 lisabot = "*waves* Hello, I am LisaBot. I run off of the Willow server on the Wikimedia Toolserver."
                 reply(lisabot, chan, nick)
                 return
-        if command == "project":
-                reply("http://lisabot.org/", chan, nick)
-                return
-        if command == "version":
-                reply("Version = 1.3.0 Stable", chan, nick)
-                return
-        if command == "new":
-                reply("Version 1.3.0 Stable", chan, nick)
-                reply("Group permissions flags have now been moved to an SQL database", chan, nick)
-                reply("Remove excessive command line logging", chan, nick)
-                reply("Links Fixed", chan, nick)
-                reply("Release on 25/09/2011", chan, nick)
-                return
 	if command == "help" or command == "commands":
-                reply("http://lisabot.org/wiki/Commands", chan, nick)
-                return
-        if command == "bugs" or command == "bug":
-                reply("http://bugs.techessentials.org/", chan, nick)
+                reply("Dsiabled.", chan, nick)
                 return
         if command == "git" or command == "github":
                 reply("https://github.com/dqwiki/lisabot/", chan, nick)
                 return
-       	if command == "access":
-		reply("http://lisabot.org/wiki/Access", chan, nick)
-		return
 	if command == "requestvoice":
                 if "rfa" in chan:reply("\x0312"+nick + " \x0312has requested a voice in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
                 if "rfa" in chan:reply("\x0312"+nick + " \x0312has requested a voice in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
