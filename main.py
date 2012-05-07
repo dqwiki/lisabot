@@ -284,7 +284,7 @@ def tellFreenode(msg):
                         if not line[1] in alreadyprint:
                                 firstmsg = msg.split(":")[0]
                                 secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched user: " + line[0].lower + ")\x0301" + secondmsg
+                                msg = firstmsg + " \x0304(Matched user: " + line[0].lower + ")\x0301" + secondmsg.join(" ")
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
