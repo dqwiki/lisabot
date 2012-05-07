@@ -18,8 +18,6 @@ HOST, PORT, NICK, IDENT, REALNAME, CHANS, REPORT_CHAN, WELCOME_CHAN, META_CHAN, 
 commandList = cparser.get_commandList()
 
 startup = "1"
-global rcstalk
-global blacklist
 
 ## Connect to IRC.
 s=socket.socket()
@@ -208,10 +206,12 @@ def refreshRClist():
         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
         db.query("SELECT * FROM rcstalklist;")
         r = db.use_result()
+        global rcstalk
         rcstalk = r.fetch_row(maxrows=0)
         
         db.query("SELECT * FROM rcblacklist;")
         r = db.use_result()
+        global blacklist
         blacklist = r.fetch_row(maxrows=0)
 
 def tellFreenode(msg):
