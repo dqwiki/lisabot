@@ -274,8 +274,8 @@ def tellFreenode(msg):
                 page = page.split("[[\x0307")[1]
                 user = msg.split("\x0303")[1]
                 user = user.split("* (")[0]
-                try:summary = msg.split(") ")[1]
-                except:summary = msg.split("\":")[1]
+                try:summary = msg.split(") \x0310")[1]
+                except:summary = msg.split('": ')[1]
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         print msg
                         for bline in blacklist:
@@ -296,7 +296,7 @@ def tellFreenode(msg):
                         if not line[1] in alreadyprint:
                                 firstmsg = msg.split(":")[0]
                                 secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched page: " + line[0].lower() + ")\x0301" + secondmsg
+                                msg = firstmsg + " \x0304(Matched page: " + line[0].lower() + ")\x0301" + secondmsg.join(" ")
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -308,7 +308,7 @@ def tellFreenode(msg):
                         if not line[1] in alreadyprint:
                                 firstmsg = msg.split(":")[0]
                                 secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched summary: " + line[0].lower() + ")\x0301" + secondmsg
+                                msg = firstmsg + " \x0304(Matched summary: " + line[0].lower() + ")\x0301" + secondmsg.join(" ")
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
