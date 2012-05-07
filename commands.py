@@ -103,20 +103,16 @@ def authtest(host, chan):
         try:return authdb(host, chan)
 	except:return False
 def get_commandList():
-	return {'quiet': 'quiet',
-	'welcome': 'welcome',
+	return {'welcome': 'welcome',
 	'greet': 'welcome',
 	'auth': 'auth',
 	'access': 'access',
-        'link':'link',
 	'join': 'join',
 	'leave': 'part',
 	'restart': 'restart',
 	'quit': 'quit',
 	'die': 'quit',
 	'suicide': 'quit',
-	'msg': 'msg',
-	'me': 'me',
 	'calc': 'calc',
 	'dice': 'dice',
 	'time': 'time',
@@ -181,17 +177,6 @@ def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2
 				break
 		else: report2.append('source unknown')
 		say(report2[0] + ' (' + report2[1] + ')', chan)
-def quiet():
-        import MySQLdb
-	db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-        db.query("SELECT * FROM config WHERE param = \"quiet\";")
-        r = db.use_result()
-        data = r.fetch_row(0)
-        result=data[0][1]
-        if result == "true" or result == "TRUE" or result == "True":
-                return True
-        else:
-                return False
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	actionlevel = authtest(host, chan)
 	print actionlevel
@@ -309,7 +294,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			msg = "Global Notice for LisaBot: "		
                         msg = msg + ' '.join(line2[4:])
 			notice("#wikipedia-en-abuse", msg)
-			notice("#wikipedia-en-abuse-v", msg)
 			notice("#wikipedia-en-spi", msg)
 			notice("##DeltaQuad", msg)
 			notice("##LisaBot", msg)
@@ -317,7 +301,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			notice("#techessentials", msg)
 			notice("#techessentials-staff", msg)
 			notice("#techessentials-security", msg)
-			notice("#techessentials-techops", msg)
 		else:
 			reply("Access denied, you need the +g (global) global to use this action.", chan, nick)
 		return
@@ -374,117 +357,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("PRIVMSG "+line2[4]+" ACTION "+ ' '.join(line2[5:]) )
 		else:
 			reply("Access denied, you need the +s (talk as bot) flag to use this action.", chan, nick)
-		return
-	if command == "time":
-		u = urllib.urlopen('http://tycho.usno.navy.mil/cgi-bin/timer.pl')
-		info = u.info()
-		u.close()
-		say('"' + info['Date'] + '" - tycho.usno.navy.mil', chan)
-		return
-	if command == "dict" or command == "dictionary":
-		def trim(thing): 
-			if thing.endswith('&nbsp;'): 
-				thing = thing[:-6]
-			return thing.strip(' :.')
-		r_li = re.compile(r'(?ims)<li>.*?</li>')
-		r_tag = re.compile(r'<[^>]+>')
-		r_parens = re.compile(r'(?<=\()(?:[^()]+|\([^)]+\))*(?=\))')
-		r_word = re.compile(r'^[A-Za-z0-9\' -]+$')
-		uri = 'http://encarta.msn.com/dictionary_/%s.html'
-		r_info = re.compile(r'(?:ResultBody"><br /><br />(.*?)&nbsp;)|(?:<b>(.*?)</b>)')
-		try:
-			word = line2[4]
-		except Exception:
-			reply("Please enter a word.", chan, nick)
-			return
-		word = urllib.quote(word.encode('utf-8'))
-		bytes = web.get(uri % word)
-		results = {}
-		wordkind = None
-		for kind, sense in r_info.findall(bytes): 
-			kind, sense = trim(kind), trim(sense)
-			if kind: wordkind = kind
-			elif sense: 
-				results.setdefault(wordkind, []).append(sense)
-		result = word.encode('utf-8') + ' - '
-		for key in sorted(results.keys()): 
-			if results[key]: 
-				result += (key or '') + ' 1. ' + results[key][0]
-				if len(results[key]) > 1: 
-					result += ', 2. ' + results[key][1]
-				result += '; '
-		result = result.rstrip('; ')
-		if result.endswith('-') and (len(result) < 30): 
-			reply('Sorry, no definition found.', chan, nick)
-		else: say(result, chan)
-		return
-	if command == "ety" or command == "etymology":
-		etyuri = 'http://etymonline.com/?term=%s'
-		etysearch = 'http://etymonline.com/?search=%s'
-		r_definition = re.compile(r'(?ims)<dd[^>]*>.*?</dd>')
-		r_tag = re.compile(r'<(?!!)[^>]+>')
-		r_whitespace = re.compile(r'[\t\r\n ]+')
-		abbrs = [
-			'cf', 'lit', 'etc', 'Ger', 'Du', 'Skt', 'Rus', 'Eng', 'Amer.Eng', 'Sp', 
-			'Fr', 'N', 'E', 'S', 'W', 'L', 'Gen', 'J.C', 'dial', 'Gk', 
-			'19c', '18c', '17c', '16c', 'St', 'Capt', 'obs', 'Jan', 'Feb', 'Mar', 
-			'Apr', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'c', 'tr', 'e', 'g'
-		]
-		t_sentence = r'^.*?(?<!%s)(?:\.(?= [A-Z0-9]|\Z)|\Z)'
-		r_sentence = re.compile(t_sentence % ')(?<!'.join(abbrs))
-		def unescape(s): 
-			s = s.replace('&gt;', '>')
-			s = s.replace('&lt;', '<')
-			s = s.replace('&amp;', '&')
-			return s
-		def text(html): 
-			html = r_tag.sub('', html)
-			html = r_whitespace.sub(' ', html)
-			return unescape(html).strip()
-		try:
-			word = line2[4]
-		except Exception:
-			reply("Please enter a word.", chan, nick)
-			return
-		def ety(word):
-			if len(word) > 25: 
-				raise ValueError("Word too long: %s[...]" % word[:10])
-			word = {'axe': 'ax/axe'}.get(word, word)
-			bytes = web.get(etyuri % word)
-			definitions = r_definition.findall(bytes)
-			if not definitions: 
-				return None
-			defn = text(definitions[0])
-			m = r_sentence.match(defn)
-			if not m: 
-				return None
-			sentence = m.group(0)
-			try: 
-				sentence = unicode(sentence, 'iso-8859-1')
-				sentence = sentence.encode('utf-8')
-			except: pass
-			maxlength = 275
-			if len(sentence) > maxlength: 
-				sentence = sentence[:maxlength]
-				words = sentence[:-5].split(' ')
-				words.pop()
-				sentence = ' '.join(words) + ' [...]'
-			sentence = '"' + sentence.replace('"', "'") + '"'
-			return sentence + ' - ' + (etyuri % word)
-		try:
-			result = ety(word.encode('utf-8'))
-		except IOError: 
-			msg = "Can't connect to etymonline.com (%s)" % (etyuri % word)
-			reply(msg, chan, nick)
-			return
-		except AttributeError: 
-			result = None
-		if result is not None: 
-			reply(result, chan, nick)
-		else: 
-			uri = etysearch % word
-			msg = 'Can\'t find the etymology for "%s". Try %s' % (word, uri)
-			reply(msg, chan, nick)
 		return
 	if command == "num" or command == "number" or command == "count":
 		try:
@@ -631,7 +503,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         except:
                                 reply("Error.", chan, nick)
                                 print traceback.format_exc()
-                if command == "unstalk":
+                if command == "unhide":
                         try:
                                 db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
                                 db.query("DELETE FROM rcblacklist WHERE stalk = \"%s\" AND channel = \"%s\";" %(' '.join(line2[4:]), chan))
@@ -704,7 +576,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			reply("Access denied, you need the +v/o (voice/op) flags  to use this action.", chan, nick)
 		return
 	if command == "trout":
-                if actionlevel[trout] == 1:
+                if True:#actionlevel[trout] == 1:
                         try:
                                 user = line2[4]
                                 user = ' '.join(line2[4:])
@@ -731,7 +603,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		reply("Who do you think I am? The Mafia?", chan, nick)
 		return
 	if command == "fish":
-                if actionlevel[trout] == 1:
+                if True: #actionlevel[trout] == 1:
                         try:
                                 user = line2[4]
                                 fish = ' '.join(line2[5:])
@@ -846,6 +718,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         if not cloak or "\"" in cloak:
                                 reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                                 return
+                        if "#" not in reqchan or "@" not in cloak:
+                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                         try:
                                 db.query("DELETE FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak, reqchan))
                                 db.commit()
@@ -862,6 +736,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         if not cloak or "\"" in cloak:
                                 reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                                 return
+                        if "#" not in reqchan or "@" not in cloak:
+                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                         if field.lower() == "@voice":
                                 try:
                                         db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
@@ -932,6 +808,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         if not cloak or "\"" in cloak:
                                 reply("Invalid command", chan, nick)
                                 return
+                        if "#" not in reqchan or "@" not in cloak:
+                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
                         try:
                                 if field.lower() == "@voice":
                                         db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )

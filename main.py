@@ -15,11 +15,11 @@ from datetime import datetime
 ## Set up constants.
 HOST, PORT, NICK, IDENT, REALNAME, CHANS, REPORT_CHAN, WELCOME_CHAN, META_CHAN, HOST2, PORT2, CHAN2, BOT, OWNER, PASS = config.host, config.port, config.nick, config.ident, config.realname, config.chans, config.report_chan, config.welcome_chan, config.meta_chan, config.host2, config.port2, config.chan2, config.bot, config.owner, config.password
 
-ld="false"
-
 commandList = cparser.get_commandList()
 
 startup = "1"
+global rcstalk
+global blacklist
 
 ## Connect to IRC.
 s=socket.socket()
@@ -40,7 +40,6 @@ def run():
 def main():
         readbuffer=''
         ## Infinte loop - command parsing.
-        lastlink = 'User:DQ'
         thread.start_new_thread(editreport,())
         while 1:
                 WHOISSERV = False
@@ -63,6 +62,7 @@ def main():
                                 s.send(msg + "\r\n")
                                 print "   %s" % msg
                         elif line2[1] == "001":
+                                print "Bot has sent identification to NickServ"
                                 msg = "PRIVMSG NICKSERV :IDENTIFY LisaBot %s" % PASS
                                 s.send(msg + "\r\n")
                                 print "   %s" % msg
@@ -77,58 +77,15 @@ def main():
                                                         notice("##LisaBot","Please Remember to start me up!")
                                 except Exception:
                                         pass
-                        elif line2[1] == "MODE" and line2[2] == "#wikipedia-en-spi" and line2[3] == "+v" and line2[0] == ":ChanServ!ChanServ@services.":
-                                try:
-                                        nick = line2[4]
-                                        if nick == NICK: continue
-                                        number = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Waiting_for_Investigation&cmlimit=500").read()))))
-                                        num2 = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Open&cmlimit=500").read()))))
-                                        aggregate = int(number) + int(num2)
-                                        if nick == NICK: continue
-                                        import time
-                                        print "Start opening"
-                                        cur = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_for_pre-CheckUser_review&cmlimit=500").read())))
-                                        time.sleep(.25)
-                                        cuendorse = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_awaiting_a_CheckUser&cmlimit=500").read())))
-                                        time.sleep(.25)
-                                        inprogress = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_currently_in_progress&cmlimit=500").read())))
-                                        time.sleep(.25)
-                                        waitclose = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_awaiting_administration&cmlimit=500").read())))
-                                        time.sleep(.25)
-                                        close = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_pending_close&cmlimit=500").read())))
-                                        time.sleep(.25)
-                                        admin = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_needing_an_Administrator&cmlimit=500").read())))
-                                        time.sleep(.25)
-                                        print "Send Msg"
-                                        notice(nick, "SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned/Open - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin))
-                                except:
-                                        print traceback.format_exc()
-                        elif line2[1] == "MODE" and line2[2] == REPORT_CHAN and line2[3] == "+v" and line2[0] == ":ChanServ!ChanServ@services.":
-                                try:
-                                        nick = line2[4]
-                                        if nick == NICK: continue
-                                        number = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Waiting_for_Investigation&cmlimit=500").read()))))
-                                        num2 = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Open&cmlimit=500").read()))))
-                                        aggregate = int(number) + int(num2)
-                                        if nick == NICK: continue
-                                        if aggregate == 0:
-                                                stat = "is \x02\x0303clear\x0301\x0F"
-                                        elif aggregate < 2:
-                                                stat = "has a \x0312small backlog\x0301"
-                                        elif aggregate < 4:
-                                                stat = "has an \x0307average backlog\x0301"
-                                        elif aggregate < 6:
-                                                stat = "is \x0304backlogged\x0301"
-                                        elif aggregate < 8:
-                                                stat = "is \x02\x0304heavily backlogged\x0301\x0F"
-                                        else:
-                                                stat = "is \x02\x1F\x0304severely backlogged\x0301\x0F"
-                                        notice(nick, "\x02Current status:\x0F Abuse Response %s (\x0302Investigator Needed\x0301: \x0305%s\x0301; \x0302Open\x0301: \x0305%s\x0301; )" % (aggregate, number, num2))
-                                        say("\x0302Member welcomed:\x0301 \x02%s\x0F was welcomed into \x02%s\x0F." % (nick, REPORT_CHAN), META_CHAN)
-                                except Exception:
-                                        print traceback.format_exc()
+                        #elif line2[1] == "MODE" and line2[2] == "" and line2[3] == "+v" and line2[0] == ":ChanServ!ChanServ@services.": #Line2[2] is channel
+                        #        try:
+                        #                nick = line2[4]
+                        #                if nick == NICK: continue
+                        #                
+                        #        except:
+                        #                print traceback.format_exc()
                         elif line2[1] == "NOTICE" and "identified" in line2:
-                                print "START"
+                                print "Bot has identified to NickServ"
                                 for chan in CHANS:
                                         msg = "JOIN %s" % chan
                                         s.send(msg + "\r\n")
@@ -176,10 +133,12 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 	if line2[1] == "PRIVMSG" and (line2[3].startswith(":!") or line2[3].startswith(":.")):
 		command = string.lower(line2[3][2:])
 		if command == "refreshrc":
+                        print "Refresh RC called"
                         actionlevel = cparser.authtest(host, chan)
                         if actionlevel[4]==1:
                                 return
                         else:
+                                print "Refresh RC running."
                                 refreshRClist()
                                 reply("RC List refreshed.", chan, nick)
                         return
@@ -190,11 +149,9 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 
 def notice(nick, msg):
     s.send("NOTICE %s :%s\r\n" % (nick, msg))
-    print "   NOTICE %s :%s" % (nick, msg)
 
 def say(msg, chan=CHANS[0]):
     s.send("PRIVMSG %s :%s\r\n" % (chan, msg))
-    print "   PRIVMSG %s :%s" % (chan, msg)
 	
 def reply(msg, chan=CHANS[0], nick=""):
    say(msg, chan)
@@ -251,12 +208,10 @@ def refreshRClist():
         db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
         db.query("SELECT * FROM rcstalklist;")
         r = db.use_result()
-        global rcstalk
         rcstalk = r.fetch_row(maxrows=0)
         
         db.query("SELECT * FROM rcblacklist;")
         r = db.use_result()
-        global blacklist
         blacklist = r.fetch_row(maxrows=0)
 
 def tellFreenode(msg):
@@ -280,7 +235,7 @@ def tellFreenode(msg):
                         print line[1]
                         say(msg, line[1])
                         time.sleep(0.5)
-refreshRClist()
+
         
 if __name__ == "__main__":
     run()
