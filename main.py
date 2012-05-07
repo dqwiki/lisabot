@@ -273,9 +273,9 @@ def tellFreenode(msg):
                 method = line[2]
                 page = msg.split("]]")[0]
                 page = page.split("[[")[1]
-                user = msg.split(" * ")[1]
-                summary = msg.split(" * ")[2]
-                summary = summary.split(") ")[1]
+                user = msg.split("* ")[1]
+                summary = msg.split("* ")[2]
+                summary = summary.split(")")[1]
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         for bline in blacklist:
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
