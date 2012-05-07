@@ -274,9 +274,8 @@ def tellFreenode(msg):
                 page = page.split("[[07")[1]
                 user = msg.split("5* 03")[1]
                 user = user.split(" 5*")[0]
-                summary = msg.split("*")[2]
-                try:summary = summary.split(")")[1]
-                except:summary = summary.split("]]\": ")[1]
+                try:summary = msg.split(") 10")[1]
+                except:summary = msg.split("]]\": ")[1]
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         print msg
                         for bline in blacklist:
