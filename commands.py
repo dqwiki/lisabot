@@ -499,31 +499,21 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-private"  
 			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-staff"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-security"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-techops"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#openglobe"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-deltaquad"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-design"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-apple"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#testwiki"  
-			s.send("JOIN %s\r\n" % channel)
-			channel = "#techessentials-managers"  
+			channel = "#wikipedia-en-unblock-dev"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-RFA"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#everythingfoodanddrink"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-RC-admin"  
+			s.send("JOIN %s\r\n" % channel)
+			channel = "#wikipedia-en-proxy"  
+			s.send("JOIN %s\r\n" % channel)
+			channel = "#wikipedia-en-utrs"  
+			s.send("JOIN %s\r\n" % channel)
+			channel = "#wikipedia-en-unblock-dev"
+			s.send("JOIN %s\r\n" % channel)
+			channel = "#wikipedia-en-accounts-admins"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#wikipedia-en-proxy"  
 			s.send("JOIN %s\r\n" % channel)
