@@ -272,7 +272,7 @@ def tellFreenode(msg):
                 method = line[2]
                 page = msg.split("\x0314]]")[0]
                 page = page.split("[[\x0307")[1]
-                user = msg.split("* \x0303")[1]
+                user = msg.split("\x0303")[1]
                 user = user.split("* (")[0]
                 try:summary = msg.split(") ")[1]
                 except:summary = msg.split("\":")[1]
