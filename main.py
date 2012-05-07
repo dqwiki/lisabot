@@ -269,7 +269,6 @@ def tellFreenode(msg):
         if "Special:Log/newusers" in msg:msg = string.replace(msg, "create2", "Created Account Via Email")
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
         for line in rcstalk:
-                print msg
                 method = line[2]
                 page = msg.split("]]")[0]
                 page = page.split("[[")[1]
