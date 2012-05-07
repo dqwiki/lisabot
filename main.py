@@ -272,7 +272,7 @@ def tellFreenode(msg):
                 method = line[2]
                 page = msg.split("14]]")[0]
                 print page
-                page = page.split("[[07")[1]
+                page = page.split("07")[1]
                 user = msg.split("5* 03")[1]
                 user = user.split(" 5*")[0]
                 try:summary = msg.split(") 10")[1]
