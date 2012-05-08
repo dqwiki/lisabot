@@ -284,7 +284,7 @@ def tellFreenode(msg):
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
                         if not line[1] in alreadyprint:
-                                msg = msg.replace(":", ": \x0304(Matched page: " + line[0].lower() + ")\x0301", 1)
+                                msg = msg.replace(":", ": \x0304(Matched user: " + line[0] + ")\x0301", 1)
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -294,7 +294,7 @@ def tellFreenode(msg):
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
                         if not line[1] in alreadyprint:
-                                msg = msg.replace(":", ": \x0304(Matched page: " + line[0].lower() + ")\x0301", 1)
+                                msg = msg.replace(":", ": \x0304(Matched page: [[" + line[0] + "]])\x0301", 1)
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -304,7 +304,7 @@ def tellFreenode(msg):
                                 if bline[0].lower() in summary.lower() and bline[1] == line[1]:
                                         return
                         if not line[1] in alreadyprint:
-                                msg = msg.replace(":", ": \x0304(Matched page: " + line[0].lower() + ")\x0301", 1)
+                                msg = msg.replace(":", ": \x0304(Matched edit summary: " + line[0] + ")\x0301", 1)
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]

@@ -152,9 +152,6 @@ def get_commandList():
         'kick': 'kick',
         'unban': 'unban',
         'sayhi': 'sayhi',
-        'new': 'new',
-        'version': 'version',
-        'support': 'support',
         'globalmsg': 'globalmsg',
         'stalk': 'stalk',
         'unstalk': 'unstalk',
@@ -221,7 +218,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			os.system("nice -15 python main.py")
 			os.abort()
 			sys.exit("Trying to end process.")
-			raise SystemExit
+			raise KeyboardInterrupt
 		else:
 			reply("Access denied, you need the +r (restart) flag to use this action.", chan, nick)
 		return
@@ -264,7 +261,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad", nick)
                         reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, Thehelpfulone, Gfoley4, Mlpearc, Courcelles.", "##DeltaQuad-rfa", nick)
                 elif "DeltaQuad" in chan:reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Thehelpfulone, Gfoley4.", "##DeltaQuad", nick)
-                elif "techessentials" in chan:reply("\x0312"+nick + " \x0304has requested operator attention in "+chan+". \x0301\x02Ping: DeltaQuad, AFK, JoeGazz84, Pilif12p, Netalarm.", "#techessentials", nick)
                 elif "spi" in chan:reply("\x0312"+nick + " \x0304has requested operator attention. \x0301\x02Ping: DeltaQuad, !clerk, MuZemike, Courcelles, Dmcdevit, Tnxman307, Avi|work, FT2, Shirik, SpitfireWP, Timotheus_Canens.", "#wikipedia-en-spi", nick)
                 elif "afc" in chan:reply("\x0312"+nick + " \x0304has requested operator attention. \x0301\x02Ping: Earwig", "#wikipedia-en-afc", nick)
                 elif "abuse" in chan:reply("\x0312"+nick + " \x0304has requested operator attention. \x0301\x02Ping: Netalarm, DeltaQuad", "#wikipedia-en-afc", nick)
@@ -459,6 +455,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 else:
                         reply("Access denied, you need the +m (mode) flag to use this action.", chan, nick)
         if command == "stalk" or command == "unstalk" or command == "hide" or command == "unhide":
+                reply("Due to new improvements to the RC system, these commands are currently disabled till they match the upgraded RC system. Please contact DeltaQuad to change what LisaBot stalks.", chan, nick)
+                return
                 import MySQLdb, traceback
                 if command == "stalk":
                         try:
@@ -504,6 +502,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			channel = "##DeltaQuad-RFA"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "#everythingfoodanddrink"  
+			s.send("JOIN %s\r\n" % channel)
+			channel = "#everythingfoodanddrink-mlpearc"  
 			s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-RC-admin"  
 			s.send("JOIN %s\r\n" % channel)
