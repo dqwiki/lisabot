@@ -285,8 +285,8 @@ def tellFreenode(msg):
                                         return
                         if not line[1] in alreadyprint:
                                 firstmsg = msg.split(":")[0]
-                                secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched user: " + line[0].lower + ")\x0301" + secondmsg.join(" ")
+                                secondmsg = (msg.split(":")[1:]).join(" ")
+                                msg = firstmsg + " \x0304(Matched user: " + line[0].lower() + ")\x0301" + secondmsg
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -297,8 +297,8 @@ def tellFreenode(msg):
                                         return
                         if not line[1] in alreadyprint:
                                 firstmsg = msg.split(":")[0]
-                                secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched page: " + line[0].lower() + ")\x0301" + secondmsg.join(" ")
+                                secondmsg = (msg.split(":")[1:]).join(" ")
+                                msg = firstmsg + " \x0304(Matched page: " + line[0].lower() + ")\x0301" + secondmsg
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -310,7 +310,7 @@ def tellFreenode(msg):
                         if not line[1] in alreadyprint:
                                 firstmsg = msg.split(":")[0]
                                 secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched summary: " + line[0].lower() + ")\x0301" + secondmsg.join(" ")
+                                msg = firstmsg + " \x0304(Matched summary: " + line[0].lower() + ")\x0301" + secondmsg
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
