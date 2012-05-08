@@ -284,9 +284,7 @@ def tellFreenode(msg):
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
                         if not line[1] in alreadyprint:
-                                firstmsg = msg.split(":")[0]
-                                secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched user: " + line[0].lower() + ")\x0301" + secondmsg
+                                msg = msg.replace(":", ": \x0304(Matched page: " + line[0].lower() + ")\x0301", 1)
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -296,9 +294,7 @@ def tellFreenode(msg):
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
                         if not line[1] in alreadyprint:
-                                firstmsg = msg.split(":")[0]
-                                secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched page: " + line[0].lower() + ")\x0301" + secondmsg
+                                msg = msg.replace(":", ": \x0304(Matched page: " + line[0].lower() + ")\x0301", 1)
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
@@ -308,9 +304,7 @@ def tellFreenode(msg):
                                 if bline[0].lower() in summary.lower() and bline[1] == line[1]:
                                         return
                         if not line[1] in alreadyprint:
-                                firstmsg = msg.split(":")[0]
-                                secondmsg = msg.split(":")[1:]
-                                msg = firstmsg + " \x0304(Matched summary: " + line[0].lower() + ")\x0301" + secondmsg
+                                msg = msg.replace(":", ": \x0304(Matched page: " + line[0].lower() + ")\x0301", 1)
                                 say(msg, line[1])
                         time.sleep(0.5)
                         alreadyprint = alreadyprint + "," + line[1]
