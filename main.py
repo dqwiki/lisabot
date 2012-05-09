@@ -291,6 +291,7 @@ def tellFreenode(msg):
                 if method == "page" and not None == (re.search(line[0].lower(),page.lower())):
                         print msg
                         if "Amalthea (bot)" in msg:return
+                        if "DeltaQuadBot" in msg:return
                         for bline in blacklist:
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
