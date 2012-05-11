@@ -280,6 +280,7 @@ def tellFreenode(msg):
                 except:summary=""
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         print msg
+                        if "DeltaQuadBot" in msg:return
                         for bline in blacklist:
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
