@@ -281,6 +281,7 @@ def tellFreenode(msg):
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         print msg
                         if "DeltaQuadBot" in msg:return
+                        if "Wikipedia talk:Noticeboard for India-related topics/Archive 48" in msg:return
                         for bline in blacklist:
                                 if bline[0].lower() in page.lower() and bline[1] == line[1]:
                                         return
