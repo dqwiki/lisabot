@@ -274,6 +274,8 @@ def tellFreenode(msg):
                 page = page.split("[[\x0307")[1]
                 user = msg.split("\x0303")[1]
                 user = user.split("* (")[0]
+                if "Archiving case from [[Wikipedia:Sockpuppet investigations/" in line:return
+                if "Archiving case to [[Wikipedia:Sockpuppet investigations/" in line:return
                 try:
                         try:summary = msg.split(") \x0310")[1]
                         except:summary = msg.split('": ')[1]
