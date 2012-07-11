@@ -301,7 +301,10 @@ def tellFreenode(msg):
 			page = page.split("[[\x0307")[1]
 			user = msg.split("\x0303")[1]
 			user = user.split("\x035* (")[0]
-			summary = msg.split(") \x0310")[1]
+			try:summary = msg.split(") \x0310")[1]
+			except:
+				summary = "NO SUMMARY"
+				print msg
                 if "Archiving case from [[Wikipedia:Sockpuppet investigations/" in line:return
                 if "Archiving case to [[Wikipedia:Sockpuppet investigations/" in line:return
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
