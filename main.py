@@ -270,7 +270,15 @@ def tellFreenode(msg):
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
         for line in rcstalk:
                 method = line[2]
-		if "Special:Log/protect" in msg:
+		if "Special:Log/upload" in msg:
+			page = msg.split("\x0314]]")[0]
+			page = page.split("[[\x0307")[1] #t used to indicate 2
+			user=msg.split("\x0303")[1]
+			user=user.split(" \x035")[0]
+			testsummary=msg.split("\x0314]]")[1]
+			testsummary=testsummary.split(": ")[1:]
+			summary= ' '.join(testsummary)
+		elif "Special:Log/protect" in msg:
 			try:
 				page = msg.split("protected ")[1]
 				page = page.split('[')[0]
@@ -301,10 +309,7 @@ def tellFreenode(msg):
 			page = page.split("[[\x0307")[1]
 			user = msg.split("\x0303")[1]
 			user = user.split("\x035* (")[0]
-			try:summary = msg.split(") \x0310")[1]
-			except:
-				summary = "NO SUMMARY"
-				print msg
+			summary = msg.split(") \x0310")[1]
                 if "Archiving case from [[Wikipedia:Sockpuppet investigations/" in line:return
                 if "Archiving case to [[Wikipedia:Sockpuppet investigations/" in line:return
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
