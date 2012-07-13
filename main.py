@@ -267,7 +267,13 @@ def tellFreenode(msg):
         for line in rcstalk:
                 method = line[2]
 		try:
-			if "Special:Log/upload" in msg:
+			if "Special:Log/patrol" in msg:
+				page = msg.split("\x0310]]")[0]
+				page = page.split("[[\x0302")[1] 
+				user=msg.split("\x0303")[1]
+				user=user.split(" \x035")[0]
+				summary = ""
+			elif "Special:Log/upload" in msg:
 				page = msg.split("\x0314]]")[0]
 				page = page.split("[[\x0307")[1] #t used to indicate 2
 				user=msg.split("\x0303")[1]
