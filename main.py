@@ -270,83 +270,98 @@ def tellFreenode(msg):
         if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
         for line in rcstalk:
                 method = line[2]
-		if "Special:Log/upload" in msg:
-			page = msg.split("\x0314]]")[0]
-			page = page.split("[[\x0307")[1] #t used to indicate 2
-			user=msg.split("\x0303")[1]
-			user=user.split(" \x035")[0]
-			testsummary=msg.split("\x0314]]")[1]
-			testsummary=testsummary.split(": ")[1:]
-			summary= ' '.join(testsummary)
-		elif "Special:Log/protect" in msg:
-			try:
-				page = msg.split("protected ")[1]
-				page = page.split('[')[0]
-			except:
-				page = msg.split("changed protection level of ")[1]
-				page = page.split('[')[0]
-			user=msg.split("\x035* \x0303")[1]
-			user=user.split("\x035* \x03")[0]
-			summary=msg.split("): ")[1]
-		elif "Special:Log/delete" in msg:
-			page = msg.split("\x0314]]")[0]
-			page = page.split("[[\x0307")[1] #t used to indicate 2
-			user=msg.split("\x0303")[1]
-			user=user.split(" \x035")[0]
-			testsummary=msg.split("\x0314]]")[1]
-			testsummary=testsummary.split(": ")[1:]
-			summary= ' '.join(testsummary)
-		elif "Special:Log/block" in msg:
-			page=msg.split("User:")[1]
-			page=page.split(" (")[0]
-			user=msg.split("\x0303")[1]
-			user=user.split(" \x035")[0]
-			try:summary=msg.split("expiry time")[1]
-			except:summary=msg.split(": ")[2]
-			summary=summary.split(": ")[1]
-		else:
-			page = msg.split("\x0314]]")[0]
-			page = page.split("[[\x0307")[1]
-			user = msg.split("\x0303")[1]
-			user = user.split("\x035* (")[0]
-			summary = msg.split(") \x0310")[1]
+		try:
+			if "Special:Log/upload" in msg:
+				page = msg.split("\x0314]]")[0]
+				page = page.split("[[\x0307")[1] #t used to indicate 2
+				user=msg.split("\x0303")[1]
+				user=user.split(" \x035")[0]
+				testsummary=msg.split("\x0314]]")[1]
+				testsummary=testsummary.split(": ")[1:]
+				summary= ' '.join(testsummary)
+			elif "Special:Log/protect" in msg:
+				try:
+					page = msg.split("protected ")[1]
+					page = page.split('[')[0]
+				except:
+					page = msg.split("changed protection level of ")[1]
+					page = page.split('[')[0]
+				user=msg.split("\x035* \x0303")[1]
+				user=user.split("\x035* \x03")[0]
+				summary=msg.split("): ")[1]
+			elif "Special:Log/delete" in msg:
+				page = msg.split("\x0314]]")[0]
+				page = page.split("[[\x0307")[1] #t used to indicate 2
+				user=msg.split("\x0303")[1]
+				user=user.split(" \x035")[0]
+				testsummary=msg.split("\x0314]]")[1]
+				testsummary=testsummary.split(": ")[1:]
+				summary= ' '.join(testsummary)
+			elif "Special:Log/block" in msg:
+				page=msg.split("User:")[1]
+				page=page.split(" (")[0]
+				user=msg.split("\x0303")[1]
+				user=user.split(" \x035")[0]
+				try:summary=msg.split("expiry time")[1]
+				except:summary=msg.split(": ")[2]
+				summary=summary.split(": ")[1]
+			else:
+				page = msg.split("\x0314]]")[0]
+				page = page.split("[[\x0307")[1]
+				user = msg.split("\x0303")[1]
+				user = user.split("\x035* (")[0]
+				summary = msg.split(") \x0310")[1]
+		except:
+			trace = traceback.format_exc() # Traceback.
+			print "Unable to comply with request, please refer to Special:Log stalking procedures"
+                        print trace # Print.
+			print msg
                 if "Archiving case from [[Wikipedia:Sockpuppet investigations/" in line:return
                 if "Archiving case to [[Wikipedia:Sockpuppet investigations/" in line:return
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
-                        print msg
-                        if "DeltaQuadBot" in msg:return
-                        if "Wikipedia talk:Noticeboard for India-related topics/Archive 48" in msg:return
-                        for bline in blacklist:
-                                if bline[0].lower() in page.lower() and bline[1] == line[1]:
-                                        return
-                        if not line[1] in alreadyprint:
-                                msg = msg.replace(":", "\x0F: \x0304(Matched user: " + line[0] + ")\x0301", 1)
-                                say(msg, line[1])
-                        time.sleep(0.5)
-                        alreadyprint = alreadyprint + "," + line[1]
+                        try:
+		                if "DeltaQuadBot" in msg:return
+		                if "Wikipedia talk:Noticeboard for India-related topics/Archive 48" in msg:return
+		                for bline in blacklist:
+		                        if bline[0].lower() in page.lower() and bline[1] == line[1]:
+		                                return
+		                if not line[1] in alreadyprint:
+		                        msg = msg.replace(":", "\x0F: \x0304(Matched user: " + line[0] + ")\x0301", 1)
+		                        say(msg, line[1])
+		                time.sleep(0.5)
+		                alreadyprint = alreadyprint + "," + line[1]
+			except:
+				print "Error in user stalking post, please refer to the following:"
+				print msg
                 elif method == "page" and not None == (re.search(line[0].lower(),page.lower())):
-                        print msg
-                        if "Amalthea (bot)" in msg:return
-                        if "DeltaQuadBot" in msg:return
-                        for bline in blacklist:
-                                if bline[0].lower() in page.lower() and bline[1] == line[1]:
-                                        return
-                        if not line[1] in alreadyprint:
-                                msg = msg.replace(":", "\x0F: \x0304(Matched page: " + line[0] + ")\x0301", 1)
-                                say(msg, line[1])
-                        time.sleep(0.5)
-                        alreadyprint = alreadyprint + "," + line[1]
+			try:
+		                if "Amalthea (bot)" in msg:return
+		                if "DeltaQuadBot" in msg:return
+		                for bline in blacklist:
+		                        if bline[0].lower() in page.lower() and bline[1] == line[1]:
+		                                return
+		                if not line[1] in alreadyprint:
+		                        msg = msg.replace(":", "\x0F: \x0304(Matched page: " + line[0] + ")\x0301", 1)
+		                        say(msg, line[1])
+		                time.sleep(0.5)
+		                alreadyprint = alreadyprint + "," + line[1]
+			except:
+				print "Error in page stalking post, please refer to the following:"
+				print msg
                 elif method == "summary" and not None == (re.search(line[0].lower(),summary.lower())):
-                        print msg
-                        for bline in blacklist:
-                                if bline[0].lower() in summary.lower() and bline[1] == line[1]:
-                                        return
-                        if not line[1] in alreadyprint:
-                                msg = msg.replace(":", "\x0F: \x0304(Matched edit summary: " + line[0] + ")\x0301", 1)
-                                say(msg, line[1])
-                        time.sleep(0.5)
-                        alreadyprint = alreadyprint + "," + line[1]
-                        continue
+			try:
+		                for bline in blacklist:
+		                        if bline[0].lower() in summary.lower() and bline[1] == line[1]:
+		                                return
+		                if not line[1] in alreadyprint:
+		                        msg = msg.replace(":", "\x0F: \x0304(Matched edit summary: " + line[0] + ")\x0301", 1)
+		                        say(msg, line[1])
+		                time.sleep(0.5)
+		                alreadyprint = alreadyprint + "," + line[1]
+		                continue
+			except:
+				print "Error in summary stalking post, please refer to the following:"
+				print msg
                 #if not line[0].lower() in msg.lower():
                        #continue
                         
