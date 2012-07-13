@@ -279,6 +279,11 @@ def tellFreenode(msg):
 				testsummary=msg.split("\x0314]]")[1]
 				testsummary=testsummary.split(": ")[1:]
 				summary= ' '.join(testsummary)
+			elif "Special:Log/newusers" in msg:
+				page = ""
+				user = msg.split("\x0303")[1]
+				user = user.split(" \x035")[0]
+				summary = ""
 			elif "Special:Log/protect" in msg:
 				try:
 					page = msg.split("protected ")[1]
