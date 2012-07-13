@@ -61,11 +61,9 @@ def main():
                         elif line2[0] == "PING":
                                 msg = "PONG %s" % line2[1]
                                 s.send(msg + "\r\n")
-                                print "   %s" % msg
                         elif line2[1] == "001":
                                 msg = "PRIVMSG NICKSERV :IDENTIFY LisaBot %s" % PASS
                                 s.send(msg + "\r\n")
-                                print "   %s" % msg
                         elif line2[1] == "JOIN" and line2[2][1:] == WELCOME_CHAN:
                                 try:
                                         host = re.findall("@(.*?)\Z", line2[0])
@@ -86,7 +84,6 @@ def main():
                                         aggregate = int(number) + int(num2)
                                         if nick == NICK: continue
                                         import time
-                                        print "Start opening"
                                         cur = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_for_pre-CheckUser_review&cmlimit=500").read())))
                                         time.sleep(.25)
                                         cuendorse = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_cases_awaiting_a_CheckUser&cmlimit=500").read())))
@@ -99,7 +96,6 @@ def main():
                                         time.sleep(.25)
                                         admin = int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:SPI_requests_needing_an_Administrator&cmlimit=500").read())))
                                         time.sleep(.25)
-                                        print "Send Msg"
                                         notice(nick, "SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned/Open - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin))
                                 except:
                                         print traceback.format_exc()
@@ -190,11 +186,11 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 
 def notice(nick, msg):
     s.send("NOTICE %s :%s\r\n" % (nick, msg))
-    print "   NOTICE %s :%s" % (nick, msg)
+    #print "   NOTICE %s :%s" % (nick, msg)
 
 def say(msg, chan=CHANS[0]):
     s.send("PRIVMSG %s :%s\r\n" % (chan, msg))
-    print "   PRIVMSG %s :%s" % (chan, msg)
+    #print "   PRIVMSG %s :%s" % (chan, msg)
 	
 def reply(msg, chan=CHANS[0], nick=""):
    say(msg, chan)
@@ -223,27 +219,27 @@ def editreport():
                         elif line2[0] == "PING":
                                 msg = "PONG %s" % line2[1]
                                 s2.send("%s\r\n" % msg)
-                                print "   %s" % msg
+                                #print "   %s" % msg
                         elif line2[1] == "376":
                                 msg = "PING :irc.wikimedia.org"
                                 s2.send("%s\r\n" % msg)
-                                print "   %s" % msg
+                                #print "   %s" % msg
                                 CHAN2 = "#en.wikipedia"
                                 msg = "JOIN %s" % CHAN2
                                 s2.send("%s\r\n" % msg)
-                                print "   %s" % msg
+                                #print "   %s" % msg
                                 CHAN2 = "#commons.wikimedia"
                                 msg = "JOIN %s" % CHAN2
                                 s2.send("%s\r\n" % msg)
-                                print "   %s" % msg
+                                #print "   %s" % msg
                                 CHAN2 = "#simple.wikipedia"
                                 msg = "JOIN %s" % CHAN2
                                 s2.send("%s\r\n" % msg)
-                                print "   %s" % msg
+                                #print "   %s" % msg
                                 CHAN2 = "#meta.wikimedia"
                                 msg = "JOIN %s" % CHAN2
                                 s2.send("%s\r\n" % msg)
-                                print "   %s" % msg
+                                #print "   %s" % msg
 
 
 def refreshRClist():
