@@ -267,7 +267,14 @@ def tellFreenode(msg):
         for line in rcstalk:
                 method = line[2]
 		try:
-			if "Special:Log/patrol" in msg:
+			if "Special:Log/move" in msg:
+				page = msg.split("\x0310]] to [[")[1] #this will only stalk the latter page, but not much we can do without arrays
+				page = page.split("]]:")[0]
+				user=msg.split("\x0303")[1]
+				user=user.split(" \x035")[0]
+				summary = msg.split("\x0310]] to [[")[1] #safety precaution
+				summary = summary.split("]]:")[1]
+			elif "Special:Log/patrol" in msg:
 				page = msg.split("\x0310]]")[0]
 				page = page.split("[[\x0302")[1] 
 				user=msg.split("\x0303")[1]
