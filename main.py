@@ -300,8 +300,8 @@ def tellFreenode(msg):
 				except:
 					page = msg.split("changed protection level of ")[1]
 					page = page.split('[')[0]
-				user=msg.split("\x035* \x0303")[1]
-				user=user.split("\x035* \x03")[0]
+				user=msg.split("\x0303")[1]
+				user=user.split("\x035*")[0]
 				summary=msg.split("): ")[1]
 			elif "Special:Log/delete" in msg:
 				page = msg.split("\x0314]]")[0]
