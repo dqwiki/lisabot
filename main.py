@@ -279,12 +279,25 @@ def tellFreenode(msg):
                                         #Some page moves don't have a summary
                                         if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
                                         else:summary=""
+                        elif "Special:Log/globalauth" in msg:
+				page = msg.split(" \"User:")[1]
+				page = "User:" + page
+                                page = page.split("\"")[0]
+				user = msg.split("* \x0303")[1]
+				user = user.split(" \x035")[0]
+				summary = msg.split("Unset")
+				summary = summary.split(": ")[1]
 			elif "Special:Log/patrol" in msg:
 				page = msg.split("\x0310]]")[0]
 				page = page.split("[[\x0302")[1] 
 				user=msg.split("\x0303")[1]
 				user=user.split(" \x035")[0]
 				summary = ""
+			elif "Special:Log/moodbar" in msg:
+                                user = msg.split("* \x0303")[1]
+                                user = user.split(" \x035*")[0]
+                                page = ""#pointless to stalk every moodbar page, doesn't relate to actual page
+                                summary = msg.split("]]: ")[1]
 			elif "Special:Log/upload" in msg:
 				page = msg.split("\x0314]]")[0]
 				page = page.split("[[\x0307")[1] #t used to indicate 2
