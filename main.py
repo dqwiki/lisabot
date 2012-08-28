@@ -267,6 +267,12 @@ def tellFreenode(msg):
         for line in rcstalk:
                 method = line[2]
 		try:
+                        #Insignificant to log, so just ignoring
+                        if "Special:Log/translationreview" in msg:
+                                page = ""
+                                user = ""
+                                summary = ""
+                        #more popular logs
 			if "Special:Log/move" in msg:
 				page = msg.split("\x0310]] to [[")[1] #this will only stalk the latter page, but not much we can do without arrays
 				page = page.split("]]")[0]
