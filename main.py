@@ -268,12 +268,12 @@ def tellFreenode(msg):
                 method = line[2]
 		try:
                         #Insignificant to log, so just ignoring
-                        if "Special:Log/translationreview" in msg:
+                        if "Special:Log/translationreview" in msg or "Special:Log/moodbar" in msg:
                                 page = ""
                                 user = ""
                                 summary = ""
                         #more popular logs
-			if "Special:Log/move" in msg:
+			elif "Special:Log/move" in msg:
 				page = msg.split("\x0310]] to [[")[1] #this will only stalk the latter page, but not much we can do without arrays
 				page = page.split("]]")[0]
 				user=msg.split("\x0303")[1]
@@ -306,11 +306,6 @@ def tellFreenode(msg):
 				user=msg.split("\x0303")[1]
 				user=user.split(" \x035")[0]
 				summary = ""
-			elif "Special:Log/moodbar" in msg:
-                                user = msg.split("* \x0303")[1]
-                                user = user.split(" \x035*")[0]
-                                page = ""#pointless to stalk every moodbar page, doesn't relate to actual page
-                                summary = msg.split("]]: ")[1]
 			elif "Special:Log/upload" in msg:
 				page = msg.split("\x0314]]")[0]
 				page = page.split("[[\x0307")[1] #t used to indicate 2
