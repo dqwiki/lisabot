@@ -273,8 +273,12 @@ def tellFreenode(msg):
 				user=msg.split("\x0303")[1]
 				user=user.split(" \x035")[0]
 				summary = msg.split("\x0310]] to [[")[1] #safety precaution
-				try:summary = summary.split("]]: ")[1]
-				except:summary = summary.split("]] over redirect: ")[1]
+				try:
+                                        summary = summary.split("]]: ")[1]
+				except:
+                                        #Some page moves don't have a summary
+                                        if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
+                                        else:summary=""
 			elif "Special:Log/patrol" in msg:
 				page = msg.split("\x0310]]")[0]
 				page = page.split("[[\x0302")[1] 
