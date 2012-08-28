@@ -285,6 +285,13 @@ def tellFreenode(msg):
                                         #Some page moves don't have a summary
                                         if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
                                         else:summary=""
+                        elif "Special:Log/gblblock" in msg:
+                                user = msg.split("* \x0303")[1]
+				user = user.split(" \x035")[0]
+				page = msg.split("[[\x0302")[1]
+				page = page.split("]]")[0]
+				summary = msg.split("expires")
+				summary = summary.split(": ")[1]
                         elif "Special:Log/globalauth" in msg:
 				page = msg.split(" \"User:")[1]
 				page = "User:" + page
