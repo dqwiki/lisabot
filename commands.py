@@ -560,7 +560,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 return
                         elif "Lisa" in normal or "LisaBot" in normal or "lisa" in normal:
                                 reply("I'm not that stupid ;)", chan, nick)
-                        elif "deltaquad" not in normal and "DeltaQuad" not in normal and "DQ" not in normal and "dq" not in normal and "FAdmArcher" not in normal and "FADMArcher" not in normal and "fadmarcher" not in normal:
+                        elif "deltaquad" not in normal and "DeltaQuad" not in normal and "DQ" not in normal and "dq" not in normal and "FAdmArcher" not in normal and "FADMArcher" not in normal and "fadmarcher" not in normal and "DairyQueen" not in normal and "dairyqueen" not in normal:
                                 text = 'slaps %s around a bit with a large trout.' % user
                                 msg = '\x01ACTION %s\x01' % text
                                 say(msg, chan)
