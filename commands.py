@@ -1,5 +1,5 @@
 ##LisaBot - IRC Bot
-##Copyright (C) 2011 DeltaQuad
+##Copyright (C) 2012 DeltaQuad
 ##This program is free software: you can redistribute it and/or modify
 ##it under the terms of the GNU General Public License as published by
 ##the Free Software Foundation, either version 3 of the License, or
@@ -103,60 +103,64 @@ def authtest(host, chan):
         try:return authdb(host, chan)
 	except:return False
 def get_commandList():
-	return {'welcome': 'welcome',
-	'greet': 'welcome',
-	'auth': 'auth',
-	'access': 'access',
+	return {
 	'join': 'join',
-	'leave': 'part',
+	'part': 'part',
+		'leave': 'part',
 	'restart': 'restart',
 	'quit': 'quit',
-	'die': 'quit',
-	'suicide': 'quit',
-	'calc': 'calc',
-	'dice': 'dice',
-	'time': 'time',
-	'beats': 'beats',
-	'dict': 'dictionary',
-	'dictionary': 'dictionary',
-	'ety': 'etymology',
-	'etymology': 'etymology',
-	'lang': 'langcode',
+		'die': 'quit',
+		'suicide': 'quit',
 	'langcode': 'langcode',
-	'num': 'number',
+		'lang': 'langcode',
 	'number': 'number',
-	'count': 'number',
+		'count': 'number',
+		'num': 'number',
 	'nick': 'nick',
 	'promote': 'promote',
 	'demote': 'demote',
 	'voice': 'voice',
 	'devoice': 'devoice',
-	'pend': 'pending',
-	'pending': 'pending',
-	'praise': 'praise',
 	'trout': 'trout',
-        'page': 'request',
-        'request': 'request',
+		'fish': 'trout',
+    'request': 'request',
+    	'page': 'request',
 	'kill': 'kill',
-	'destroy': 'kill',
-	'murder': 'kill',
+		'destroy': 'kill',
+		'murder': 'kill',
 	'commands': 'commands',
-        'clear': 'clear',
 	'help': 'help',
-	'myaccess': 'myaccess',
-	'doc': 'help',
-	'documentation': 'help',
-	'remind': 'reminder',
+		'doc': 'help',
+		'documentation': 'help',
 	'reminder': 'reminder',
-        'ban': 'ban',
-        'kick': 'kick',
-        'unban': 'unban',
-        'sayhi': 'sayhi',
-        'globalmsg': 'globalmsg',
-        'stalk': 'stalk',
-        'unstalk': 'unstalk',
-        'hide': 'hide',
-        'unhide': 'unhide'
+		'remind': 'reminder',
+    'ban': 'ban',
+    'kick': 'kick',
+    'unban': 'unban',
+    'kickban': 'kickban',
+    'quiet': 'quiet',
+    'unquiet': 'unquiet',
+    'sayhi': 'sayhi',
+    'globalmsg': 'globalmsg',
+    'stalk': 'stalk',
+    'unstalk': 'unstalk',
+    'hide': 'hide',
+    'unhide': 'unhide',
+    'blockinfo': 'blockinfo',
+    'ipinfo': 'ipinfo',
+    'pull': 'pull',
+    'chan': 'chan',
+    'myhost', 'myhost',
+    'git': 'git',
+    	'github': 'git',
+    'msg': 'msg',
+    'me': 'me',
+    'mode': 'mode',
+    'startup': 'startup',
+    'geolocate': 'geolocate',
+    	'geo': 'geolocate',
+    'sql': 'sql',
+    	'perms': 'sql'
 	}
 
 def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
@@ -174,6 +178,7 @@ def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2
 				break
 		else: report2.append('source unknown')
 		say(report2[0] + ' (' + report2[1] + ')', chan)
+
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
 	actionlevel = authtest(host, chan)
 	print actionlevel
@@ -224,7 +229,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		return
 	if command == "chan":
                 reply(chan, chan, nick)
-        if command == "request" or command == "page":
+        if command == "request":
                 if actionlevel[trout]==0:
                         reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
                         return
@@ -245,10 +250,10 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 lisabot = "*waves* Hello, I am LisaBot. I run off of the Willow server on the Wikimedia Toolserver."
                 reply(lisabot, chan, nick)
                 return
-	if command == "help" or command == "commands":
+	if command == "help":
                 reply("Dsiabled.", chan, nick)
                 return
-        if command == "git" or command == "github":
+        if command == "git":
                 reply("https://github.com/dqwiki/lisabot/", chan, nick)
                 return
 	if command == "globalmsg":
@@ -297,7 +302,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		else:
 			reply("Access denied, you need the +j (join/part) flag to use this action.", chan, nick)
 		return
-	if command == "quit" or command == "die" or command == "suicide":
+	if command == "quit":
 		if actionlevel[startup] == 0:
 				reply("Access denied, you need the +p (power) flag to use this action." % OWNER, chan, nick)
 		else:
@@ -320,7 +325,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		else:
 			reply("Access denied, you need the +s (talk as bot) flag to use this action.", chan, nick)
 		return
-	if command == "num" or command == "number" or command == "count":
+	if command == "num":
 		try:
 			params = string.lower(line2[4])
 		except Exception:
@@ -539,11 +544,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Hahahahahahahaha...", chan, nick)
                                 return
                         normal = unicodedata.normalize('NFKD', unicode(string.lower(user)))
-                        if "itself" in normal:
+                        if "itself" in normal or "Lisa" in normal or "LisaBot" in normal or "lisa" in normal or "lisabot" in normal:
                                 reply("I'm not that stupid ;)", chan, nick)
                                 return
-                        elif "Lisa" in normal or "LisaBot" in normal or "lisa" in normal:
-                                reply("I'm not that stupid ;)", chan, nick)
                         elif "deltaquad" not in normal and "DeltaQuad" not in normal and "DQ" not in normal and "dq" not in normal and "FAdmArcher" not in normal and "FADMArcher" not in normal and "fadmarcher" not in normal and "DairyQueen" not in normal and "dairyqueen" not in normal:
                                 text = 'slaps %s around a bit with a large trout.' % user
                                 msg = '\x01ACTION %s\x01' % text
@@ -554,33 +557,10 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 else:
                         reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
                         
-	if command == "kill" or command == "destroy" or command == "murder":
+	if command == "kill":
 		reply("Who do you think I am? The Mafia?", chan, nick)
 		return
-	if command == "fish":
-                if True: #actionlevel[trout] == 1:
-                        try:
-                                user = line2[4]
-                                fish = ' '.join(line2[5:])
-                        except Exception:
-                                reply("Hahahahahahahaha...", chan, nick)
-                                return
-                        normal = unicodedata.normalize('NFKD', unicode(string.lower(user)))
-                        if "itself" in normal:
-                                reply("I'm not that stupid ;)", chan, nick)
-                                return
-                        elif "lisabot" in normal or "LisaBot" in normal or "Lisa" in normal:
-                                reply("I'm not that stupid ;)", chan, nick)
-                        elif "deltaquad" not in normal and "DeltaQuad" not in normal:
-                                text = 'slaps %s around a bit with a %s.' % (user, fish)
-                                msg = '\x01ACTION %s\x01' % text
-                                say(msg, chan)
-                        else:
-                                reply("I refuse to hurt anything with \"DeltaQuad\" in its name :P", chan, nick)
-                        return
-                else:
-                        reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
-	if command == "remind" or command == "reminder":
+	if command == "reminder":
                 import time
 		try:
 			times = int(line2[4])
@@ -592,7 +572,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		time.sleep(times)
 		reply(content, chan, nick)
 		return
-	if command == "langcode" or command == "lang" or command == "language":
+	if command == "langcode":
 		try:
 			lang = line2[4]
 		except Exception:
@@ -615,7 +595,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         say(getGeo(line2[4]), chan)
                 except:
                         say("Try a valid IP address.", chan)
-	if command == "sql" or command == "perms":
+	if command == "sql":
                 if not actionlevel[permission] == 1:
                         reply("Access denied, you need the +f (permissions) flag to use this action.", chan, nick)
                         return
@@ -851,6 +831,7 @@ def getGeo(ip):#,loc):
         if str(info["RegionName"]) == "":
                info["City"] == "Unknown"
         return "Estimated Location for "+str(info['Ip'])+" : " + str(info["City"]) + ", "+ str(info["RegionName"]) + ", "+ str(info["CountryName"]) + ". Timezone: "+ str(info["TimezoneName"])
+
 def blockinfo(IP):
         import urllib,urllib2,json,re
         test = re.search("(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)",IP)
