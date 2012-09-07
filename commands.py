@@ -339,8 +339,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		try:
 			params = string.lower(line2[4])
 		except Exception:
-			params = False
-			print traceback.format_exc()
+			params = "spi"
 		if params == "abuse":
                         invest = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Waiting_for_Investigation&cmlimit=500").read()))))
                         o = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Open&cmlimit=500").read()))))
