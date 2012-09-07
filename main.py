@@ -356,8 +356,8 @@ def tellFreenode(msg):
 			print "Unable to comply with request, please refer to Special:Log stalking procedures"
                         print trace # Print.
 			print msg
-                if "Archiving case from [[Wikipedia:Sockpuppet investigations/" in line:return
-                if "Archiving case to [[Wikipedia:Sockpuppet investigations/" in line:return
+                if "Archiving case from" in line:return
+                if "Archiving case to" in line:return
                 if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
                         try:
 		                if "DeltaQuadBot" in msg:return
