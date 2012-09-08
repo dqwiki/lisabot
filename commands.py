@@ -150,7 +150,7 @@ def get_commandList():
     'ipinfo': 'ipinfo',
     'pull': 'pull',
     'chan': 'chan',
-    'myhost', 'myhost',
+    'myhost': 'myhost',
     'git': 'git',
     	'github': 'git',
     'msg': 'msg',
