@@ -544,6 +544,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Hahahahahahahaha...", chan, nick)
                                 return
                         normal = unicodedata.normalize('NFKD', unicode(string.lower(user)))
+                        if "itself" in normal:
+                                reply("I'm not that stupid ;)", chan, nick)
+                                return
                         elif "Lisa" in normal or "LisaBot" in normal or "lisa" in normal:
                                 reply("I'm not that stupid ;)", chan, nick)
                         try:
