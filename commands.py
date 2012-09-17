@@ -544,19 +544,9 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply("Hahahahahahahaha...", chan, nick)
                                 return
                         normal = unicodedata.normalize('NFKD', unicode(string.lower(user)))
-                        if "itself" in normal:
-                                reply("I'm not that stupid ;)", chan, nick)
-                                return
-                        elif "Lisa" in normal or "LisaBot" in normal or "lisa" in normal:
-                                reply("I'm not that stupid ;)", chan, nick)
-                        try:
-                                if re.search(".*(D|d).*(e|E|).*(L|l|).*(t|T|).*(A|a|).*(Q|q|).*(U|u|).*(A|a|).*(D|d|).*",normal) == None and re.search("(I|i).*(Z|z).*(Z|z)",normal) == None:
-                                        text = 'slaps %s around a bit with a large trout.' % user
-                                        msg = '\x01ACTION %s\x01' % text
-                                        say(msg, chan)
-                                else:
-                                        reply("I refuse to hurt anything with \"DeltaQuad\" in its name :P", chan, nick)
-                        except:return
+                        text = 'slaps %s around a bit with a large trout.' % user
+                        msg = '\x01ACTION %s\x01' % text
+                        say(msg, chan)
                         return
                 else:
                         reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
