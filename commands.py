@@ -116,6 +116,7 @@ def get_commandList():
 	'number': 'number',
 		'count': 'number',
 		'num': 'number',
+        'cases': 'number',
 	'nick': 'nick',
 	'promote': 'promote',
 	'demote': 'demote',
@@ -325,7 +326,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 		else:
 			reply("Access denied, you need the +s (talk as bot) flag to use this action.", chan, nick)
 		return
-	if command == "num":
+	if command == "num" or command == "number" or command == "count" or command == "cases":
 		try:
 			params = string.lower(line2[4])
 		except Exception:
@@ -352,6 +353,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 time.sleep(.25)
                                 print "Send Msg"
                                 reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Open cases - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
+                                reply("And yes, this command has been fixed so that !num, !number, !count, and !cases with \"spi\" after it will work.", chan, nick)
                         except:
                                 print traceback.format_exc()
                                 return
