@@ -353,7 +353,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 time.sleep(.25)
                                 print "Send Msg"
                                 reply("SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Open cases - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin), chan, nick)
-                                reply("And yes, this command has been fixed so that !num, !number, !count, and !cases with \"spi\" after it will work.", chan, nick)
+                                reply("And yes, this command has been fixed so that !num, !number, !count, and !cases will work.", chan, nick)
                         except:
                                 print traceback.format_exc()
                                 return
