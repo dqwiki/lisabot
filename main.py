@@ -169,7 +169,7 @@ def meta_reporting(line2, nick, chan, command):
 	say(msg, META_CHAN)
 
 def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
-	if line2[1] == "PRIVMSG" and (line2[3].startswith(":!") or line2[3].startswith(":.")):
+	if line2[1] == "PRIVMSG" and line2[3].startswith(":!"):
 		command = string.lower(line2[3][2:])
 		if command == "refreshrc":
                         actionlevel = cparser.authtest(host, chan)
