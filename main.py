@@ -244,6 +244,7 @@ def tellFreenode(msg,stalk,black):
                         print "Match user"
                         try:
 		                for bline in black:
+                                        if bline =="":break
                                         bline=bline.split(",")
 		                        if bline[1] in user and bline[0] == channel:
 		                                return
@@ -257,7 +258,10 @@ def tellFreenode(msg,stalk,black):
                         print "Match page"
 			try:
 		                for bline in black:
+                                        if bline =="":break
+                                        print bline
                                         bline=bline.split(",")
+                                        print bline
 		                        if bline[1] in page and bline[0] == channel:
 		                                return
                                 if channel not in alreadyprint:say(msg, channel)
@@ -272,6 +276,7 @@ def tellFreenode(msg,stalk,black):
                         print "Match summary"
 			try:
 		                for bline in black:
+                                        if bline =="":break
                                         bline=bline.split(",")
 		                        if bline[1] in summary and bline[0] == channel:
 		                                return
