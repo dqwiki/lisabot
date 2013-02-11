@@ -559,7 +559,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                                 text.replace(pline,"")
                                 done=True
                                 break
-                        elif ractivity=="change" or ractivity == "modify" and spline[0] == rcloak:
+                        elif (ractivity=="change" or ractivity == "modify") and spline[0] == rcloak:
                                 if rcloak in text:
                                         text.replace(pline,rcloak+","+rlevel)
                                         done = True
