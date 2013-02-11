@@ -231,7 +231,7 @@ def tellFreenode(msg,stalk,black):
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
         page,user,summary=formatMsg(msg)
         for line in stalk:
-                if line ="":break
+                if line =="":break
                 line = line.split(",")
                 channel = line[0]
                 method = line[1].lower()
