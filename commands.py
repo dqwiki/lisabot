@@ -549,7 +549,6 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
                 done = False
                 for pline in text:
-                        if done =
                         spline=pline.split(',')
                         if (ractivity == "del" or ractivity == "remove") and spline[0] == rcloak:
                                 text.replace(pline,"")
