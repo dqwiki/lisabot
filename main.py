@@ -230,10 +230,11 @@ def tellFreenode(msg,stalk,black):
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
-        user,page,summary=formatMsg(msg)
-        print "User: "+user
-        print "Page: "+page
-        print "Summary: "+summary
+        page,user,summary=formatMsg(msg)
+        if "sockpuppet" in msg:
+                print "User: "+user
+                print "Page: "+page
+                print "Summary: "+super
         for line in stalk:
                 line = line.split(",")
                 channel = line[0]
@@ -365,9 +366,9 @@ def formatMsg(msg):
                 else:
                         page = msg.split("\x0314]]")[0]
                         page = page.split("[[\x0307")[1]
-                        user = msg.split("\x0303")[1]
+                        user = msg.split("*\x0303")[1]
                         user = user.split("\x035* (")[0]
-                        summary = msg.split(" \x0310")[1]
+                        summary = msg.split(") \x0310")[1]
         except:
                 trace = traceback.format_exc() # Traceback.
                 print "Unable to comply with request, please refer to Special:Log stalking procedures"
