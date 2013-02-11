@@ -99,30 +99,6 @@ def main():
                                         notice(nick, "SPI Status: CU Request - %s, CU Endorse - %s, CU in progress - %s, Checked/Actioned/Open - %s, Archive - %s, Need admin - %s" % (cur, cuendorse, inprogress, waitclose, close, admin))
                                 except:
                                         print traceback.format_exc()
-                        elif line2[1] == "MODE" and line2[2] == REPORT_CHAN and line2[3] == "+v" and line2[0] == ":ChanServ!ChanServ@services.":
-                                try:
-                                        nick = line2[4]
-                                        if nick == NICK: continue
-                                        number = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Waiting_for_Investigation&cmlimit=500").read()))))
-                                        num2 = unicode(int(len(re.findall("title=", urllib.urlopen("http://en.wikipedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Abuse_response_-_Open&cmlimit=500").read()))))
-                                        aggregate = int(number) + int(num2)
-                                        if nick == NICK: continue
-                                        if aggregate == 0:
-                                                stat = "is \x02\x0303clear\x0301\x0F"
-                                        elif aggregate < 2:
-                                                stat = "has a \x0312small backlog\x0301"
-                                        elif aggregate < 4:
-                                                stat = "has an \x0307average backlog\x0301"
-                                        elif aggregate < 6:
-                                                stat = "is \x0304backlogged\x0301"
-                                        elif aggregate < 8:
-                                                stat = "is \x02\x0304heavily backlogged\x0301\x0F"
-                                        else:
-                                                stat = "is \x02\x1F\x0304severely backlogged\x0301\x0F"
-                                        notice(nick, "\x02Current status:\x0F Abuse Response %s (\x0302Investigator Needed\x0301: \x0305%s\x0301; \x0302Open\x0301: \x0305%s\x0301; )" % (aggregate, number, num2))
-                                        say("\x0302Member welcomed:\x0301 \x02%s\x0F was welcomed into \x02%s\x0F." % (nick, REPORT_CHAN), META_CHAN)
-                                except Exception:
-                                        print traceback.format_exc()
                         elif line2[1] == "NOTICE" and "identified" in line2:
                                 print "START"
                                 for chan in CHANS:
@@ -171,14 +147,6 @@ def meta_reporting(line2, nick, chan, command):
 def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 	if line2[1] == "PRIVMSG" and line2[3].startswith(":!"):
 		command = string.lower(line2[3][2:])
-		if command == "refreshrc":
-                        actionlevel = cparser.authtest(host, chan)
-                        if actionlevel[4]==1:
-                                return
-                        else:
-                                refreshRClist()
-                                reply("RC List refreshed.", chan, nick)
-                        return
 		thread.start_new_thread(meta_reporting,(line2, nick, chan, command))
 		authorization = cparser.authtest(host, chan)
 		if command != "null" and lockdown != "true":
@@ -194,6 +162,14 @@ def say(msg, chan=CHANS[0]):
 	
 def reply(msg, chan=CHANS[0], nick=""):
    say(msg, chan)
+def updateRC():
+        f = f.open('rcstalklist.txt','r')
+        stalk=f.read()
+        f.close()
+        f = f.open('rcblacklist.txt','r')
+        black = f.read()
+        f.close()
+        return stalk,black
 
 def editreport():
         s2.connect((HOST2, PORT2))
@@ -202,8 +178,15 @@ def editreport():
         s2.send("USER %s %s bla :%s\r\n" % (IDENT, HOST2, REALNAME))
         print "   USER %s %s bla :%s" % (IDENT, HOST2, REALNAME)
         readbuffer=''
+        minuteDone=int(datetime.now()).split(':')[1]
+        stalk,black=updateRC()
+        stalk,black=stalk.split("\n"),black.split("\n")
+        from datetime import datetime
         ## Infinte loop - command parsing.
         while 1:
+                if int(datetime.now()).split(':')[1] > minuteDone+5:
+                        stalk,black=updateRC()
+                        minuteDone=int(datetime.now()).split(':')[1]
                 readbuffer=readbuffer+s2.recv(1024)
                 temp=string.split(readbuffer, "\n")
                 readbuffer=temp.pop()
@@ -212,7 +195,7 @@ def editreport():
                         line2=string.split(line2)
                         if line2[1] == "PRIVMSG":
                                 try:
-                                        tellFreenode(' '.join(line2[2:]))
+                                        tellFreenode(' '.join(line2[2:]),stalk,black)
                                 except BaseException:
                                         import traceback
                                         print traceback.format_exc()
@@ -241,171 +224,150 @@ def editreport():
                                 s2.send("%s\r\n" % msg)
                                 #print "   %s" % msg
 
-
-def refreshRClist():
-        import MySQLdb, traceback
-        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-        db.query("SELECT * FROM rcstalklist;")
-        r = db.use_result()
-        global rcstalk
-        rcstalk = r.fetch_row(maxrows=0)
-        
-        db.query("SELECT * FROM rcblacklist;")
-        r = db.use_result()
-        global blacklist
-        blacklist = r.fetch_row(maxrows=0)
-
-def tellFreenode(msg):
+def tellFreenode(msg,stalk,black):
         alreadyprint = ""
         if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
-        if "Special:Log/rights" in msg:msg = string.replace(msg, "rights", "Changed Userrights")
-        if "Special:Log/newusers" in msg:msg = string.replace(msg, "create2", "Created Account Via Email")
-        if "Special:Log/block" in msg:msg = string.replace(msg, "reblock", "Changed Block Settings")
-        for line in rcstalk:
-                method = line[2]
-		try:
-                        #Insignificant to log, so just ignoring
-                        if "Special:Log/translationreview" in msg or "Special:Log/moodbar" in msg:
-                                page = ""
-                                user = ""
-                                summary = ""
-                        #more popular logs
-			elif "Special:Log/move" in msg:
-				page = msg.split("\x0310]] to [[")[1] #this will only stalk the latter page, but not much we can do without arrays
-				page = page.split("]]")[0]
-				user=msg.split("\x0303")[1]
-				user=user.split(" \x035")[0]
-				summary = msg.split("\x0310]] to [[")[1] #safety precaution
-				try:
-                                        summary = summary.split("]]: ")[1]
-				except:
-                                        #Some page moves don't have a summary
-                                        if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
-                                        else:summary=""
-                        elif "Special:Log/gblblock" in msg:
-                                user = msg.split("* \x0303")[1]
-				user = user.split(" \x035")[0]
-				page = msg.split("[[\x0302")[1]
-				page = page.split("]]")[0]
-				summary = msg.split("expires")
-				summary = summary.split(": ")[1]
-                        elif "Special:Log/globalauth" in msg:
-				page = msg.split(" \"User:")[1]
-				page = "User:" + page
-                                page = page.split("\"")[0]
-				user = msg.split("* \x0303")[1]
-				user = user.split(" \x035")[0]
-				summary = msg.split("Unset")
-				summary = summary.split(": ")[1]
-			elif "Special:Log/patrol" in msg:
-				page = msg.split("\x0310]]")[0]
-				page = page.split("[[\x0302")[1] 
-				user=msg.split("\x0303")[1]
-				user=user.split(" \x035")[0]
-				summary = ""
-			elif "Special:Log/upload" in msg:
-				page = msg.split("\x0314]]")[0]
-				page = page.split("[[\x0307")[1] #t used to indicate 2
-				user=msg.split("\x0303")[1]
-				user=user.split(" \x035")[0]
-				testsummary=msg.split("\x0314]]")[1]
-				testsummary=testsummary.split(": ")[1:]
-				summary= ' '.join(testsummary)
-			elif "Special:Log/newusers" in msg:
-				page = ""
-				user = msg.split("\x0303")[1]
-				user = user.split(" \x035")[0]
-				summary = ""
-			elif "Special:Log/protect" in msg:
-				try:
-					page = msg.split("protected ")[1]
-					page = page.split('[')[0]
-				except:
-					page = msg.split("changed protection level of ")[1]
-					page = page.split('[')[0]
-				user=msg.split("\x0303")[1]
-				user=user.split("\x035*")[0]
-				summary=msg.split("): ")[1]
-			elif "Special:Log/delete" in msg:
-				page = msg.split("\x0314]]")[0]
-				page = page.split("[[\x0307")[1] #t used to indicate 2
-				user=msg.split("\x0303")[1]
-				user=user.split(" \x035")[0]
-				testsummary=msg.split("\x0314]]")[1]
-				testsummary=testsummary.split(": ")[1:]
-				summary= ' '.join(testsummary)
-			elif "Special:Log/block" in msg:
-				page=msg.split("User:")[1]
-				page=page.split(" (")[0]
-				user=msg.split("\x0303")[1]
-				user=user.split(" \x035")[0]
-				try:summary=msg.split("expiry time")[1]
-				except:summary=msg.split(": ")[2]
-				summary=summary.split(": ")[1]
-			else:
-				page = msg.split("\x0314]]")[0]
-				page = page.split("[[\x0307")[1]
-				user = msg.split("\x0303")[1]
-				user = user.split("\x035* (")[0]
-				summary = msg.split(") \x0310")[1]
-		except:
-			trace = traceback.format_exc() # Traceback.
-			print "Unable to comply with request, please refer to Special:Log stalking procedures"
-                        print trace # Print.
-			print msg
-                if "Archiving case from" in line:return
-                if "Archiving case to" in line:return
-                if method == "user" and not None == (re.search(line[0].lower(),user.lower())):
+        user,page,summary=formatMsg(msg)
+        for line in stalk:
+                line = line.split(",")
+                channel = line[0]
+                method = line[1].lower()
+                stalkword = line[2].lower()
+                if method == "user" and not None == re.search(stalkword,user):
                         try:
-		                if "DeltaQuadBot" in msg:return
-		                if "Wikipedia talk:Noticeboard for India-related topics/Archive 48" in msg:return
 		                for bline in blacklist:
-		                        if bline[0].lower() in page.lower() and bline[1] == line[1]:
+                                        bline=bline.split(",")
+		                        if bline[1] in user and bline[0] == channel:
 		                                return
-		                if not line[1] in alreadyprint:
-		                        msg = msg.replace(":", "\x0F: \x0304(Matched user: " + line[0] + ")\x0301", 1)
-		                        say(msg, line[1])
+		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
-		                alreadyprint = alreadyprint + "," + line[1]
+		                if channel not in alreadyprint:alreadyprint = alreadyprint + "," + channel
 			except:
 				print "Error in user stalking post, please refer to the following:"
 				print msg
-                elif method == "page" and not None == (re.search(line[0].lower(),page.lower())):
+                elif method == "page" and not None == re.search(stalkword,page):
 			try:
-		                if "Amalthea (bot)" in msg:return
-		                if "DeltaQuadBot" in msg:return
 		                for bline in blacklist:
-		                        if bline[0].lower() in page.lower() and bline[1] == line[1]:
+                                        bline=bline.split(",")
+		                        if bline[1] in page and bline[0] == channel:
 		                                return
-		                if not line[1] in alreadyprint:
-		                        msg = msg.replace(":", "\x0F: \x0304(Matched page: " + line[0] + ")\x0301", 1)
-		                        say(msg, line[1])
+                                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
-		                alreadyprint = alreadyprint + "," + line[1]
+		                alreadyprint = alreadyprint + "," + channel
 			except:
 				print "Error in page stalking post, please refer to the following:"
 				print msg
-                elif method == "summary" and not None == (re.search(line[0].lower(),summary.lower())):
+                elif method == "summary" and not None == re.search(stalkword,summary):
 			try:
 		                for bline in blacklist:
-		                        if bline[0].lower() in summary.lower() and bline[1] == line[1]:
+                                        bline=bline.split(",")
+		                        if bline[1] in summary and bline[0] == channel:
 		                                return
-		                if not line[1] in alreadyprint:
-		                        msg = msg.replace(":", "\x0F: \x0304(Matched edit summary: " + line[0] + ")\x0301", 1)
-		                        say(msg, line[1])
+		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
-		                alreadyprint = alreadyprint + "," + line[1]
+		                alreadyprint = alreadyprint + "," + channel
 		                continue
 			except:
 				print "Error in summary stalking post, please refer to the following:"
 				print msg
                 #if not line[0].lower() in msg.lower():
                        #continue
-                        
-refreshRClist()
-        
+
+def formatMsg(msg):
+        try:
+                #Insignificant to log, so just ignoring
+                if "Special:Log/translationreview" in msg or "Special:Log/moodbar" in msg:
+                        page = ""
+                        user = ""
+                        summary = ""
+                #more popular logs
+                elif "Special:Log/move" in msg:
+                        page = msg.split("\x0310]] to [[")[1] #this will only stalk the latter page, but not much we can do without arrays
+                        page = page.split("]]")[0]
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        summary = msg.split("\x0310]] to [[")[1] #safety precaution
+                        try:
+                                summary = summary.split("]]: ")[1]
+                        except:
+                                #Some page moves don't have a summary
+                                if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
+                                else:summary=""
+                elif "Special:Log/gblblock" in msg:
+                        user = msg.split("* \x0303")[1]
+                        user = user.split(" \x035")[0]
+                        page = msg.split("[[\x0302")[1]
+                        page = page.split("]]")[0]
+                        summary = msg.split("expires")
+                        summary = summary.split(": ")[1]
+                elif "Special:Log/globalauth" in msg:
+                        page = msg.split(" \"User:")[1]
+                        page = "User:" + page
+                        page = page.split("\"")[0]
+                        user = msg.split("* \x0303")[1]
+                        user = user.split(" \x035")[0]
+                        summary = msg.split("Unset")
+                        summary = summary.split(": ")[1]
+                elif "Special:Log/patrol" in msg:
+                        page = msg.split("\x0310]]")[0]
+                        page = page.split("[[\x0302")[1] 
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        summary = ""
+                elif "Special:Log/upload" in msg:
+                        page = msg.split("\x0314]]")[0]
+                        page = page.split("[[\x0307")[1] #t used to indicate 2
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        testsummary=msg.split("\x0314]]")[1]
+                        testsummary=testsummary.split(": ")[1:]
+                        summary= ' '.join(testsummary)
+                elif "Special:Log/newusers" in msg:
+                        page = ""
+                        user = msg.split("\x0303")[1]
+                        user = user.split(" \x035")[0]
+                        summary = ""
+                elif "Special:Log/protect" in msg:
+                        try:
+                                page = msg.split("protected ")[1]
+                                page = page.split('[')[0]
+                        except:
+                                page = msg.split("changed protection level of ")[1]
+                                page = page.split('[')[0]
+                        user=msg.split("\x0303")[1]
+                        user=user.split("\x035*")[0]
+                        summary=msg.split("): ")[1]
+                elif "Special:Log/delete" in msg:
+                        page = msg.split("\x0314]]")[0]
+                        page = page.split("[[\x0307")[1] #t used to indicate 2
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        testsummary=msg.split("\x0314]]")[1]
+                        testsummary=testsummary.split(": ")[1:]
+                        summary= ' '.join(testsummary)
+                elif "Special:Log/block" in msg:
+                        page=msg.split("User:")[1]
+                        page=page.split(" (")[0]
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        try:summary=msg.split("expiry time")[1]
+                        except:summary=msg.split(": ")[2]
+                        summary=summary.split(": ")[1]
+                else:
+                        page = msg.split("\x0314]]")[0]
+                        page = page.split("[[\x0307")[1]
+                        user = msg.split("\x0303")[1]
+                        user = user.split("\x035* (")[0]
+                        summary = msg.split(" \x0310")[1]
+        except:
+                trace = traceback.format_exc() # Traceback.
+                print "Unable to comply with request, please refer to Special:Log stalking procedures"
+                print trace # Print.
+                print msg
+                return
+        return page.lower(),user.lower(),summary.lower()
 if __name__ == "__main__":
     run()

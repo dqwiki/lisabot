@@ -24,83 +24,42 @@ HOST, PORT, NICK, IDENT, REALNAME, CHANS, REPORT_CHAN, WELCOME_CHAN, META_CHAN, 
 
 KEY=config.key
 
-## MySQL constants for access commands
-op=2
-voice=3
-ban=4
-kick=5
-globalmsg=6
-startup=7
-quiet=8
-nick=9
-mode=10
-trout=11
-permission=12
-restart=13
-joinpart=14
-blocked=15
-
-def authdb(host, chan):
-        import MySQLdb, traceback
-        db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-        specify = host
-
-        #new group system
-        db.query("SELECT * FROM groups;")
-        r = db.use_result()
-        entry = r.fetch_row(maxrows=0)
-        for group in entry:
-                if group[0] in chan.lower():chan = group[1]
-        time.sleep(.5)
-        ####Temp disable to try new group system
-        #if "techessentials" in chan.lower():chan = "@te"
-        #if "deltaquad" in chan.lower() or "lisabot" in chan.lower():chan = "@dq"
-        #if "openglobe" in chan.lower() or "lisabot" in chan.lower():chan = "@openglobe"
-                
-        if " " in specify: specify = string.split(specify, " ")[0]
-        if not specify or "\"" in specify:
-                reply("Please include the name of the entry you would like to read after the command, e.g. !notes read earwig", chan, nick)
-                print "error"
-        if '@' not in specify:specify = '@' + specify
-        try:
-                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" %(specify,chan))
-                r = db.use_result()
-                try:
-                        data = r.fetch_row(0)[0]
-                        print data[5]
-                        auth = data
-                except:auth = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" %specify)
-                rglobal = db.use_result()
-                try:
-                        authglobal = rglobal.fetch_row(0)[0]
-                        print authglobal[5]
-                except:authglobal = ['@none', '@global', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                count = 0
-                authfinal = []
-                authfinal.insert(-1, '@%s'%host)
-                authfinal.insert(1, chan)
-                for entry in authglobal:
-                        count = count + 1
-                        try:float(entry)
-                        except ValueError:continue
-                        if entry == 0:authfinal.insert(count-1, auth[count-1]) 
-                        else:
-                                try:
-                                        authfinal[count-1] = authglobal[count-1]
-                                except:
-                                        authfinal.insert(count-1, authglobal[count-1]) 
-                #print authfinal
-                return authfinal
-        except:
-                trace = traceback.format_exc() # Traceback.
-                print trace # Print.
-                return
-
-def authtest(host, chan):
+## New permissions systems
+## Blocked, Voice, Ops, Secure, Dev
+nodev="Access Denied, you need Developer permissions to execute this action."
+nosecure="Access Denied, you need Secure permissions or above to execute this action."
+noop="Access Denied, you need Op permissions or above to execute this action."
+novoice="Access Denied, you need Voice permissions or above to execute this action."
+def permlevel(level,need):
+        if level == 'block' and need=='block':return True
+        if level == 'block':return False
+        if level == 'dev':return True
+        if level == 'secure' and not need=='dev':return True
+        if level == 'op' and not (need=='secure' or need=='dev'):return True
+        if level == 'voice' and not (need=='secure' or need=='dev' or need=='op'):return True
+        return False
+def authdb(host, chan, need, local=False):
+        if host == '@wikipedia/DeltaQuad':return True
+        #Global first, then local
+        if local:
+                try:f = open('perms-'+chan+'.txt', 'r')
+                except IOError:return False
+        if not local:
+                try:f = open('perms-global.txt', 'r')
+                except IOError:return False
+        text = f.read()
+        f.close()
+        for line in text:
+                line=line.split(',')
+                if line[0] == host:
+                        result=permlevel(line[1],need)
+                        if not local and not result:return authdb(host,chan,need,True)
+                        return result
+        return False
+def authtest(host, chan, need):
         if not "@" in host:host= "@" + host
         print "AuthDB"
-        try:return authdb(host, chan)
+        try:return authdb(host, chan, need)
 	except:return False
 def get_commandList():
 	return {
@@ -181,10 +140,8 @@ def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2
 		say(report2[0] + ' (' + report2[1] + ')', chan)
 
 def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
-	actionlevel = authtest(host, chan)
-	print actionlevel
 	try:
-                if actionlevel[blocked] == 1:return
+                if authtest(host, chan, 'block'):return
         except:
                 import traceback
                 trace = traceback.format_exc() # Traceback.
@@ -199,7 +156,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 say(getGeo(line2[4]),chan)
                 return
         if command == "pull":
-                if actionlevel[restart] == 1:
+                if authtest(host, chan, 'dev'):
                         try:
                                 import sys
                                 sys.path.append("/home/deltaquad/")
@@ -208,11 +165,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         except:
                                 reply("Error.", chan, nick)
                 else:
-                        reply("Access denied, you need the +r (restart) to use this action.", chan, nick)
+                        reply(nodev, chan, nick)
                 return
 	if command == "restart":
 		import thread, time
-		if actionlevel[restart] == 1:
+		if authtest(host, chan, 'dev'):
                         s.send("QUIT\r\n")
                         s.shutdown(socket.SHUT_RDWR)
                         time.sleep(2)
@@ -226,14 +183,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			sys.exit("Trying to end process.")
 			raise KeyboardInterrupt
 		else:
-			reply("Access denied, you need the +r (restart) flag to use this action.", chan, nick)
+			reply(nodev, chan, nick)
 		return
 	if command == "chan":
                 reply(chan, chan, nick)
         if command == "request":
-                if actionlevel[trout]==0:
-                        reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
-                        return
                 #say(line2[4] + " to " + line2[5] +". Thank You!", chan)
                 notice(nick, "Thank you for using the LisaBot paging system. Your message has been delievered over PM.")
                 try:
@@ -252,13 +206,13 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                 reply(lisabot, chan, nick)
                 return
 	if command == "help":
-                reply("Dsiabled.", chan, nick)
+                reply("http://bit.ly/lisahelp", chan, nick)
                 return
         if command == "git":
                 reply("https://github.com/dqwiki/lisabot/", chan, nick)
                 return
 	if command == "globalmsg":
-		if actionlevel[globalmsg] == 1:
+		if authtest(host, chan, 'dev'):
 			msg = "Global Notice for LisaBot: "		
                         msg = msg + ' '.join(line2[4:])
 			notice("#wikipedia-en-abuse", msg)
@@ -270,10 +224,10 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			notice("#techessentials-staff", msg)
 			notice("#techessentials-security", msg)
 		else:
-			reply("Access denied, you need the +g (global) global to use this action.", chan, nick)
+			reply(nodev, chan, nick)
 		return
 	if command == "join":
-		if actionlevel[joinpart] == 1:
+		if authtest(host, chan, 'voice'):
 			try:
 				channel = line2[4]
 			except Exception:
@@ -281,10 +235,10 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply('Done!', chan, nick)
 		else:
-			reply("Access denied, you need the +j (join/part) flag to use this action.", chan, nick)
+			reply(novoice, chan, nick)
 		return
 	if command == "part":
-		if actionlevel[joinpart] == 1:
+		if authtest(host, chan, 'voice'):
 			try:
 				channel = line2[4]
 			except Exception:
@@ -301,11 +255,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 reply('Bye Bye!', chan, nick)
                                 s.send("PART %s :%s\r\n" % (channel,reason))
 		else:
-			reply("Access denied, you need the +j (join/part) flag to use this action.", chan, nick)
+			reply(novoice, chan, nick)
 		return
 	if command == "quit":
-		if actionlevel[startup] == 0:
-				reply("Access denied, you need the +p (power) flag to use this action." % OWNER, chan, nick)
+		if authtest(host, chan, 'dev'):
+				reply(nodev, chan, nick)
 		else:
 			try:
 				s.send("QUIT :%s\r\n" % ' '.join(line2[4:]))
@@ -315,16 +269,16 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			sys.exit(1)
 		return
 	if command == "msg":
-		if actionlevel[startup] == 1:
+		if authtest(host, chan, 'dev'):
 			say(' '.join(line2[5:]), line2[4])
 		else:
-			reply("Access denied, you need the +s (talk as bot) flag  to use this action.", chan, nick)
+			reply(nodev, chan, nick)
 		return
 	if command == "me":
-		if actionlevel[startup] == 1:
+		if authtest(host, chan, 'dev'):
 			s.send("PRIVMSG "+line2[4]+" ACTION "+ ' '.join(line2[5:]) )
 		else:
-			reply("Access denied, you need the +s (talk as bot) flag to use this action.", chan, nick)
+			reply(nodev, chan, nick)
 		return
 	if command == "num" or command == "number" or command == "count" or command == "cases":
 		try:
@@ -359,7 +313,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 return
 		return
 	if command == "nick":
-		if actionlevel[nick] == 1:
+		if authtest(host, chan, 'dev'):
 			try:
 				new_nick = line2[4]
 			except Exception:
@@ -367,21 +321,21 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 				return
 			s.send("NICK %s\r\n" % new_nick)
 		else:
-			reply("Access denied, you need the +n (nick flag) to use this action.", chan, nick)
+			reply(nodev, chan, nick)
 		return
 	if command == "kick" or command == "ban" or command == "kickban" or command == "unban" or command == "quiet" or command == "unquiet":
-                if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                 try:
                         user = line2[4]
                 except Exception:
                         user = nick
-                if (command == "kick" or command == "kickban" or command == "ban" or command == "quiet") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
+                if (command == "kick" or command == "kickban" or command == "ban" or command == "quiet") and (user == "DeltaQuad" or "DQ|" in user or "Izhidez" in user):
                         if not host == 'wikipedia/DeltaQuad':
                                 reply("Access denied, you are not DeltaQuad.", chan, nick)
                                 return
                 import time
                 time.sleep(1)
-                if actionlevel[ban] == 1 and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):      
+                if authtest(host, chan, 'op') and (command == "kick" or command == "ban" or command == "kickban" or command == "unban"):
+                        if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                         try:
                                 if command == "kick":
                                         s.send("KICK %s %s :%s\r\n" % (chan, line2[4], line2[4]))
@@ -406,7 +360,8 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 else:
                                         reply("Please enter a user.", chan, nick)
                                         return
-                elif actionlevel[kick] == 1 and (command == "quiet" or command == "unquiet"):      
+                elif authtest(host, chan, 'op') and (command == "quiet" or command == "unquiet"):
+                        if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
                         try:
                                 if command == "unquiet":
                                         s.send("MODE %s -q %s\r\n" % (chan, line2[4]))
@@ -419,11 +374,11 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 print traceback.format_exc()
                                 return
                 else:
-                        reply("Access denied, you need the +b/q (ban/quiet) flag to use this action.", chan, nick)
+                        reply(noop, chan, nick)
                         return
         if command == "mode":
                 import time
-                if actionlevel[mode] == 1:
+                if authtest(host, chan, 'op'):
                         try:
                                 if line2[5]:
                                         if "spi" in chan:say("op #wikipedia-en-spi LisaBot", "ChanServ")
@@ -444,46 +399,12 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                                 if "spi" in chan:say("deop #wikipedia-en-spi LisaBot", "ChanServ")
                                 if chan == "##DeltaQuadBot":say("deop ##DeltaQuadBot LisaBot", "ChanServ")
                 else:
-                        reply("Access denied, you need the +m (mode) flag to use this action.", chan, nick)
+                        reply(noop, chan, nick)
         if command == "stalk" or command == "unstalk" or command == "hide" or command == "unhide":
                 reply("Due to new improvements to the RC system, these commands are currently disabled till they match the upgraded RC system. Please contact DeltaQuad to change what LisaBot stalks.", chan, nick)
                 return
-                import MySQLdb, traceback
-                if command == "stalk":
-                        try:
-                                db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-                                db.query("INSERT INTO rcstalklist (`stalk`, `channel`) VALUES ('%s', '%s');" %(' '.join(line2[4:]), chan))
-                                db.commit()
-                        except:
-                                reply("Error.", chan, nick)
-                                print traceback.format_exc()
-                if command == "hide":
-                        try:
-                                db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-                                db.query("INSERT INTO rcblacklist (`stalk`, `channel`) VALUES ('%s', '%s');" %(' '.join(line2[4:]), chan))
-                                db.commit()
-                        except:
-                                reply("Error.", chan, nick)
-                                print traceback.format_exc()
-                if command == "unstalk":
-                        try:
-                                db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-                                db.query("DELETE FROM rcstalklist WHERE stalk = \"%s\" AND channel = \"%s\";" %(' '.join(line2[4:]), chan))
-                                db.commit()
-                        except:
-                                reply("Error.", chan, nick)
-                                print traceback.format_exc()
-                if command == "unhide":
-                        try:
-                                db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-                                db.query("DELETE FROM rcblacklist WHERE stalk = \"%s\" AND channel = \"%s\";" %(' '.join(line2[4:]), chan))
-                                db.commit()
-                        except:
-                                reply("Error.", chan, nick)
-                                print traceback.format_exc()
-		return
 	if command == "startup":
-                if actionlevel[startup] == 1:
+                if authtest(host, chan, 'dev'):
                         channel = "#wikipedia-en-abuse-v"
                         s.send("JOIN %s\r\n" % channel)
 			channel = "##DeltaQuad-private"  
@@ -510,7 +431,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			s.send("JOIN %s\r\n" % channel)
 			reply("Bot startup complete.", chan, nick)
 		else:
-			reply("Access denied, you need the +s (startup) flag to use this action.", chan, nick)
+			reply(nodev, chan, nick)
 		return
 	if command == "promote" or command == "demote" or command == "voice" or command == "devoice":
                 try:
@@ -519,40 +440,35 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         user = nick
                 if command == "promote":command="op"
                 if command == "demote":command="deop"
-                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "FAdmArcher" in user):
+                if (command == "deop" or command == "devoice") and (user == "DeltaQuad" or "DQ|" in user or "Izhidez" in user):
                         if not host == 'wikipedia/DeltaQuad':
                                 reply("Access denied, you are not DeltaQuad.", chan, nick)
                                 return
-                if actionlevel[op] == 1:
+                if authtest(host, chan, 'op'):
                         try:
                                 say("%s %s %s" % (command, chan, user), "ChanServ")
                         except:
-                                reply("Access denied, you need the +o (operator) flag to use this action.", chan, nick)
+                                reply(noop, chan, nick)
                         return
-		elif actionlevel[voice] == 1:
+		elif authtest(host, chan, 'voice'):
                         if not command == "voice" and not command =="devoice":
-                                reply("Access denied, you need the +o (operator) flag to use this action.", chan, nick)
+                                reply(novoice, chan, nick)
                                 return
 			say("%s %s %s" % (command, chan, user), "ChanServ")
 		else:
-			reply("Access denied, you need the +v/o (voice/op) flags  to use this action.", chan, nick)
+			reply(novoice, chan, nick)
 		return
 	if command == "trout":
-                if True:#actionlevel[trout] == 1:
-                        try:
-                                user = line2[4]
-                                user = ' '.join(line2[4:])
-                        except Exception:
-                                reply("Hahahahahahahaha...", chan, nick)
-                                return
-                        normal = unicodedata.normalize('NFKD', unicode(string.lower(user)))
-                        text = 'slaps %s around a bit with a large trout.' % user
-                        msg = '\x01ACTION %s\x01' % text
-                        say(msg, chan)
+                try:
+                        user = line2[4] + ' '.join(line2[4:])
+                except Exception:
+                        reply("Hahahahahahahaha...", chan, nick)
                         return
-                else:
-                        reply("Access denied, you need the +t (trout) flag to use this action.", chan, nick)
-                        
+                normal = unicodedata.normalize('NFKD', unicode(string.lower(user)))
+                text = 'slaps %s around a bit with a large trout.' % user
+                msg = '\x01ACTION %s\x01' % text
+                say(msg, chan)
+                return
 	if command == "kill":
 		reply("Who do you think I am? The Mafia?", chan, nick)
 		return
@@ -562,8 +478,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
 			times = int(line2[4])
 			content = ' '.join(line2[5:])
 		except Exception:
-			reply("Please specify a time and a note in the following format: !remind <time> <note>.", chan, nick)
-			return
+			return reply("Please specify a time and a note in the following format: !remind <time> <note>.", chan, nick)
 		reply("Set reminder for \"%s\" in %s seconds." % (content, times), chan, nick)
 		time.sleep(times)
 		reply(content, chan, nick)
@@ -591,196 +506,68 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         say(getGeo(line2[4]), chan)
                 except:
                         say("Try a valid IP address.", chan)
-	if command == "sql":
-                if not actionlevel[permission] == 1:
-                        reply("Access denied, you need the +f (permissions) flag to use this action.", chan, nick)
-                        return
-                try:
-			action = line2[4]
-		except BaseException:
-			reply("What do you want me to do?", chan, nick)
-			return
-                import MySQLdb
-		db = MySQLdb.connect(db="u_deltaquad_rights", host="sql", read_default_file="/home/deltaquad/.my.cnf")
-		try:reqchan = str(line2[5])
-                except:
-                        reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                        return
-		try:cloak = str(line2[6])
-		except:
-                        reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                        return
-		if action == "read":
-                        if " " in cloak: cloak = string.split(cloak, " ")[0]
-                        if not cloak or "\"" in cloak:
-                                reply("Please include the name of the entry you would like to read after the command.", chan, nick)
-                                return
-                        try:
-                                channew = chan
-                                db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak,reqchan))
-                                r = db.use_result()
-                                entry = r.fetch_row()
-                                print "entry: " + ' '.join(str(entry[0][0:]))
-                                ####for entry in data:
-                                cloak = entry[0][0]
-                                channel=entry[0][1]
-                                #s added to all commands because without 's' is already defined
-                                ops=entry[0][2]
-                                voices=entry[0][3]
-                                bans=entry[0][4]
-                                kicks=entry[0][5]
-                                globalmsgs=entry[0][6]
-                                startups=entry[0][7]
-                                quiets=entry[0][8]
-                                nicks=entry[0][9]
-                                modes=entry[0][10]
-                                trouts=entry[0][11]
-                                permissions=entry[0][12]
-                                restarts=entry[0][13]
-                                joinparts=entry[0][14]
-                                blockeds=entry[0][15]
-                                notice(nick, "Entry \"\x02%s\x0F\": Channel: %s Ops: %s Voice: %s Ban: %s Kick: %s Globalmsg: %s Startup: %s Nick: %s  Quiet: %s Mode: %s Trout: %s Permission: %s Restart: %s Join/part: %s Blocked: %s" % (cloak, channel, ops, voices, bans, kicks, globalmsgs, startups, quiets, nicks, modes, trouts, permissions, restarts, joinparts, blockeds))
-                        except Exception:
-                                import traceback
-                                print traceback.format_exc()
-                                reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
-                        return                
-                elif action == "del":
-                        if not cloak or "\"" in cloak:
-                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                                return
-                        if "#" not in reqchan or "@" not in cloak:
-                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                        try:
-                                db.query("DELETE FROM accessnew WHERE cloak = \"%s\" AND channel = \"%s\";" % (cloak, reqchan))
-                                db.commit()
-                                reply("Done if any were present.", chan, nick)
-                        except Exception:
-                                print traceback.format_exc()
-                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)                
-                elif action == "modify":
-                        reqchan = str(line2[5])
-                        cloak = str(line2[6])
-                        field = str(line2[7])
-                        try:value =  str(line2[8])
-                        except:a=1
-                        if not cloak or "\"" in cloak:
-                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                                return
-                        if "#" not in reqchan or "@" not in cloak:
-                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                        if field.lower() == "@voice":
-                                try:
-                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                except Exception:
-                                        print traceback.format_exc()
-                                        reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
-                        if field.lower() == "@ops":
-                                try:
-                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                except Exception:
-                                        print traceback.format_exc()
-                                        reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
-                        if field.lower() == "@mode":
-                                try:
-                                        db.query("UPDATE accessnew SET voice=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET joinpart=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan))
-                                        db.query("UPDATE accessnew SET mode=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan)) 
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                except Exception:
-                                        print traceback.format_exc()
-                                        reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)                        
-                        try:
-                                db.query("UPDATE accessnew SET %s=\'%s\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (field, value, cloak, reqchan))
-                                db.commit()
-                                reply("Done!", chan, nick)
-                                return
-                        except Exception:
-                                print traceback.format_exc()
-                                reply("There is no cloak titled \"\x02%s\x0F\"." % cloak, chan, nick)
-                        return
-                elif action == "add":
-                        reqchan = str(line2[5])
-                        cloak = str(line2[6])
-                        field = str(line2[7])
-                        try:value =  str(line2[8])
-                        except:a=1
-                        try:
-                                if line2[5] == "@global":
-                                        channew = "@global"
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\" AND channel = \"@global\";" % cloak)
-                                else:
-                                        channew = chan
-                                        db.query("SELECT * FROM accessnew WHERE cloak = \"%s\ AND channel = \"%s\";" % (cloak,reqchan))
-                                r = db.use_result()
-                                data = r.fetch_row()
-                                print data[0][5]
-                                reply("There is already a entry under that cloak, please use the modify command." % specify, chan, nick)
-                                return
-                        except:a=1
-                        if not cloak or "\"" in cloak:
-                                reply("Invalid command", chan, nick)
-                                return
-                        if "#" not in reqchan or "@" not in cloak:
-                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                        try:
-                                if field.lower() == "@voice":
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                if field.lower() == "@ops":
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                if field.lower() == "@mode":
-                                        db.query("INSERT INTO accessnew (`cloak`, `channel`, `voice`) VALUES ('%s', '%s', '1');" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET trout=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET op=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET ban=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET kick=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET quiet=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.query("UPDATE accessnew SET mode=\'1\' WHERE cloak=\'%s\' AND channel=\'%s\';" % (cloak, reqchan) )
-                                        db.commit()
-                                        reply("Done!", chan, nick)
-                                        return
-                                else:
-                                        try:
-                                                db.query("INSERT INTO accessnew (`cloak`, `channel`, `%s`) VALUES ('%s', '%s', '%s');" % (field, cloak, reqchan, value) )
-                                                db.commit()
-                                                reply("Done!", chan, nick)
-                                        except:
-                                                reply("Your mode operator is incorrect, please consult the perms manual!", chan, nick)
-                                        return
-                        except Exception:
-                                reply("Error.", chan, nick)
-                                print traceback.format_exc()
-                        return
+	if command == "perms" or command == "permission" or command == "permissions":
+                if not authtest(host, chan, 'secure'):return reply(nosecure, chan, nick)
+                ####Format Check
+                options=["read","list","del","remove","add","change","modify"]
+                level=["dev","secure","op","voice","blocked"]
+                ractivity = line2[4]
+                rscope = line2[5]
+                rcloak = line2[6]
+                rlevel = line2[7]
+                if rcloak not in options:return reply("You did not specify an action in the first argument, your options are: " + " ".join(options), chan, nick)
+                if not rscope == "local" or not rscope == "global" :return reply("You did not specify the scope (global vs. local).", chan, nick)
+                if "@" not in rcloak or "/" not in rcloak:return reply("You did not specify a cloak in the second argument.", chan, nick)
+                if not ractivity in ["read","list","del","remove"]:
+                        if rlevel not in options:return reply("You did not specify a permission level in the third argument, your options are: " + " ".join(level), chan, nick)
+                        if rlevel == 'blocked' and not authtest(host, chan, 'dev'):return reply(nodev, chan, nick)
+                ####Run by action request
+		if ractivity == "read" or ractivity == "list":
+                        if rscope == "local":
+                                try:f = open('perms-'+chan+'.txt', 'r')
+                                except IOError:return reply("Error in accessing permissions", chan, nick)
+                        if not rscope == "local":
+                                try:f = open('perms-global.txt', 'r')
+                                except IOError:return reply("Error in accessing permissions", chan, nick)
+                        text = f.read()
+                        f.close()
+                        if authtest(host, chan, 'dev'):return notice(nick, text)
+                        for pline in text:
+                                spline=pline.split(',')
+                                if spline[0] == rcloak:
+                                        return reply(pline, chan, nick)
+                ####Either way, actions below will need files opened the same way
+                if rscope == "local":
+                        try:f = open('perms-'+chan+'.txt', 'r+')
+                        except IOError:return reply("Error in accessing permissions", chan, nick)
+                if not rscope == "local":
+                        try:f = open('perms-global.txt', 'r+')
+                        except IOError:return reply("Error in accessing permissions", chan, nick)
+                text = f.read()
+                if ractivity == "add":
+                        if rcloak not in text:text = text + "\n"+rcloak+","rlevel
+                        else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
+                done = False
+                for pline in text:
+                        if done =
+                        spline=pline.split(',')
+                        if (ractivity == "del" or ractivity == "remove") and spline[0] == rcloak:
+                                text.replace(pline,"")
+                                done=True
+                                break
+                        elif ractivity=="change" or ractivity == "modify":
+                                if rcloak in text:
+                                        text.pop(pline)
+                                        text = text + "\n"+rcloak+","rlevel
+                                        done = True
+                                        break
+                if not done:
+                        f.close()
+                        return reply("Permissions are not on file, please add them first.", chan, nick)
+                text = text.replace("\n\n","\n")
+                f.write(text)
+                f.close()
+                return
 def getGeo(ip):#,loc):
         # Copyright (c) 2010, Westly Ward
         # All rights reserved.
@@ -829,6 +616,7 @@ def getGeo(ip):#,loc):
         return "Estimated Location for "+str(info['Ip'])+" : " + str(info["City"]) + ", "+ str(info["RegionName"]) + ", "+ str(info["CountryName"]) + ". Timezone: "+ str(info["TimezoneName"])
 
 def blockinfo(IP):
+        ###Needs to be simplified with JSON
         import urllib,urllib2,json,re
         test = re.search("(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)",IP)
         if test == None:#user
