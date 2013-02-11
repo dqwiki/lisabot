@@ -39,8 +39,8 @@ def permlevel(level,need):
         if level == 'voice' and not (need=='secure' or need=='dev' or need=='op'):return True
         return False
 def authdb(host, chan, need, local=False):
-        if host == '@wikipedia/DeltaQuad' and need !='block':return True
-        if host == '@wikipedia/DeltaQuad' and need =='block':return False
+        #if host == '@wikipedia/DeltaQuad' and need !='block':return True
+        #if host == '@wikipedia/DeltaQuad' and need =='block':return False
         #Global first, then local
         if local:
                 try:f = open('perms-'+chan+'.txt', 'r')
@@ -52,6 +52,7 @@ def authdb(host, chan, need, local=False):
         stext=text.split("\n")
         f.close()
         for line in stext:
+                print line
                 line=line.split(',')
                 if line[0] == host:
                         result=permlevel(line[1],need)
