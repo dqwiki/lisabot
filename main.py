@@ -224,24 +224,18 @@ def editreport():
                                 #print "   %s" % msg
 
 def tellFreenode(msg,stalk,black):
-        print "-----------------------"
         alreadyprint = ""
         if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
         page,user,summary=formatMsg(msg)
-        if "sockpuppet" in msg:
-                print "User: "+user
-                print "Page: "+page
-                print "Summary: "+summary
         for line in stalk:
                 line = line.split(",")
                 channel = line[0]
                 method = line[1].lower()
                 stalkword = line[2].lower()
                 if method == "user" and not None == re.search(stalkword,user):
-                        print "Match user"
                         try:
 		                for bline in black:
                                         if bline =="":break
@@ -253,15 +247,16 @@ def tellFreenode(msg,stalk,black):
 		                if channel not in alreadyprint:alreadyprint = alreadyprint + "," + channel
 			except:
 				print "Error in user stalking post, please refer to the following:"
+				trace = traceback.format_exc() # Traceback.
+                                print trace # Print.
 				print msg
+				print "-----------------------"
+				break
                 elif method == "page" and not None == re.search(stalkword,page):
-                        print "Match page"
 			try:
 		                for bline in black:
                                         if bline =="":break
-                                        print bline
                                         bline=bline.split(",")
-                                        print bline
 		                        if bline[1] in page and bline[0] == channel:
 		                                return
                                 if channel not in alreadyprint:say(msg, channel)
@@ -272,8 +267,9 @@ def tellFreenode(msg,stalk,black):
 				trace = traceback.format_exc() # Traceback.
                                 print trace # Print.
 				print msg
+				print "-----------------------"
+				break
                 elif method == "summary" and not None == re.search(stalkword,summary):
-                        print "Match summary"
 			try:
 		                for bline in black:
                                         if bline =="":break
@@ -283,12 +279,13 @@ def tellFreenode(msg,stalk,black):
 		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                alreadyprint = alreadyprint + "," + channel
-		                continue
 			except:
 				print "Error in summary stalking post, please refer to the following:"
+				trace = traceback.format_exc() # Traceback.
+                                print trace # Print.
 				print msg
-                #if not line[0].lower() in msg.lower():
-                       #continue
+				print "-----------------------"
+				break
 
 def formatMsg(msg):
         try:
