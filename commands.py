@@ -55,6 +55,9 @@ def authdb(host, chan, need, local=False):
                 line=line.split(',')
                 if line[0] == host:
                         result=permlevel(line[1],need)
+                        print line[1]
+                        print need
+                        print result
                         if not local and not result:return authdb(host,chan,need,True)
                         return result
         return False
