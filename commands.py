@@ -544,10 +544,12 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                         try:f = open('perms-global.txt', 'r+')
                         except IOError:return reply("Error in accessing permissions", chan, nick)
                 text = f.read()
-                if ractivity == "add":
-                        if rcloak not in text:text = text + "\n"+rcloak+","+rlevel
-                        else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
                 done = False
+                if ractivity == "add":
+                        if rcloak not in text:
+                                text = text + "\n"+rcloak+","+rlevel
+                                done=True
+                        else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
                 for pline in text:
                         spline=pline.split(',')
                         if (ractivity == "del" or ractivity == "remove") and spline[0] == rcloak:
@@ -566,7 +568,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                 text = text.replace("\n\n","\n")
                 f.write(text)
                 f.close()
-                return
+                return reply("Permissions modified :) Have a nice day.", chan, nick)
 def getGeo(ip):#,loc):
         # Copyright (c) 2010, Westly Ward
         # All rights reserved.
