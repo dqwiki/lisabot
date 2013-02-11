@@ -538,12 +538,13 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                                         return reply(pline, chan, nick)
                 ####Either way, actions below will need files opened the same way
                 if rscope == "local":
-                        try:f = open('perms-'+chan+'.txt', 'r+')
+                        try:f = open('perms-'+chan+'.txt', 'r')
                         except IOError:return reply("Error in accessing permissions", chan, nick)
                 if not rscope == "local":
-                        try:f = open('perms-global.txt', 'r+')
+                        try:f = open('perms-global.txt', 'r')
                         except IOError:return reply("Error in accessing permissions", chan, nick)
                 text = f.read()
+                f.close()
                 done = False
                 if ractivity == "add":
                         if rcloak not in text:
@@ -552,6 +553,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                         else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
                 for pline in text:
                         spline=pline.split(',')
+                        print spline
                         if (ractivity == "del" or ractivity == "remove") and spline[0] == rcloak:
                                 text.replace(pline,"")
                                 done=True
@@ -562,8 +564,13 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                                         done = True
                                         break
                 if not done:
-                        f.close()
                         return reply("Permissions are not on file, please add them first.", chan, nick)
+                if rscope == "local":
+                        try:f = open('perms-'+chan+'.txt', 'w')
+                        except IOError:return reply("Error in accessing permissions (Sysadmin: Final)", chan, nick)
+                if not rscope == "local":
+                        try:f = open('perms-global.txt', 'w')
+                        except IOError:return reply("Error in accessing permissions (Sysadmin: Final)", chan, nick)
                 text = text.replace("\n\n","\n")
                 f.write(text)
                 f.close()
