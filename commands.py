@@ -58,7 +58,7 @@ def authdb(host, chan, need, local=False):
         return False
 def authtest(host, chan, need):
         if not "@" in host:host= "@" + host
-        print "AuthDB"
+        print "Host: " + host
         try:return authdb(host, chan, need)
 	except:return False
 def get_commandList():
