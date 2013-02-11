@@ -229,6 +229,10 @@ def tellFreenode(msg,stalk,black):
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
+        if "sockpuppet" in msg:
+                print user
+                print page
+                print summary
         page,user,summary=formatMsg(msg)
         for line in stalk:
                 if line =="" or "," not in line:break

@@ -49,8 +49,9 @@ def authdb(host, chan, need, local=False):
                 try:f = open('perms-global.txt', 'r')
                 except IOError:return False
         text = f.read()
+        stext=text.split("\n")
         f.close()
-        for line in text:
+        for line in stext:
                 line=line.split(',')
                 if line[0] == host:
                         result=permlevel(line[1],need)
@@ -514,7 +515,8 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                 ractivity = line2[4]
                 rscope = line2[5]
                 rcloak = line2[6]
-                rlevel = line2[7]
+                try:rlevel = line2[7]
+                except:rlevel=""
                 if ractivity not in options:return reply("You did not specify an action in the first argument, your options are: " + " ".join(options), chan, nick)
                 if not (rscope == "local" and rscope != "global") and not (rscope != "local" and rscope == "global"):return reply("You did not specify the scope (global vs. local) in the second argument.", chan, nick)
                 if "@" not in rcloak or "/" not in rcloak:return reply("You did not specify a cloak in the third argument.", chan, nick)
