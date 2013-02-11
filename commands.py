@@ -460,7 +460,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
 		return
 	if command == "trout":
                 try:
-                        user = line2[4] + ' '.join(line2[4:])
+                        user = line2[4] + ' '.join(line2[5:])
                 except Exception:
                         reply("Hahahahahahahaha...", chan, nick)
                         return
