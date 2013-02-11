@@ -179,14 +179,14 @@ def editreport():
         print "   USER %s %s bla :%s" % (IDENT, HOST2, REALNAME)
         readbuffer=''
         from datetime import datetime
-        minuteDone=int(datetime.now()).split(':')[1]
+        minuteDone=int(str(datetime.now()).split(':')[1])
         stalk,black=updateRC()
         stalk,black=stalk.split("\n"),black.split("\n")
         ## Infinte loop - command parsing.
         while 1:
-                if int(datetime.now()).split(':')[1] > minuteDone+5:
+                if int(str(datetime.now()).split(':')[1]) > minuteDone+5:
                         stalk,black=updateRC()
-                        minuteDone=int(datetime.now()).split(':')[1]
+                        minuteDone=int(str(datetime.now()).split(':')[1])
                 readbuffer=readbuffer+s2.recv(1024)
                 temp=string.split(readbuffer, "\n")
                 readbuffer=temp.pop()
