@@ -305,7 +305,9 @@ def formatMsg(msg):
                                 summary = summary.split("]]: ")[1]
                         except:
                                 #Some page moves don't have a summary
-                                if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
+                                if "over redirect" in summary:
+                                        try:summary = summary.split("]] over redirect: ")[1]
+                                        except:summary = ""#no summary
                                 else:summary=""
                 elif "Special:Log/gblblock" in msg:
                         user = msg.split("\x0303")[1]

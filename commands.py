@@ -39,7 +39,8 @@ def permlevel(level,need):
         if level == 'voice' and not (need=='secure' or need=='dev' or need=='op'):return True
         return False
 def authdb(host, chan, need, local=False):
-        if host == '@wikipedia/DeltaQuad':return True
+        if host == '@wikipedia/DeltaQuad' and need !='block':return True
+        if host == '@wikipedia/DeltaQuad' and need =='block':return False
         #Global first, then local
         if local:
                 try:f = open('perms-'+chan+'.txt', 'r')
@@ -58,8 +59,6 @@ def authdb(host, chan, need, local=False):
         return False
 def authtest(host, chan, need):
         if not "@" in host:host= "@" + host
-        print "Host: " + host
-        print authdb(host, chan, need)
         try:return authdb(host, chan, need)
 	except:return False
 def get_commandList():
