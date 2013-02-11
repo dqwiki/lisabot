@@ -349,7 +349,7 @@ def formatMsg(msg):
                                 page = msg.split("protected ")[1]
                                 page = page.split('[')[0]
                         except:
-                                page = msg.split("changed protection level of ")[1]
+                                page = msg.split("changed protection level for ")[1]
                                 page = page.split('[')[0]
                         user=msg.split("\x0303")[1]
                         user=user.split("\x035*")[0]
