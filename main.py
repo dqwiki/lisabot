@@ -366,7 +366,7 @@ def formatMsg(msg):
                 else:
                         page = msg.split("\x0314]]")[0]
                         page = page.split("[[\x0307")[1]
-                        user = msg.split("*\x0303")[1]
+                        user = msg.split("\x0303")[1]
                         user = user.split("\x035* (")[0]
                         summary = msg.split(") \x0310")[1]
         except:
