@@ -52,8 +52,8 @@ def authdb(host, chan, need, local=False):
         stext=text.split("\n")
         f.close()
         for line in stext:
-                print line
                 line=line.split(',')
+                print line[0] + " == " host
                 if line[0] == host:
                         result=permlevel(line[1],need)
                         print line[1]
