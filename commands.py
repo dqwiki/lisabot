@@ -552,18 +552,18 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                                 done=True
                         else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
                 for pline in text:
-                        print pline
                         spline=pline.split(',')
                         print spline#Teh hell?
+                        print ractivity
+                        print rcloak
                         if (ractivity == "del" or ractivity == "remove") and spline[0] == rcloak:
                                 text.replace(pline,"")
                                 done=True
                                 break
                         elif (ractivity=="change" or ractivity == "modify") and spline[0] == rcloak:
-                                if rcloak in text:
-                                        text.replace(pline,rcloak+","+rlevel)
-                                        done = True
-                                        break
+                                text.replace(pline,rcloak+","+rlevel)
+                                done = True
+                                break
                 if not done:
                         return reply("Permissions are not on file, please add them first.", chan, nick)
                 if rscope == "local":
