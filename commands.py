@@ -52,17 +52,12 @@ def authdb(host, chan, need, local=False):
         stext=text.split("\n")
         f.close()
         for line in stext:
+                if "," not in line:continue
                 line=line.split(',')
-                print line[0] + " == " + host
                 if line[0] == host:
                         result=permlevel(line[1],need)
-                        print line[1]
-                        print need
-                        print result
-                        if not local and not result:return authdb(host,chan,need,True)
                         return result
-                else:
-                        return authdb(host,chan,need,True)
+        return authdb(host,chan,need,local=True)
         return False
 def authtest(host, chan, need):
         if not "@" in host:host= "@" + host
