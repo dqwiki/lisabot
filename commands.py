@@ -519,7 +519,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                 if not (rscope == "local" and rscope != "global") and not (rscope != "local" and rscope == "global"):return reply("You did not specify the scope (global vs. local) in the second argument.", chan, nick)
                 if "@" not in rcloak or "/" not in rcloak:return reply("You did not specify a cloak in the third argument.", chan, nick)
                 if not ractivity in ["read","list","del","remove"]:
-                        if rlevel not in options:return reply("You did not specify a permission level in the fourth argument, your options are: " + " ".join(level), chan, nick)
+                        if rlevel not in level:return reply("You did not specify a permission level in the fourth argument, your options are: " + " ".join(level), chan, nick)
                         if rlevel == 'blocked' and not authtest(host, chan, 'dev'):return reply(nodev, chan, nick)
                 ####Run by action request
 		if ractivity == "read" or ractivity == "list":
