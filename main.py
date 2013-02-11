@@ -178,10 +178,10 @@ def editreport():
         s2.send("USER %s %s bla :%s\r\n" % (IDENT, HOST2, REALNAME))
         print "   USER %s %s bla :%s" % (IDENT, HOST2, REALNAME)
         readbuffer=''
+        from datetime import datetime
         minuteDone=int(datetime.now()).split(':')[1]
         stalk,black=updateRC()
         stalk,black=stalk.split("\n"),black.split("\n")
-        from datetime import datetime
         ## Infinte loop - command parsing.
         while 1:
                 if int(datetime.now()).split(':')[1] > minuteDone+5:
