@@ -557,7 +557,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         elif ractivity=="change" or ractivity == "modify":
                                 if rcloak in text:
                                         text.pop(pline)
-                                        text = text + "\n"+rcloak+","rlevel
+                                        text = text + "\n"+rcloak+","+rlevel
                                         done = True
                                         break
                 if not done:
