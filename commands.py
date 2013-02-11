@@ -543,7 +543,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                 if not rscope == "local":
                         try:f = open('perms-global.txt', 'r')
                         except IOError:return reply("Error in accessing permissions", chan, nick)
-                text = f.read()
+                text = f.read().split('\n')
                 f.close()
                 done = False
                 if ractivity == "add":
