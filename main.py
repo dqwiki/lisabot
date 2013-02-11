@@ -163,10 +163,10 @@ def say(msg, chan=CHANS[0]):
 def reply(msg, chan=CHANS[0], nick=""):
    say(msg, chan)
 def updateRC():
-        f = f.open('rcstalklist.txt','r')
+        f = open('rcstalklist.txt','r')
         stalk=f.read()
         f.close()
-        f = f.open('rcblacklist.txt','r')
+        f = open('rcblacklist.txt','r')
         black = f.read()
         f.close()
         return stalk,black
