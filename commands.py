@@ -545,7 +545,7 @@ def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s
                         except IOError:return reply("Error in accessing permissions", chan, nick)
                 text = f.read()
                 if ractivity == "add":
-                        if rcloak not in text:text = text + "\n"+rcloak+","rlevel
+                        if rcloak not in text:text = text + "\n"+rcloak+","+rlevel
                         else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
                 done = False
                 for pline in text:
