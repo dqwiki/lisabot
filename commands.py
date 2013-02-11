@@ -515,7 +515,7 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                 rscope = line2[5]
                 rcloak = line2[6]
                 rlevel = line2[7]
-                if rcloak not in options:return reply("You did not specify an action in the first argument, your options are: " + " ".join(options), chan, nick)
+                if ractivity not in options:return reply("You did not specify an action in the first argument, your options are: " + " ".join(options), chan, nick)
                 if not rscope == "local" or not rscope == "global" :return reply("You did not specify the scope (global vs. local).", chan, nick)
                 if "@" not in rcloak or "/" not in rcloak:return reply("You did not specify a cloak in the second argument.", chan, nick)
                 if not ractivity in ["read","list","del","remove"]:
