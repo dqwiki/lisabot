@@ -61,6 +61,8 @@ def authdb(host, chan, need, local=False):
                         print result
                         if not local and not result:return authdb(host,chan,need,True)
                         return result
+                else:
+                        return authdb(host,chan,need,True)
         return False
 def authtest(host, chan, need):
         if not "@" in host:host= "@" + host
