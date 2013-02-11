@@ -243,7 +243,7 @@ def tellFreenode(msg,stalk,black):
                 if method == "user" and not None == re.search(stalkword,user):
                         print "Match user"
                         try:
-		                for bline in blacklist:
+		                for bline in black:
                                         bline=bline.split(",")
 		                        if bline[1] in user and bline[0] == channel:
 		                                return
@@ -256,7 +256,7 @@ def tellFreenode(msg,stalk,black):
                 elif method == "page" and not None == re.search(stalkword,page):
                         print "Match page"
 			try:
-		                for bline in blacklist:
+		                for bline in black:
                                         bline=bline.split(",")
 		                        if bline[1] in page and bline[0] == channel:
 		                                return
@@ -271,7 +271,7 @@ def tellFreenode(msg,stalk,black):
                 elif method == "summary" and not None == re.search(stalkword,summary):
                         print "Match summary"
 			try:
-		                for bline in blacklist:
+		                for bline in black:
                                         bline=bline.split(",")
 		                        if bline[1] in summary and bline[0] == channel:
 		                                return
