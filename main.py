@@ -315,7 +315,7 @@ def formatMsg(msg):
                         user = user.split(" \x035")[0]
                         page = msg.split("[[\x0302")[1]
                         page = page.split("]]")[0]
-                        summary = msg.split("expires")
+                        summary = msg.split("expires")[1]
                         summary = summary.split(": ")[1]
                 elif "Special:Log/globalauth" in msg:
                         page = msg.split(" \"User:")[1]
@@ -323,7 +323,7 @@ def formatMsg(msg):
                         page = page.split("\"")[0]
                         user = msg.split("\x0303")[1]
                         user = user.split(" \x035")[0]
-                        summary = msg.split("Unset")
+                        summary = msg.split("Unset")[1]
                         summary = summary.split(": ")[1]
                 elif "Special:Log/patrol" in msg:
                         page = msg.split("\x0310]]")[0]
