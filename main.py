@@ -148,9 +148,8 @@ def commandparser(line, line2, nick, chan, host, lockdown, s2, lastlink):
 	if line2[1] == "PRIVMSG" and line2[3].startswith(":!"):
 		command = string.lower(line2[3][2:])
 		thread.start_new_thread(meta_reporting,(line2, nick, chan, command))
-		authorization = cparser.authtest(host, chan)
 		if command != "null" and lockdown != "true":
-			 cparser.main(command, line, line2, nick, chan, host, authorization, notice, say, reply, s, s2, lastlink)
+			 cparser.main(command, line, line2, nick, chan, host, notice, say, reply, s, s2, lastlink)
 
 def notice(nick, msg):
     s.send("NOTICE %s :%s\r\n" % (nick, msg))
@@ -225,6 +224,7 @@ def editreport():
                                 #print "   %s" % msg
 
 def tellFreenode(msg,stalk,black):
+        print "-----------------------"
         alreadyprint = ""
         if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
@@ -265,6 +265,8 @@ def tellFreenode(msg,stalk,black):
 		                alreadyprint = alreadyprint + "," + channel
 			except:
 				print "Error in page stalking post, please refer to the following:"
+				trace = traceback.format_exc() # Traceback.
+                                print trace # Print.
 				print msg
                 elif method == "summary" and not None == re.search(stalkword,summary):
                         print "Match summary"
@@ -304,7 +306,7 @@ def formatMsg(msg):
                                 if "over redirect" in summary:summary = summary.split("]] over redirect: ")[1]
                                 else:summary=""
                 elif "Special:Log/gblblock" in msg:
-                        user = msg.split("* \x0303")[1]
+                        user = msg.split("\x0303")[1]
                         user = user.split(" \x035")[0]
                         page = msg.split("[[\x0302")[1]
                         page = page.split("]]")[0]
@@ -314,7 +316,7 @@ def formatMsg(msg):
                         page = msg.split(" \"User:")[1]
                         page = "User:" + page
                         page = page.split("\"")[0]
-                        user = msg.split("* \x0303")[1]
+                        user = msg.split("\x0303")[1]
                         user = user.split(" \x035")[0]
                         summary = msg.split("Unset")
                         summary = summary.split(": ")[1]

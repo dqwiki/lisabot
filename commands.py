@@ -123,9 +123,9 @@ def get_commandList():
     	'perms': 'sql'
 	}
 
-def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
+def main(command, line, line2, nick, chan, host, notice, say, reply, s, s2, lastlink):
 	try:
-		parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink)
+		parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, lastlink)
 	except Exception:
 		trace = traceback.format_exc() # Traceback.
 		print trace # Print.
@@ -139,7 +139,7 @@ def main(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2
 		else: report2.append('source unknown')
 		say(report2[0] + ' (' + report2[1] + ')', chan)
 
-def parse(command, line, line2, nick, chan, host, auth, notice, say, reply, s, s2, lastlink):
+def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, lastlink):
 	try:
                 if authtest(host, chan, 'block'):return
         except:
