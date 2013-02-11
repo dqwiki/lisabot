@@ -558,11 +558,11 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                         print ractivity
                         print rcloak
                         if (ractivity == "del" or ractivity == "remove") and spline[0] == rcloak:
-                                text.replace(pline,"")
+                                text = text.replace(pline,"")
                                 done=True
                                 break
                         elif (ractivity=="change" or ractivity == "modify") and spline[0] == rcloak:
-                                text.replace(pline,rcloak+","+rlevel)
+                                text = text.replace(pline,rcloak+","+rlevel)
                                 done = True
                                 break
                 if not done:
