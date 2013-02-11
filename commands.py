@@ -543,15 +543,16 @@ def parse(command, line, line2, nick, chan, host, notice, say, reply, s, s2, las
                 if not rscope == "local":
                         try:f = open('perms-global.txt', 'r')
                         except IOError:return reply("Error in accessing permissions", chan, nick)
-                text = f.read().split('\n')
+                text = f.read()
+                stext=text.split('\n')
                 f.close()
                 done = False
                 if ractivity == "add":
-                        if rcloak not in text:
+                        if rcloak not in stext:
                                 text = text + "\n"+rcloak+","+rlevel
                                 done=True
                         else:return reply("Permissions are already on file, please modify them instead of trying to add a new entry", chan, nick)
-                for pline in text:
+                for pline in stext:
                         spline=pline.split(',')
                         print spline#Teh hell?
                         print ractivity
