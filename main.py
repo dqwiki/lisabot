@@ -231,12 +231,16 @@ def tellFreenode(msg,stalk,black):
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
         user,page,summary=formatMsg(msg)
+        print "User: "+user
+        print "Page: "+page
+        print "Summary: "+summary
         for line in stalk:
                 line = line.split(",")
                 channel = line[0]
                 method = line[1].lower()
                 stalkword = line[2].lower()
                 if method == "user" and not None == re.search(stalkword,user):
+                        print "Match user"
                         try:
 		                for bline in blacklist:
                                         bline=bline.split(",")
@@ -249,6 +253,7 @@ def tellFreenode(msg,stalk,black):
 				print "Error in user stalking post, please refer to the following:"
 				print msg
                 elif method == "page" and not None == re.search(stalkword,page):
+                        print "Match page"
 			try:
 		                for bline in blacklist:
                                         bline=bline.split(",")
@@ -261,6 +266,7 @@ def tellFreenode(msg,stalk,black):
 				print "Error in page stalking post, please refer to the following:"
 				print msg
                 elif method == "summary" and not None == re.search(stalkword,summary):
+                        print "Match summary"
 			try:
 		                for bline in blacklist:
                                         bline=bline.split(",")
