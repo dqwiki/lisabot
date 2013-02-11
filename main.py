@@ -234,7 +234,7 @@ def tellFreenode(msg,stalk,black):
         if "sockpuppet" in msg:
                 print "User: "+user
                 print "Page: "+page
-                print "Summary: "+super
+                print "Summary: "+summary
         for line in stalk:
                 line = line.split(",")
                 channel = line[0]
