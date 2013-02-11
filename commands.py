@@ -32,8 +32,8 @@ noop="Access Denied, you need Op permissions or above to execute this action."
 novoice="Access Denied, you need Voice permissions or above to execute this action."
 def permlevel(level,need):
         if level == 'block' and need=='block':return True
-        if level == 'block':return False
-        if level == 'dev':return True
+        if need == 'block':return False #if its at this point, it can be cleared
+        if level == 'dev' and need != 'block':return True
         if level == 'secure' and not need=='dev':return True
         if level == 'op' and not (need=='secure' or need=='dev'):return True
         if level == 'voice' and not (need=='secure' or need=='dev' or need=='op'):return True
