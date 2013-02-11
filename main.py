@@ -363,12 +363,16 @@ def formatMsg(msg):
                         try:summary=msg.split("expiry time")[1]
                         except:summary=msg.split(": ")[2]
                         summary=summary.split(": ")[1]
+                elif "Special:Log" in msg:#Shut this up for now
+                        page=""
+                        summary=""
+                        user=""
                 else:
                         page = msg.split("\x0314]]")[0]
                         page = page.split("[[\x0307")[1]
                         user = msg.split("\x0303")[1]
                         user = user.split("\x035* (")[0]
-                        summary = msg.split(") \x0310")[1]
+                        summary = msg.split("\x0310")[1]
         except:
                 trace = traceback.format_exc() # Traceback.
                 print "Unable to comply with request, please refer to Special:Log stalking procedures"
