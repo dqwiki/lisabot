@@ -242,10 +242,12 @@ def tellFreenode(msg,stalk,black):
         for line in stalk:
                 if line =="" or not ("," in line):continue
                 line = line.split(",")
-                print line
                 channel = line[0]
                 method = line[1].lower()
-                stalkword = line[2].lower()
+                try:stalkword = line[2].lower()
+                except:
+                        print line
+                        continue
                 if method == "user" and not None == re.search(stalkword,user):
                         print "-----------Match------------------"
                         try:
