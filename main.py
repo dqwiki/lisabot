@@ -323,7 +323,7 @@ def formatMsg(msg):
                         page = msg.split("[[\x0302")[1]
                         page = page.split("]]")[0]
                         summary = msg.split("expires")[1]
-                        try:summary = summary.split(": ")[1]
+                        try:summary = summary.split(": ")[1:]
                         except:summary=""
                 elif "Special:Log/globalauth" in msg:
                         page = msg.split(" \"User:")[1]
@@ -332,7 +332,7 @@ def formatMsg(msg):
                         user = msg.split("\x0303")[1]
                         user = user.split(" \x035")[0]
                         summary = msg.split("Unset")[1]
-                        try:summary = summary.split(": ")[1]
+                        try:summary = summary.split(": ")[1:]
                         except:summary=""
                 elif "Special:Log/patrol" in msg:
                         page = msg.split("\x0310]]")[0]
@@ -340,6 +340,13 @@ def formatMsg(msg):
                         user=msg.split("\x0303")[1]
                         user=user.split(" \x035")[0]
                         summary = ""
+                elif "Special:Log/stable" in msg:
+                        page = msg.split("\x0310]]")[0]
+                        page = page.split("[[\x0302")[1] 
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        try:summary = summary.split(": ")[1:]
+                        except:summary=""
                 elif "Special:Log/upload" in msg:
                         page = msg.split("\x0314]]")[0]
                         page = page.split("[[\x0307")[1] #t used to indicate 2
