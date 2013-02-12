@@ -239,6 +239,7 @@ def tellFreenode(msg,stalk,black):
         page,user,summary=formatMsg(msg)
         if "Amalthea" in msg:print "***TEST***BOT EDIT***"
         debugSock(msg,user,page,summary)
+        print "--------Past Debug------------"
         for line in stalk:
                 if line =="" or "," not in line:break
                 line = line.split(",")
