@@ -360,8 +360,8 @@ def formatMsg(msg):
                         except:
                                 if not "moved protection settings" in msg:
                                         if not "removed protection" in msg:page = msg.split("changed protection level of ")[1]
-                                        else:page = msg.split("removed protection from ")[1]
-                                        page = page.split('[')[0]
+                                        else:page = msg.split("removed protection from \"")[1]
+                                        page = page.split(']]')[0]
                                 else:
                                         page =msg.split("\"[[")[1]
                                         page =msg.split("]]\"")[0]
