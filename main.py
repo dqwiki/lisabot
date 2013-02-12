@@ -230,7 +230,7 @@ def tellFreenode(msg,stalk,black):
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
         page,user,summary=formatMsg(msg)
-        if "sockpuppet" in msg:
+        if "sockpuppet" in msg.lower():
                 print user
                 print page
                 print summary
@@ -364,7 +364,7 @@ def formatMsg(msg):
                                         page =msg.split("]]\"")[0]
                         user=msg.split("\x0303")[1]
                         user=user.split("\x035*")[0]
-                        if not "moved protection settings" in msg:summary=msg.split("): ")[1]
+                        if not "moved protection settings" in msg:summary=msg.split(": ")[1]
                         else:summary = (msg.split("moved to")[1]).split("]]:")[1]
                 elif "Special:Log/delete" in msg:
                         page = msg.split("\x0314]]")[0]
