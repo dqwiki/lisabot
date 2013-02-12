@@ -222,14 +222,7 @@ def editreport():
                                 msg = "JOIN %s" % CHAN2
                                 s2.send("%s\r\n" % msg)
                                 #print "   %s" % msg
-
-def tellFreenode(msg,stalk,black):
-        alreadyprint = ""
-        if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
-        if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
-        if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
-        if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
-        page,user,summary=formatMsg(msg)
+def debugSock(msg,user,page,summary):
         if "sockpuppet" in msg.lower():
                 print msg
                 print "-----------"
@@ -237,6 +230,15 @@ def tellFreenode(msg,stalk,black):
                 print page
                 print summary
                 print "-----------------------"
+def tellFreenode(msg,stalk,black):
+        alreadyprint = ""
+        if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
+        if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
+        if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
+        if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
+        page,user,summary=formatMsg(msg)
+        if "Amalthea" in msg:print "***TEST***BOT EDIT***"
+        debugSock(msg,user,page,summary)
         for line in stalk:
                 if line =="" or "," not in line:break
                 line = line.split(",")
@@ -249,6 +251,7 @@ def tellFreenode(msg,stalk,black):
                                         if bline =="":break
                                         bline=bline.split(",")
 		                        if bline[1] in user and bline[0] == channel:
+                                                print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
 		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
@@ -266,6 +269,7 @@ def tellFreenode(msg,stalk,black):
                                         if bline =="":break
                                         bline=bline.split(",")
 		                        if bline[1] in page and bline[0] == channel:
+                                                print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
                                 if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
@@ -283,6 +287,7 @@ def tellFreenode(msg,stalk,black):
                                         if bline =="":break
                                         bline=bline.split(",")
 		                        if bline[1] in summary and bline[0] == channel:
+                                                print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
 		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
