@@ -242,6 +242,7 @@ def tellFreenode(msg,stalk,black):
         for line in stalk:
                 if line =="" or not ("," in line):continue
                 line = line.split(",")
+                print line
                 channel = line[0]
                 method = line[1].lower()
                 stalkword = line[2].lower()
@@ -249,7 +250,7 @@ def tellFreenode(msg,stalk,black):
                         print "-----------Match------------------"
                         try:
 		                for bline in black:
-                                        if bline =="":break
+                                        if bline =="":continue
                                         bline=bline.split(",")
 		                        if bline[1] in user and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
@@ -268,7 +269,7 @@ def tellFreenode(msg,stalk,black):
                         print "-----------Match------------------"
 			try:
 		                for bline in black:
-                                        if bline =="":break
+                                        if bline =="":continue
                                         bline=bline.split(",")
 		                        if bline[1] in page and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
@@ -287,7 +288,7 @@ def tellFreenode(msg,stalk,black):
                         print "-----------Match------------------"
 			try:
 		                for bline in black:
-                                        if bline =="":break
+                                        if bline =="":continue
                                         bline=bline.split(",")
 		                        if bline[1] in summary and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
