@@ -240,14 +240,11 @@ def tellFreenode(msg,stalk,black):
         if "Amalthea" in msg:print "***TEST***BOT EDIT***"
         debugSock(msg,user,page,summary)
         for line in stalk:
-                if line =="" or not ("," in line):
-                        print "--------Break------------"
-                        break
+                if line =="" or not ("," in line):continue
                 line = line.split(",")
                 channel = line[0]
                 method = line[1].lower()
                 stalkword = line[2].lower()
-                print "--------Call matching------------"
                 if method == "user" and not None == re.search(stalkword,user):
                         print "-----------Match------------------"
                         try:
