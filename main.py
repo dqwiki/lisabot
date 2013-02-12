@@ -231,9 +231,12 @@ def tellFreenode(msg,stalk,black):
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
         page,user,summary=formatMsg(msg)
         if "sockpuppet" in msg.lower():
+                print msg
+                print "-----------"
                 print user
                 print page
                 print summary
+                print "-----------------------"
         for line in stalk:
                 if line =="" or "," not in line:break
                 line = line.split(",")
@@ -393,7 +396,7 @@ def formatMsg(msg):
                         page = msg.split("\x0314]]")[0]
                         page = page.split("[[\x0307")[1]
                         user = msg.split("\x0303")[1]
-                        user = user.split("\x035* (")[0]
+                        user = user.split("\x035*")[0]
                         summary = msg.split("\x0310")[1]
         except:
                 trace = traceback.format_exc() # Traceback.
