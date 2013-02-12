@@ -229,11 +229,11 @@ def tellFreenode(msg,stalk,black):
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
         if "#commons.wikimedia :" in msg: msg = string.replace(msg, "#commons.wikimedia :", "\x02Wikimedia Commons:\x0F ")
         if "#meta.wikimedia :" in msg: msg = string.replace(msg, "#meta.wikimedia :", "\x02Meta Wiki:\x0F ")
+        page,user,summary=formatMsg(msg)
         if "sockpuppet" in msg:
                 print user
                 print page
                 print summary
-        page,user,summary=formatMsg(msg)
         for line in stalk:
                 if line =="" or "," not in line:break
                 line = line.split(",")
@@ -320,7 +320,8 @@ def formatMsg(msg):
                         page = msg.split("[[\x0302")[1]
                         page = page.split("]]")[0]
                         summary = msg.split("expires")[1]
-                        summary = summary.split(": ")[1]
+                        try:summary = summary.split(": ")[1]
+                        except:summary=""
                 elif "Special:Log/globalauth" in msg:
                         page = msg.split(" \"User:")[1]
                         page = "User:" + page
@@ -328,7 +329,8 @@ def formatMsg(msg):
                         user = msg.split("\x0303")[1]
                         user = user.split(" \x035")[0]
                         summary = msg.split("Unset")[1]
-                        summary = summary.split(": ")[1]
+                        try:summary = summary.split(": ")[1]
+                        except:summary=""
                 elif "Special:Log/patrol" in msg:
                         page = msg.split("\x0310]]")[0]
                         page = page.split("[[\x0302")[1] 
@@ -353,11 +355,17 @@ def formatMsg(msg):
                                 page = msg.split("protected ")[1]
                                 page = page.split('[')[0]
                         except:
-                                page = msg.split("changed protection level for ")[1]
-                                page = page.split('[')[0]
+                                if not "moved protection settings" in msg:
+                                        if not "removed protection" in msg:page = msg.split("changed protection level of ")[1]
+                                        else:page = msg.split("removed protection from ")[1]
+                                        page = page.split('[')[0]
+                                else:
+                                        page =msg.split("\"[[")[1]
+                                        page =msg.split("]]\"")[0]
                         user=msg.split("\x0303")[1]
                         user=user.split("\x035*")[0]
-                        summary=msg.split("): ")[1]
+                        if not "moved protection settings" in msg:summary=msg.split("): ")[1]
+                        else:summary = (msg.split("moved to")[1]).split("]]:")[1]
                 elif "Special:Log/delete" in msg:
                         page = msg.split("\x0314]]")[0]
                         page = page.split("[[\x0307")[1] #t used to indicate 2
@@ -371,9 +379,12 @@ def formatMsg(msg):
                         page=page.split(" (")[0]
                         user=msg.split("\x0303")[1]
                         user=user.split(" \x035")[0]
-                        try:summary=msg.split("expiry time")[1]
-                        except:summary=msg.split(": ")[2]
-                        summary=summary.split(": ")[1]
+                        try:
+                                summary=msg.split("expiry time")[1]
+                                summary=summary.split(": ")[1]
+                        except:
+                                summary=msg.split("User:")[1]
+                                summary=summary.split(":")[1]                 
                 elif "Special:Log" in msg:#Shut this up for now
                         page=""
                         summary=""
