@@ -350,11 +350,11 @@ def formatMsg(msg):
                                 page = page.split("[[\x0302")[1]
                         except:
                                 page = msg.split("for ")[1]
-                                page = msg.split(" :")[0]
+                                page = page.split(" :")[0]
                         user=msg.split("\x0303")[1]
                         user=user.split(" \x035")[0]
                         try:
-                                summary = summary.split(": ")
+                                summary = msg.split(": ")
                                 summary = ' '.join(summary[1:])
                         except:summary=""
                 elif "Special:Log/upload" in msg:
