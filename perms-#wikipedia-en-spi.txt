@@ -1,3 +1,0 @@
-@wikipedia/DeltaQuad,dev
-@wikipedia/Reaper-Eternal,op
-@wikipedia/rschen7754,op
