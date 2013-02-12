@@ -339,18 +339,18 @@ def formatMsg(msg):
                                 summary = ' '.join(summary[1:])
                         except:summary=""
                 elif "Special:Log/patrol" in msg:
+                        page = msg.split("\x0310]]")[0]
+                        page = page.split("[[\x0302")[1]
+                        user=msg.split("\x0303")[1]
+                        user=user.split(" \x035")[0]
+                        summary = ""
+                elif "Special:Log/stable" in msg:
                         try:
                                 page = msg.split("\x0310]]")[0]
                                 page = page.split("[[\x0302")[1]
                         except:
                                 page = msg.split("for ")[1]
                                 page = msg.split(" :")[0]
-                        user=msg.split("\x0303")[1]
-                        user=user.split(" \x035")[0]
-                        summary = ""
-                elif "Special:Log/stable" in msg:
-                        page = msg.split("\x0310]]")[0]
-                        page = page.split("[[\x0302")[1] 
                         user=msg.split("\x0303")[1]
                         user=user.split(" \x035")[0]
                         try:
