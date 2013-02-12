@@ -397,7 +397,7 @@ def formatMsg(msg):
                         page = page.split("[[\x0307")[1]
                         user = msg.split("\x0303")[1]
                         user = user.split("\x035*")[0]
-                        summary = msg.split("\x0310")[1]
+                        summary = msg.split("\x0310")[2]
         except:
                 trace = traceback.format_exc() # Traceback.
                 print "Unable to comply with request, please refer to Special:Log stalking procedures"
