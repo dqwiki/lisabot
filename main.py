@@ -370,12 +370,8 @@ def formatMsg(msg):
                         if not "moved protection settings" in msg:summary=msg.split(": ")[1]
                         else:summary = (msg.split("moved to")[1]).split("]]:")[1]
                 elif "Special:Log/delete" in msg:
-                        if "restore" not in msg:
-                                page = msg.split("\x0314]]")[0]
-                                page = page.split("[[\x0307")[1] #t used to indicate 2
-                        else:
-                               page = msg.split("\x0310]]\"")[0]
-                               page = page.split("\"[[\x0302")[1] #t used to indicate 2
+                        page = msg.split("\x0310]]\"")[0]
+                        page = page.split("\"[[\x0302")[1] #t used to indicate 2
                         user=msg.split("\x0303")[1]
                         user=user.split(" \x035")[0]
                         testsummary=msg.split("\x0314]]")[1]
