@@ -168,6 +168,7 @@ def updateRC():
         f = open('rcblacklist.txt','r')
         black = f.read()
         f.close()
+        stalk,black=stalk.split("\n"),black.split("\n")
         return stalk,black
 
 def editreport():
@@ -180,7 +181,6 @@ def editreport():
         from datetime import datetime
         minuteDone=int(str(datetime.now()).split(':')[1])
         stalk,black=updateRC()
-        stalk,black=stalk.split("\n"),black.split("\n")
         ## Infinte loop - command parsing.
         while 1:
                 if int(str(datetime.now()).split(':')[1]) > minuteDone+5:
@@ -276,6 +276,7 @@ def tellFreenode(msg,stalk,black):
 		                        if bline[1] in page and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
+		                        else:print "--NEGBL-- Bline[0] = channel: " + bline[0] == channel + " Channel: " + channel + " Bline: "+bline[0]
                                 if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                alreadyprint = alreadyprint + "," + channel
