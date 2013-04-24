@@ -249,7 +249,7 @@ def tellFreenode(msg,stalk,black):
                         print line
                         continue
                 if method == "user" and not None == re.search(stalkword,user):
-                        print "-----------Match------------------"
+                        print "-----------Match user------------------"
                         try:
 		                for bline in black:
                                         if bline =="":continue
@@ -260,15 +260,16 @@ def tellFreenode(msg,stalk,black):
 		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                if channel not in alreadyprint:alreadyprint = alreadyprint + "," + channel
+		                print "-----------END------------"
 			except:
 				print "Error in user stalking post, please refer to the following:"
 				trace = traceback.format_exc() # Traceback.
                                 print trace # Print.
 				print msg
-				print "-----------------------"
+				print "----------END-------------"
 				break
                 elif method == "page" and not None == re.search(stalkword,page):
-                        print "-----------Match------------------"
+                        print "-----------Match page------------------"
 			try:
 		                for bline in black:
                                         if bline =="":continue
@@ -279,15 +280,16 @@ def tellFreenode(msg,stalk,black):
                                 if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                alreadyprint = alreadyprint + "," + channel
+		                print "-----------END------------"
 			except:
 				print "Error in page stalking post, please refer to the following:"
 				trace = traceback.format_exc() # Traceback.
                                 print trace # Print.
 				print msg
-				print "-----------------------"
+				print "----------END-------------"
 				break
                 elif method == "summary" and not None == re.search(stalkword,summary):
-                        print "-----------Match------------------"
+                        print "-----------Match Summary------------------"
 			try:
 		                for bline in black:
                                         if bline =="":continue
@@ -298,12 +300,13 @@ def tellFreenode(msg,stalk,black):
 		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                alreadyprint = alreadyprint + "," + channel
+		                print "-----------END------------"
 			except:
 				print "Error in summary stalking post, please refer to the following:"
 				trace = traceback.format_exc() # Traceback.
                                 print trace # Print.
 				print msg
-				print "-----------------------"
+				print "-----------END------------"
 				break
 
 def formatMsg(msg):
