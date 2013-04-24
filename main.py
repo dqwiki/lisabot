@@ -231,7 +231,7 @@ def debugSock(msg,user,page,summary):
                 print summary
                 print "-----------------------"
 def tellFreenode(msg,stalk,black):
-        msg = msg.lower() #Double check to make sure everything is lower, though I think it's already set above
+        msg = msg #Double check to make sure everything is lower, though I think it's already set above
         alreadyprint = ""
         if "#en.wikipedia :" in msg: msg = string.replace(msg, "#en.wikipedia :", "\x02English Wikipedia:\x0F ")
         if "#simple.wikipedia :" in msg: msg = string.replace(msg, "#simple.wikipedia :", "\x02Simple Wikipedia:\x0F ")
@@ -249,13 +249,13 @@ def tellFreenode(msg,stalk,black):
                 except:
                         print line
                         continue
+                print "User: " +user+ " Page: " + page + " Summary: " + summary
                 if method == "user" and not None == re.search(stalkword,user):
                         print "-----------Match user------------------"
                         try:
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.lower().split(",")
-                                        print bline
 		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
