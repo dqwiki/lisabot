@@ -251,7 +251,7 @@ def tellFreenode(msg,stalk,black):
                         continue
                 if method == "user" and not None == re.search(stalkword,user):
                         print "-----------Match user------------------"
-                        print "User: " +user+ " Page: " + page + " Summary: " + summary
+                        print "Channel: "+channel
                         try:
 		                for bline in black:
                                         if bline =="":continue
@@ -273,7 +273,7 @@ def tellFreenode(msg,stalk,black):
 				break
                 elif method == "page" and not None == re.search(stalkword,page):
                         print "-----------Match page------------------"
-                        print "User: " +user+ " Page: " + page + " Summary: " + summary
+                        print "Channel: "+channel
 			try:
 		                for bline in black:
                                         if bline =="":continue
@@ -294,7 +294,7 @@ def tellFreenode(msg,stalk,black):
 				break
                 elif method == "summary" and not None == re.search(stalkword,summary):
                         print "-----------Match Summary------------------"
-                        print "User: " +user+ " Page: " + page + " Summary: " + summary
+                        print "Channel: "+channel
 			try:
 		                for bline in black:
                                         if bline =="":continue
