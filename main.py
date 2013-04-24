@@ -254,9 +254,11 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.split(",")
+                                        print bline
 		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
+		                print "----------SENDING---------"
 		                if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                if channel not in alreadyprint:alreadyprint = alreadyprint + "," + channel
