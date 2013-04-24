@@ -240,7 +240,6 @@ def tellFreenode(msg,stalk,black):
         page,user,summary=formatMsg(msg)
         if "Amalthea" in msg:print "***TEST***BOT EDIT***"
         debugSock(msg,user,page,summary)
-        print "User: " +user+ " Page: " + page + " Summary: " + summary
         for line in stalk:
                 if line =="" or not ("," in line):continue
                 line = line.split(",")
@@ -252,6 +251,7 @@ def tellFreenode(msg,stalk,black):
                         continue
                 if method == "user" and not None == re.search(stalkword,user):
                         print "-----------Match user------------------"
+                        print "User: " +user+ " Page: " + page + " Summary: " + summary
                         try:
 		                for bline in black:
                                         if bline =="":continue
@@ -273,6 +273,7 @@ def tellFreenode(msg,stalk,black):
 				break
                 elif method == "page" and not None == re.search(stalkword,page):
                         print "-----------Match page------------------"
+                        print "User: " +user+ " Page: " + page + " Summary: " + summary
 			try:
 		                for bline in black:
                                         if bline =="":continue
@@ -293,6 +294,7 @@ def tellFreenode(msg,stalk,black):
 				break
                 elif method == "summary" and not None == re.search(stalkword,summary):
                         print "-----------Match Summary------------------"
+                        print "User: " +user+ " Page: " + page + " Summary: " + summary
 			try:
 		                for bline in black:
                                         if bline =="":continue
