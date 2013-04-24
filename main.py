@@ -240,6 +240,7 @@ def tellFreenode(msg,stalk,black):
         page,user,summary=formatMsg(msg)
         if "Amalthea" in msg:print "***TEST***BOT EDIT***"
         debugSock(msg,user,page,summary)
+        print "User: " +user+ " Page: " + page + " Summary: " + summary
         for line in stalk:
                 if line =="" or not ("," in line):continue
                 line = line.split(",")
@@ -249,7 +250,6 @@ def tellFreenode(msg,stalk,black):
                 except:
                         print line
                         continue
-                print "User: " +user+ " Page: " + page + " Summary: " + summary
                 if method == "user" and not None == re.search(stalkword,user):
                         print "-----------Match user------------------"
                         try:
