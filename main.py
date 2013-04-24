@@ -254,7 +254,7 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.split(",")
-		                        if bline[1] in user and bline[0] == channel:
+		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
 		                if channel not in alreadyprint:say(msg, channel)
@@ -273,10 +273,9 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.split(",")
-		                        if bline[1] in page and bline[0] == channel:
+		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
-		                        else:print "--NEGBL-- Bline[0] = channel: " + bline[0] == channel + " Channel: " + channel + " Bline: "+bline[0]
                                 if channel not in alreadyprint:say(msg, channel)
 		                time.sleep(0.5)
 		                alreadyprint = alreadyprint + "," + channel
@@ -293,7 +292,7 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.split(",")
-		                        if bline[1] in summary and bline[0] == channel:
+		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
 		                if channel not in alreadyprint:say(msg, channel)
