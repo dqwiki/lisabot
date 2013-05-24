@@ -256,7 +256,7 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.lower().split(",")
-                                        if ((bline[1] in page) or (bline[1] in user) or (bline[1] in summary)) and bline[0] == channel:
+                                        if ((bline[1] in page.lower()) or (bline[1] in user.lower()) or (bline[1] in summary.lower())) and bline[0] == channel.lower():
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
 		                print "----------SENDING---------"
@@ -278,7 +278,7 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.lower().split(",")
-                                        if ((bline[1] in page) or (bline[1] in user) or (bline[1] in summary)) and bline[0] == channel:
+                                        if ((bline[1] in page.lower()) or (bline[1] in user.lower()) or (bline[1] in summary.lower())) and bline[0] == channel.lower():
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
                                 if channel not in alreadyprint:say(msg, channel)
@@ -299,7 +299,7 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.lower().split(",")
-		                        if ((bline[1] in page) or (bline[1] in user) or (bline[1] in summary)) and bline[0] == channel:
+		                        if ((bline[1] in page.lower()) or (bline[1] in user.lower()) or (bline[1] in summary.lower())) and bline[0] == channel.lower():
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
 		                if channel not in alreadyprint:say(msg, channel)
