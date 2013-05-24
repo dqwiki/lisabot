@@ -255,7 +255,8 @@ def tellFreenode(msg,stalk,black):
                         try:
 		                for bline in black:
                                         if bline =="":continue
-                                        bline=bline.split(",")
+                                        bline=bline.lower().split(",")
+                                        print bline[1] in user
 		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
@@ -277,7 +278,8 @@ def tellFreenode(msg,stalk,black):
 			try:
 		                for bline in black:
                                         if bline =="":continue
-                                        bline=bline.split(",")
+                                        bline=bline.lower().split(",")
+                                        bline[1] in page
 		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
@@ -298,7 +300,7 @@ def tellFreenode(msg,stalk,black):
 			try:
 		                for bline in black:
                                         if bline =="":continue
-                                        bline=bline.split(",")
+                                        bline=bline.lower().split(",")
 		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
