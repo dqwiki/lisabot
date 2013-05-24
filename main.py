@@ -256,7 +256,8 @@ def tellFreenode(msg,stalk,black):
 		                for bline in black:
                                         if bline =="":continue
                                         bline=bline.lower().split(",")
-                                        print bline[1] in user
+                                        print "Bline is in user: "+bline[1] in user
+                                        print "Bline is channel: "+bline[0] == channel
 		                        if (bline[1] in page or bline[1] in user or bline[1] in summary) and bline[0] == channel:
                                                 print "!!! This ^^ ("+' '.join(bline[0:])+") bline RC entry is blacklisted. !!!"
 		                                return
