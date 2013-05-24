@@ -223,7 +223,7 @@ def editreport():
                                 s2.send("%s\r\n" % msg)
                                 #print "   %s" % msg
 def debugSock(msg,user,page,summary):
-        if "bot" in msg.lower():
+        if "DeltaQuadBot" in msg:
                 print msg
                 print "-----------"
                 print user
