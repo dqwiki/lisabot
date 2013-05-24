@@ -223,7 +223,7 @@ def editreport():
                                 s2.send("%s\r\n" % msg)
                                 #print "   %s" % msg
 def debugSock(msg,user,page,summary):
-        if "sockpuppet" in msg.lower():
+        if "bot" in msg.lower():
                 print msg
                 print "-----------"
                 print user
